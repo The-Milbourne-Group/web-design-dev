@@ -270,7 +270,7 @@ def write_artifact(root: Path, slug: str, filename: str, content: str) -> Path:
 # directory at qualification, when a lead already exists; a target has not been
 # contacted and may never become one. Filing every researched company under
 # `clients/` would flood the pipeline and corrupt the buyer-evidence base that
-# Q-003 depends on.
+# D-021 is tested against.
 
 TARGET_RECORD = "target.json"
 

@@ -380,7 +380,7 @@ def cmd_qualify(root, a):
     ok(f"{a.slug} — {c(a.outcome, C.ACC)} (decided by {approver})")
     _report_render(written)
     if a.outcome == "Disqualified":
-        dim("  Directory retained. The reasoning is evidence for Q-001 and Q-003 (ICP.md §7).")
+        dim("  Directory retained. The reasoning is market-selection evidence under D-019 (ICP.md §7).")
     print(f"\n{c('Next:', C.B)} {_next_action(root, opp)}")
     return 0
 
@@ -488,20 +488,22 @@ def cmd_gate(root, a):
             approver = gov.require_founder("proposal_issue", a.approved_by)
         except m.ApprovalRequired as e:
             err(str(e)); return 1
-        # Commercial terms carry a figure only once the founder has decided them.
-        # Passing --terms without --terms-decided is the exact path by which an
-        # invented price would reach a client-facing document.
+        # The figure for an engagement is a founder decision, so --terms needs
+        # --terms-decided. The minimum-engagement check runs regardless of who
+        # decided it: $5,000 is a floor on the engagement, not on the author.
         if a.terms:
             if not (a.terms_decided or p.gate_terms_decided):
-                for x in gov.scan_for_open_values(root, a.terms):
-                    err(x)
-                err("Terms not recorded. Pricing is open (Q-007): either decide it for this "
-                    "engagement with --terms-decided, or leave terms as 'to be determined'.")
+                err("Terms not recorded. Prices are approved in SERVICES.md §2.4, but the "
+                    "figure for an engagement is a founder decision — record it with "
+                    "--terms-decided.")
                 return 1
-            problems = gov.scan_for_open_values(root, a.terms) if not a.terms_decided else []
+            problems = gov.scan_for_open_values(root, a.terms)
             if problems:
                 for x in problems:
                     err(x)
+                dim("  An engagement below the minimum is accepted only where the work is "
+                    "explicitly strategic or creates exceptional portfolio or relationship "
+                    "value, and the exception is recorded (D-038).")
                 return 1
             p.commercial_terms = a.terms
             opp.log("gate", "commercial terms recorded", approver)
@@ -605,7 +607,7 @@ def cmd_outcome(root, a):
     if a.outcome in ("Declined", "No decision"):
         if not a.loss_reason and not a.force:
             err("Loss reasoning is required. It is the strongest evidence available for "
-                "Q-001 and Q-003 (ICP.md §7); a loss recorded only as 'lost' teaches "
+                "market selection under D-019 and D-036 (ICP.md §7); a loss recorded only as 'lost' teaches "
                 "the company nothing (sops/sales/PROPOSAL.md §5.10).")
             dim("  --loss-reason 'scope|price|timing|trust|competitor|no decision — detail'")
             return 1
@@ -895,8 +897,15 @@ def cmd_check(root, a):
                 dim(f"      recoverable: mg restore {slug}")
     qs = gov.open_questions(root)
     openq = [q for q in qs.values() if not q["resolved"]]
-    print(f"  Open questions: {len(openq)} of {len(qs)}"
-          f"  ({', '.join(q['id'] for q in openq if q['priority']=='Blocking')} blocking)")
+    if not openq:
+        print(f"  Founder decisions: all {len(qs)} resolved — strategic configuration complete")
+        mn = gov.minimum_engagement(root)
+        if mn:
+            print(f"  Commercial config:  minimum engagement ${mn:,} (SERVICES.md §2.4)")
+    else:
+        blocking = [q["id"] for q in openq if q["priority"] == "Blocking"]
+        print(f"  Open questions: {len(openq)} of {len(qs)}"
+              + (f"  ({', '.join(blocking)} blocking)" if blocking else ""))
     for o in opps:
         issues = []
         d = store.opp_dir(root, o.slug)
@@ -954,7 +963,7 @@ def cmd_metrics(root, a):
         for k, v in s["by_status"].items():
             print(f"  {k:<22}{v}")
     if s["by_source"]:
-        head("By source   " + c("(evidence for Q-008)", C.D))
+        head("By source   " + c("(channel evidence — validates the D-026 priority order)", C.D))
         for k, v in s["by_source"].items():
             label = k if len(k) <= 44 else k[:43] + "…"
             print(f"  {label:<46}{v}")
@@ -1034,7 +1043,7 @@ def build_parser() -> argparse.ArgumentParser:
     it.add_argument("--channel", default="manual",
                     help="how it arrived: form, email, phone, referral, manual")
     it.add_argument("--company", help="override or supply the company name")
-    it.add_argument("--source", help="override the recorded source (evidence for Q-008)")
+    it.add_argument("--source", help="override the recorded source (channel evidence, D-026)")
     it.add_argument("--slug"); it.add_argument("--force", action="store_true")
     it.add_argument("--yes", action="store_true")
     it.add_argument("--duplicate-ok", dest="duplicate_ok", action="store_true",
@@ -1095,7 +1104,7 @@ def build_parser() -> argparse.ArgumentParser:
     so.add_argument("--force", action="store_true")
     so.set_defaults(fn=cmd_solution)
 
-    g = sub.add_parser("gate", help="the proposal issuance gate (SERVICES.md §4)")
+    g = sub.add_parser("gate", help="record this engagement's commercial terms")
     g.add_argument("slug")
     g.add_argument("--terms-decided", dest="terms_decided", action="store_true")
     g.add_argument("--deliverables-defined", dest="deliverables_defined", action="store_true")
@@ -1183,7 +1192,7 @@ def build_parser() -> argparse.ArgumentParser:
 
     ta = tsub.add_parser("add", help="identify a target company")
     ta.add_argument("--company", required=True)
-    ta.add_argument("--slug"); ta.add_argument("--via", help="how it was found — Q-008 evidence")
+    ta.add_argument("--slug"); ta.add_argument("--via", help="how it was found — channel evidence, D-026")
     ta.add_argument("--campaign"); ta.add_argument("--website"); ta.add_argument("--industry")
     ta.add_argument("--size"); ta.add_argument("--location")
     ta.add_argument("--contact"); ta.add_argument("--role"); ta.add_argument("--email")

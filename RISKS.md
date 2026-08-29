@@ -30,7 +30,7 @@ The adopted strategy resolved capability-versus-positioning, but initial
 market focus is unresolved. A decision is still needed on whether to narrow by
 industry, business maturity, buyer type, or a more specific recurring problem.
 
-**Mitigation.** Resolve Q-001, Q-002, Q-005 in Discovery Round 2. Until then,
+**Mitigation.** Resolved by D-019, D-020, D-023 and D-036. The residual risk is that the broad initial market never narrows;
 acquisition stays deliberately small and evidence-gathering.
 
 **Source:** `.docx` §10 Risk 1.
@@ -62,7 +62,7 @@ Pricing, packaging, acquisition channels, and capacity planning depend on
 detailed ICP, buying triggers, founder advantages, revenue urgency, and
 capacity.
 
-**Mitigation.** Keep Q-007 and Q-008 open rather than filling them with
+**Mitigation.** Resolved by D-038 and D-036. The residual risk is that the bands prove wrong (A-007), rather than that they are
 generic assumptions. `BUSINESS.md` §10 enforces "pricing to be determined."
 
 **Source:** `.docx` §10 Risk 3.
@@ -89,7 +89,7 @@ with the founder. Sales and delivery compete for the same person, producing
 the feast-famine cycle typical of founder-led services businesses.
 
 **Mitigation.** `ROADMAP.md` Phase 4 automation; `MASTER.md` bottleneck
-analysis; resolve Q-006 to quantify actual capacity before committing to
+analysis; D-037 sets one major engagement at a time (A-008) before committing to
 concurrent engagements.
 
 ---
@@ -157,3 +157,23 @@ action taken.*
 - **2026-08-29 — R-002 materialized.** Two Tier 2/3 documents carried AI-first
   identity claims contradicting founder-approved positioning. Corrected under
   D-002. No client-facing material had been produced from them.
+
+---
+
+### R-010 — Tax and legal jurisdiction unstated
+**Category:** Legal / commercial · **Likelihood:** Medium · **Impact:** Medium
+
+**Risk.** D-038 sets prices in USD, but no tax treatment or governing legal
+jurisdiction is recorded. Proposal and agreement templates therefore carry no
+jurisdiction-specific commercial or legal terms.
+
+**Consequence.** A first agreement could be executed without terms appropriate
+to the jurisdiction it operates in, or priced without accounting for applicable
+tax.
+
+**Mitigation.** Establish tax treatment and governing jurisdiction before the
+first agreement is executed. This is execution work, not a strategic decision —
+it does not block sales activity, only contract execution.
+
+**Owner:** Founder. **Review trigger:** Before the first executed agreement.
+

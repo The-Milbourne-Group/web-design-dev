@@ -53,7 +53,7 @@ Never fill these with a default.*
 
 | Requirement | Blocked by |
 |---|---|
-| | Q-007 pricing / Q-009 stack / Q-011 package contents |
+| | *e.g. client-side dependency, third-party access, undecided integration* |
 
 ## 7. Verification Against Discovery
 

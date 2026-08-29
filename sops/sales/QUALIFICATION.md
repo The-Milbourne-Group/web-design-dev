@@ -8,7 +8,7 @@
 **Owner:** Founder
 **Status:** Active
 **Last reviewed:** 2026-08-29
-**Review trigger:** ICP configuration (Q-001 – Q-004); recurring mis-qualification.
+**Review trigger:** Evidence that the D-021 profile or D-022 trigger is wrong; recurring mis-qualification.
 **Related:** `ICP.md`, `SALES.md`, `sops/sales/DISCOVERY.md`
 
 ---
@@ -41,8 +41,8 @@ Founder. An agent may prepare the assessment; the founder decides the outcome.
    artifact from here to closure lives (`clients/README.md`).
 
 2. **Record the source** in `QUALIFICATION.md`. How the prospect arrived is
-   evidence for Q-008 (acquisition channels). Log it even when the opportunity
-   is disqualified.
+   channel evidence testing the D-036 acquisition order. Log it even when the
+   opportunity is disqualified.
 
 3. **Assess ICP fit** against `ICP.md` §4 and §5. Note which specific high-fit
    characteristics and problem signals are present. Do not score against
@@ -84,16 +84,16 @@ One of four outcomes, with written reasoning:
 that directory's `README.md`.
 
 Plus: source recorded; ICP and buyer evidence captured in the directory
-`README.md` for Q-003; risks noted.
+`README.md` testing the D-021 buyer roles; risks noted.
 
 **Disqualified opportunities keep their directory.** The reasoning is the
-primary evidence for resolving Q-001 and Q-003 (`ICP.md` §7).
+primary market-selection evidence under D-019 (`ICP.md` §7).
 
 ## 7. Quality Checks
 
 - [ ] No invented assumption is presented as fact.
 - [ ] No price, timeline, or deliverable was quoted (`SALES.md` §6 — pricing
-      is open, Q-007).
+      is not quoted at qualification).
 - [ ] The decision-maker is identified or explicitly recorded as unknown.
 - [ ] Reasoning would be intelligible to someone else in three months.
 - [ ] Disqualification reasoning is recorded, not just the verdict.

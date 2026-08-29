@@ -38,11 +38,9 @@ industry focus, detailed ICP and buyer profile, primary buying trigger,
 founder advantages, revenue urgency and capacity, acquisition channels, and
 pricing economics.
 
-All of these are tracked in **`OPEN_QUESTIONS.md`** (Q-001 – Q-008) with
-dependencies and blocked work identified. The founder's own analysis
-identifies **founder advantages (Q-005) and revenue urgency/capacity (Q-006)**
-as the highest-leverage inputs, because they may materially change market
-selection — so they should be answered before industry focus is finalized.
+All strategic questions are now resolved and recorded in **`DECISIONS.md`**
+(D-001 – D-040). `OPEN_QUESTIONS.md` holds no pending founder decision; the
+company is in commercial execution.
 
 These open items are deliberate dependencies, not gaps to be filled with
 generic assumptions.

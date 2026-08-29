@@ -6,9 +6,9 @@
 **Parent Authority:** `MASTER.md` (Tier 1 — supreme), `SALES.md` §6 and §7, `SERVICES.md` §4
 **Applies to:** Every opportunity between solution design and agreement.
 **Owner:** Founder
-**Status:** Active — issuance blocked by Q-007 and Q-011 (§9).
+**Status:** Active — prices confirmed (D-038); issuance is a founder decision, not a blocked step.
 **Last reviewed:** 2026-08-29
-**Review trigger:** Pricing configuration (Q-007); package configuration (Q-011); recurring loss pattern; scope disputes traced to the proposal.
+**Review trigger:** Pricing revision from delivery margin (D-038); recurring loss pattern; scope disputes traced to the proposal.
 **Related:** `sops/sales/SOLUTION_DESIGN.md`, `templates/sales/PROPOSAL_OUTLINE.md`, `sops/delivery/ONBOARDING.md`, `SALES.md`, `SERVICES.md`
 
 ---
@@ -48,17 +48,18 @@ the founder approves and sends.
 - `clients/<client>/DISCOVERY.md` — the client's own words
 - `SALES.md` §6 (commercial constraints) and §7 (proposal standard)
 - `SERVICES.md` §4 (offer definition standard) and §2 (progression)
-- `OPEN_QUESTIONS.md` — **mandatory**; Q-007 and Q-011 gate issuance
+- `SERVICES.md` §2.4 — **mandatory**; the approved price bands and minimum engagement
 - `templates/sales/PROPOSAL_OUTLINE.md`
 
 ## 5. Procedure
 
-1. **Run the issuance gate before drafting.** `SERVICES.md` §4 requires a
-   pricing model and defined deliverables before an offer is presented
-   commercially. Both are open (Q-007, Q-011). Confirm with the founder that
-   the commercial terms for *this* engagement have been decided and recorded.
-   If they have not, **stop and escalate (§9)** — do not draft a proposal
-   around a gap and do not write a figure to fill it.
+1. **Confirm the commercial terms for this engagement.** Prices are approved
+   (`SERVICES.md` §2.4): entry $7,500–$25,000, strategic assessment
+   $1,500–$5,000, expansion from $5,000, recurring from $750/month, minimum
+   engagement $5,000. The **figure for this engagement** follows the solution
+   design and is a founder decision. An engagement below the minimum requires
+   an explicitly recorded founder exception (D-038). Do not publish a fixed
+   price for work that still requires discovery.
 
 2. **Carry the scope across unchanged.** Every deliverable in the proposal
    comes from the minimum viable scope in `SOLUTION.md` §3. Adding anything
@@ -103,7 +104,7 @@ the founder approves and sends.
     the client actually objected to — scope, price, timing, trust, a competitor,
     or no decision — and complete the Buyer Evidence table in
     `clients/<client>/README.md`. Lost proposals are the strongest available
-    evidence for Q-001 and Q-003 (`ICP.md` §7), for the same reason
+    market-selection evidence under D-019 and D-036 (`ICP.md` §7), for the same reason
     disqualifications are (D-015). A loss recorded only as "lost" teaches the
     company nothing.
 
@@ -123,7 +124,8 @@ the founder approves and sends.
 - [ ] The issuance gate (§5.1) was run and passed, or the proposal was not
       issued.
 - [ ] No price, package content, timeline guarantee, or deliverable appears
-      that the founder has not decided (`SALES.md` §6, Q-007, Q-011).
+      that the founder has not approved, and nothing below the $5,000 minimum
+      without a recorded exception (`SERVICES.md` §2.4).
 - [ ] Every deliverable traces to `SOLUTION.md` §3 — nothing was added.
 - [ ] Deferred items appear as exclusions.
 - [ ] Assumed requirements are labelled as assumptions.
@@ -143,17 +145,14 @@ the founder approves and sends.
 | Client treats an assumption as a commitment | Return to the labelled assumption in writing; if it must hold, it is a scope change, not a clarification |
 | Proposal lost with no reason recorded | Ask; a lost opportunity that teaches nothing has cost twice |
 | Negotiation quietly changed the scope | Re-issue and re-file; the last issued version is the baseline, and an unrecorded revision breaks onboarding reconciliation |
-| Package contents invented to complete the document | Stop — Q-011 is open (`SERVICES.md` §7) |
+| Deliverables stated beyond what §7 defines | Stop — package contents are defined in `SERVICES.md` §7; do not extend them in a proposal |
 
 ## 9. Escalation
 
-**Standing escalation — issuance is currently blocked.** `SERVICES.md` §4
-requires a pricing model and defined deliverables before an offer is presented
-commercially; Q-007 (Blocking) and Q-011 (High) leave both open. Until the
-founder decides them, no proposal can be issued that satisfies `SERVICES.md`
-§4, and every proposal is a founder escalation rather than a procedure an
-agent completes. This is a real constraint on the commercial chain, not a
-documentation gap — recorded in `RISKS.md` R-003.
+**Prices are approved.** `SERVICES.md` §2.4 sets the bands and the $5,000
+minimum engagement (D-038), so issuance is a normal founder decision rather
+than a standing escalation. The founder approves the figure for the engagement;
+an agent never sets it.
 
 Also escalate when: the client requests terms outside what was approved; the
 minimum viable scope exceeds what the client can invest; the client asks for a

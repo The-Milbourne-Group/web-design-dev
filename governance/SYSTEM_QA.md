@@ -186,7 +186,9 @@ secret values, no AI-first positioning, 11/11 SOPs and 8/8 agents at standard.
 
 **Surfaced, not fixed — requires founder decision:** `SERVICES.md` §4 forbids
 presenting an offer without a pricing model and defined deliverables. Q-007 and
-Q-011 leave both open. **No proposal can currently be issued that satisfies
+Q-011 left both open at the time. *(Superseded 2026-08-29: D-038 sets the price
+points and `SERVICES.md` §2.4 satisfies §4. Retained as the record of the
+finding.)* **At the time of this review no proposal could be issued that satisfied
 `SERVICES.md` §4.** The commercial chain is executable up to solution design and
 then blocked by an undecided value, not by a documentation gap.
 `sops/sales/PROPOSAL.md` §9 makes this a standing escalation rather than
@@ -217,7 +219,7 @@ cases.
 
 | ID | Severity | Defect | Fix |
 |---|---|---|---|
-| P0-1 | System breaking | Qualification and discovery artifacts had no storage location; placement rule routed them to "do not file"; `ICP.md` §7 buyer evidence for blocking Q-003 had nowhere to accumulate | D-015 |
+| P0-1 | System breaking | Qualification and discovery artifacts had no storage location; placement rule routed them to "do not file"; `ICP.md` §7 buyer evidence had nowhere to accumulate | D-015 |
 | P1-2 | High | Discovery→proposal step undocumented; no SOP, no owner — the entry point for fabricated scope | D-016 |
 | P1-3 | High | No closure procedure; access left granted, no measurement baseline, confirmed expansion strategy had no operational trigger | D-017 |
 | P1-4 | High | `SERVICES.md` §5 pointed to `DELIVERY.md` §5 for change orders, which did not define them; `DELIVERY.md` had no route to `SCOPE_CHANGE.md` | Both corrected to point at the SOP |

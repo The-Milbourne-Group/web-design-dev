@@ -8,7 +8,7 @@
 **Owner:** Founder
 **Status:** Active
 **Last reviewed:** 2026-08-29
-**Review trigger:** Channel decision (Q-008); positioning change.
+**Review trigger:** Channel performance evidence (D-036); positioning change.
 **Related:** `MARKETING.md`, `BRAND.md`, `METRICS.md`, `WEB_STANDARDS.md`
 
 ---
@@ -33,7 +33,7 @@ rather than traffic volume.
 
 - Does **not** publish content or change a live site without approval
 - Does **not** set positioning or messaging strategy (`BRAND.md`)
-- Does **not** decide channel strategy (Q-008 — founder decision)
+- Does **not** decide channel strategy (D-036 — founder decision)
 - Does **not** produce content volume as a substitute for content value
 - Does **not** make claims on the client's behalf
 

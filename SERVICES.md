@@ -8,9 +8,9 @@
 **Parent Authority:** `MASTER.md` (Tier 1 — supreme), `STRATEGIC_CONFIGURATION.md` (Tier 2), `BUSINESS.md`
 **Applies to:** Sales conversations, proposals, delivery scoping, marketing claims.
 **Owner:** Founder
-**Status:** Active — structure confirmed, package contents open (Q-011).
+**Status:** Active — offers, price points and payment structure confirmed (D-029, D-038).
 **Last reviewed:** 2026-08-29
-**Review trigger:** Any change to the offer set, package contents, or pricing model.
+**Review trigger:** Any change to the offer set, package contents, or pricing. Pricing is refined from actual delivery margin after the initial validation projects (D-038).
 **Related:** `BUSINESS.md`, `ICP.md`, `SALES.md`, `DELIVERY.md`, `WEB_STANDARDS.md`
 
 ---
@@ -43,7 +43,7 @@ and built to `WEB_STANDARDS.md`.
 Solves: a digital presence that fails to establish credibility, communicate
 value, or generate qualified opportunities.
 
-*Exact deliverables, inclusions, exclusions, and timelines are open — Q-011.*
+*Price range and payment structure: §2.4. Package contents: §7.*
 
 ### 2.2 Expansion — Digital Systems & Workflow Improvement
 
@@ -64,6 +64,69 @@ expansion.
 Solves: digital infrastructure decaying or failing to keep pace with growth.
 
 ---
+
+## 2.4 Commercial Configuration
+
+**Confirmed under D-038. All figures USD.**
+
+| Offer | Price |
+|---|---|
+| **Minimum engagement** | **$5,000** |
+| Entry — Strategic Website & Digital Foundation | **$7,500 – $25,000** |
+| Strategic Assessment / Discovery | **$1,500 – $5,000** |
+| Expansion — systems, integrations, workflow, automation, applications | **from $5,000** |
+| Recurring — optimization, support, managed digital systems | **from $750 / month** |
+
+### Minimum engagement
+
+An implementation engagement below $5,000 is not accepted unless the work is
+explicitly strategic, or creates exceptional portfolio or relationship value —
+**and the founder explicitly records the exception.**
+
+### What determines the entry price
+
+Strategic complexity · information architecture · content requirements · design
+complexity · implementation complexity · integrations · workflow requirements ·
+timeline · risk.
+
+**Never publish a fixed price for work that requires discovery.** The range is
+the honest statement; the figure follows the solution design.
+
+### Strategic assessment
+
+Exists for structured problem definition, discovery and solution development,
+and **must not become unlimited unpaid consulting** (§3, sales instruments). It
+may be credited partially toward a subsequent implementation at the founder's
+discretion where commercially justified.
+
+### Recurring tiers
+
+The $750/month floor rises with response requirements, maintenance burden,
+reporting, optimization work, system complexity, and automation or integration
+ownership. **Unlimited support is never promised** — capacity and economics must
+support any commitment made (D-037).
+
+### Payment structure
+
+| Stage | Share |
+|---|---|
+| Project commitment | **50%** |
+| Approved design / implementation milestone | **25%** |
+| Before launch or final handoff | **25%** |
+
+**Work does not begin until the required initial payment is received** (D-037,
+deposits before significant implementation work). Where an executed agreement
+requires a different structure, the legal agreement hierarchy is preserved —
+the contract governs, not this table.
+
+### Pricing philosophy
+
+The company competes on strategic value, implementation quality, business
+understanding, systems capability and measurable improvement. **It does not
+compete on being the lowest-cost provider** (D-007).
+
+Pricing is refined from actual delivery effort, margin and client outcomes once
+the initial validation projects are complete (D-038).
 
 ## 3. Underlying Capabilities
 
@@ -122,11 +185,19 @@ Recommend the smallest engagement capable of solving the problem reliably.
 Do not upsell unnecessary complexity. Recommending an expansion engagement
 before the entry foundation is sound is a scope failure, not a sale.
 
-## 7. Unresolved Configuration
+## 7. Package Contents
 
-Package contents, deliverables, turnaround times, formal guarantees, and all
-pricing are registered in `OPEN_QUESTIONS.md` (Q-007, Q-011).
+Every package defines: client problem addressed · intended outcome ·
+deliverables · inclusions · exclusions · client responsibilities · timeline ·
+revision boundaries · technical assumptions · acceptance criteria · support
+period · optional extensions (D-029).
 
-Until the founder configures them, they must not be stated in a proposal,
-on the website, or in any agent output. Quote "to be determined" rather than
-an invented figure.
+The five-stage progression — Discovery/Assessment, Strategy and Solution
+Definition, Design and Development, Launch and Stabilization, Ongoing
+Optimization and Support — maps onto the three commercial layers in §2.
+
+**Guarantees** apply only to controllable delivery standards: delivery of
+agreed scope, correction of defects attributable to delivered work, defined
+stabilization support, and performance or uptime commitments only where
+technically controllable and contractually defined. **No guarantee of revenue
+growth or search rankings** (D-029).

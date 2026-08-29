@@ -24,7 +24,7 @@ delivery, and closure. It is not created at onboarding — by then, discovery
 notes and qualification records already exist and need somewhere to live.
 
 **Disqualified opportunities keep their directory.** The disqualification
-reasoning is the primary evidence for resolving Q-001 and Q-003 (industry
+reasoning is primary market-selection evidence under D-019 and D-036 (industry
 focus, detailed ICP and buyer roles) under `ICP.md` §7. Deleting it destroys
 the evidence the company needs to finish configuring itself.
 

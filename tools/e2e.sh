@@ -134,20 +134,21 @@ cat > "$SCRATCH/sol.json" <<'JSON'
   {"ref":"R3","statement":"Enquiry measurement baseline","source":"Assumption — inferred from D3","kind":"Assumed","capability":"optimization-and-support","in_scope":true},
   {"ref":"R4","statement":"Tender document templating","source":"D2","kind":"Confirmed","in_scope":false,"deferred_reason":"Expansion candidate; not the credibility problem"}],
  "stage":"Entry","feasibility":"Within capability; client content capacity is the constraint",
- "open_dependencies":["Q-009 — no approved stack, CMS is a per-project decision"]}
+ "open_dependencies":["CMS choice is a per-project decision (TECH_STACK.md §3)"]}
 JSON
 expect_ok "sourced solution ingested" $MG ingest zz-e2e-main solution --from "$SCRATCH/sol.json"
 expect_ok "founder approves solution" $MG solution zz-e2e-main --verified --approved-by Founder
 expect_status zz-e2e-main Proposal
 
 step "5 · Proposal issuance gate"
-expect_fail "blocked: Q-007 and Q-011 open" $MG propose zz-e2e-main --approved-by Founder
-expect_fail "blocked: price with the gate uncleared" \
-  $MG gate zz-e2e-main --terms "Phase one at £18,500" --approved-by Founder
-expect_ok "founder decides terms for this engagement" $MG gate zz-e2e-main \
+expect_fail "blocked: commercial terms not set for this engagement" \
+  $MG propose zz-e2e-main --approved-by Founder
+expect_fail "blocked: figure below the \$5,000 minimum engagement" \
+  $MG gate zz-e2e-main --terms-decided --terms "Fixed fee of \$2,000." --approved-by Founder
+expect_ok "founder records terms within the approved bands" $MG gate zz-e2e-main \
   --terms-decided --deliverables-defined --approved-by Founder \
-  --terms "Fixed fee for the scope in §2, invoiced in three stages." \
-  --note "This engagement only; Q-007 remains open company-wide."
+  --terms "Fixed fee of \$14,000 for the scope in §2, invoiced 50/25/25." \
+  --note "Within the D-038 entry range of \$7,500-\$25,000."
 expect_fail "blocked: issuance without founder approval" $MG propose zz-e2e-main
 expect_ok "proposal issued" $MG propose zz-e2e-main --approved-by Founder \
   --valid-until 2026-10-15 --follow-up-due 2026-09-15
@@ -220,7 +221,7 @@ $MG discovery zz-e2e-lost --held-on 2026-09-04 --playback 2026-09-06 >/dev/null 
 echo '{"problem_restatement":"Dated site","requirements":[{"ref":"R1","statement":"Rebuild","source":"client statement","kind":"Confirmed","capability":"website-development","in_scope":true}],"stage":"Entry","feasibility":"ok"}' > "$SCRATCH/s2.json"
 $MG ingest zz-e2e-lost solution --from "$SCRATCH/s2.json" >/dev/null 2>&1
 $MG solution zz-e2e-lost --verified --approved-by Founder >/dev/null 2>&1
-$MG gate zz-e2e-lost --terms-decided --deliverables-defined --approved-by Founder >/dev/null 2>&1
+$MG gate zz-e2e-lost --terms-decided --deliverables-defined --approved-by Founder --terms "Fixed fee of \$9,000." >/dev/null 2>&1
 $MG propose zz-e2e-lost --approved-by Founder >/dev/null 2>&1
 expect_fail "blocked: decline with no loss reasoning" $MG outcome zz-e2e-lost --outcome Declined
 expect_ok "decline with reasoning" $MG outcome zz-e2e-lost --outcome Declined \
@@ -346,7 +347,30 @@ assert s['contacted']>=1 and s['positive']>=1 and s['converted']>=1, s
 assert s['by_channel'].get('email',{}).get('converted',0)>=1, s['by_channel']
 " && ok "growth metrics attribute the conversion to its channel" || bad "growth attribution broken"
 
-step "13 · Governance check, pipeline view and metrics"
+step "13 · Launch configuration"
+python3 -c "
+import sys; sys.path.insert(0,'tools')
+from pathlib import Path
+from mg import governance as g
+root=g.repo_root(Path('tools/mg/governance.py').resolve())
+qs=g.open_questions(root)
+pending=[k for k,v in qs.items() if not v['resolved']]
+assert not pending, pending
+" && ok "no pending founder decisions in OPEN_QUESTIONS.md" || bad "open questions remain"
+python3 -c "
+import sys; sys.path.insert(0,'tools')
+from pathlib import Path
+from mg import governance as g
+root=g.repo_root(Path('tools/mg/governance.py').resolve())
+assert g.minimum_engagement(root)==5000, g.minimum_engagement(root)
+bands=g.pricing(root)
+assert any('Entry' in k for k in bands), list(bands)
+assert not g.scan_for_open_values(root, 'Fixed fee of \$14,000.'), 'in-band figure flagged'
+assert g.scan_for_open_values(root, 'One-off \$1,200 build'), 'below-minimum figure not flagged'
+assert not g.scan_for_open_values(root, '\$750 per month retainer'), 'recurring flagged as project value'
+" && ok "pricing bands read from SERVICES.md §2.4; minimum enforced" || bad "pricing model wrong"
+
+step "14 · Governance check, pipeline view and metrics"
 expect_ok "governance check clean" $MG check
 expect_ok "pipeline view renders" $MG next
 $MG metrics --json > "$SCRATCH/m.json"

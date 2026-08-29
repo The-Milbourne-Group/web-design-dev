@@ -102,7 +102,7 @@ class OpenValueError(Exception):
 @dataclass
 class Contact:
     name: str = ""
-    role: str = ""            # as stated by them; never inferred (Q-003 open)
+    role: str = ""            # as stated by them; never inferred (D-021 lists expected roles)
     email: str = ""
     phone: str = ""
     is_decision_maker: bool | None = None   # None = not yet established
@@ -132,7 +132,7 @@ class Fit:
 
 @dataclass
 class Qualification:
-    source: str = ""             # evidence for Q-008
+    source: str = ""             # channel evidence (D-026)
     problem: str = ""            # in the prospect's own words
     desired_outcome: str = ""
     authority_confirmed: bool | None = None
@@ -209,7 +209,7 @@ class ProposalRecord:
     gate_terms_decided: bool = False       # PROPOSAL.md §5.1 issuance gate
     gate_deliverables_defined: bool = False
     gate_notes: str = ""
-    commercial_terms: str = "To be determined"   # Q-007 open until founder decides
+    commercial_terms: str = "To be determined"   # until the founder approves the figure
     version: int = 0
     issued_on: str = ""
     issued_at: str = ""          # full timestamp, for proposal build time
@@ -244,7 +244,7 @@ class Project:
 
 @dataclass
 class BuyerEvidence:
-    """ICP.md §7 — the evidence Q-003 needs. Recorded, never generalized here."""
+    """ICP.md §7 — evidence testing the D-021 buyer roles. Never generalized here."""
     initiated_contact: str = ""
     held_budget: str = ""
     could_say_no: str = ""

@@ -8,7 +8,7 @@
 **Owner:** Founder
 **Status:** Active
 **Last reviewed:** 2026-08-29
-**Review trigger:** Visual identity configuration (Q-010); accessibility baseline change.
+**Review trigger:** Brand revision (D-040); accessibility baseline change.
 **Related:** `WEB_STANDARDS.md`, `BRAND.md`, `DELIVERY.md`
 
 ---
@@ -33,7 +33,7 @@ achieve a business outcome — in that order, with visual quality serving both.
 - Does **not** prioritize aesthetics over usability or client objectives
   (`WEB_STANDARDS.md` §3)
 - Does **not** invent company brand assets — colours, typography, logo
-  (`BRAND.md` §8, Q-010 open)
+  outside the approved system (`BRAND.md` §8, D-040)
 - Does **not** approve designs; the founder and client approve
 - Does **not** decide project scope or add unscoped deliverables
 - Does **not** implement; it specifies
@@ -64,7 +64,7 @@ an approved design system.
 **May recommend only:** visual direction; content structure changes; scope
 adjustments; conversion changes.
 
-**May never decide:** company brand identity (Q-010); client brand identity;
+**May never decide:** company brand identity (D-040 — founder decision); client brand identity;
 project scope; what is acceptable for delivery; anything client-facing.
 
 ## 8. Escalation Rules

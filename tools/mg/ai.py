@@ -121,7 +121,7 @@ TASKS: dict[str, dict] = {
             "company": {"industry": "str", "approximate_size": "str",
                         "location": "str", "website": "str"},
             "contacts": [{"name": "str", "role": "as published, never inferred from a "
-                                                 "name or guessed (Q-003 is open)",
+                                                 "name or guessed; D-021 lists expected roles, verify them",
                           "email": "only if published"}],
             "research": [{"ref": "E1", "statement": "str",
                           "kind": "confirmed|inference|unknown",

@@ -8,9 +8,9 @@
 **Parent Authority:** `MASTER.md` (Tier 1 — supreme), whose §2 places strategic identity under founder decision.
 **Applies to:** Every document, agent, and artifact that describes what the company is or who it serves.
 **Owner:** Founder — sole authority to change this document.
-**Status:** Founder-approved working configuration
+**Status:** Founder-approved — strategic configuration complete; in commercial execution
 **Last reviewed:** 2026-08-29
-**Review trigger:** Discovery Round 2; any change to positioning, market, or commercial model.
+**Review trigger:** Evidence from the initial validation projects; any change to positioning, market, or commercial model.
 **Related:** `DECISIONS.md`, `OPEN_QUESTIONS.md`, `RISKS.md`, `BUSINESS.md`, `EXECUTIVE_SUMMARY.md`
 
 ## Executive Positioning
@@ -51,22 +51,44 @@ Differentiation is expected to come from:
 - Appropriate human oversight
 - Measurable business improvement rather than deliverable volume
 
-## Open Strategic Decisions
+## Launch Configuration
 
-The following remain unresolved and **must not be treated as confirmed**:
-industry vertical or specialization; detailed ICP and company-size range;
-buyer roles and buying committee; founder technical strengths and advantages;
-network and referral advantages; founder time and capacity constraints;
-revenue urgency; acquisition channels; pricing philosophy, minimum engagement,
-and package economics.
+Strategic configuration is **complete**. `OPEN_QUESTIONS.md` holds no pending
+founder decision.
 
-Each is tracked with its rationale, dependencies, and blocked work in
-**`OPEN_QUESTIONS.md`** (Q-001 – Q-008), which is the single register for
-open items. Do not maintain a competing list.
+- **Founder advantage:** operating capability, not credentials — systems
+  thinking, strategy-to-implementation continuity, broad technical capability
+  directed by the founder, AI-enabled operational leverage under human
+  oversight, a founder-led boutique model, and demonstrated internal
+  systems capability (D-036). **No undocumented experience, relationship,
+  client, outcome or credential is ever claimed.**
+- **Initial market:** established small-to-mid-sized service and professional
+  businesses whose digital presence or infrastructure has become fragmented,
+  outdated, underperforming, or disconnected from operational needs (D-036),
+  tested broadly before any specialization (D-019).
+- **Acquisition:** diversified early-stage — targeted outbound, founder network
+  where available, referrals as they develop, portfolio and content evidence,
+  selective partnerships (D-036, amending the D-026 priority order).
+- **Capacity:** one major implementation in active build at a time; at most two
+  active engagements, the second being discovery, strategy, optimization or
+  support (D-037). **Delivery capacity is never sold on theoretical hiring.**
+- **Commercial posture:** controlled commercial validation — revenue
+  prioritized over further speculative internal system building (D-037).
+- **Commercial configuration:** $5,000 minimum engagement; entry
+  $7,500–$25,000; strategic assessment $1,500–$5,000; expansion from $5,000;
+  recurring from $750/month; 50/25/25 payment structure (D-038, detailed in
+  `SERVICES.md` §2.4).
+- **Validation target:** close and successfully deliver **three profitable
+  projects**, establish reliable project economics, then refine pricing from
+  actual delivery margin (D-037, D-038).
+- **Technology:** Next.js with TypeScript, Tailwind CSS, PostgreSQL where
+  relational data is required, Vercel or equivalent managed hosting — a default,
+  not a prohibition on justified alternatives (D-039).
+- **Brand:** Inter; `#111111`, `#F7F7F5`, `#6B7280`, `#E5E7EB`, accent
+  `#1D4ED8`; 4px spacing; 4–8px radius; wordmark identity for launch (D-040).
 
-These are deliberate dependencies, not gaps to be filled with generic
-assumptions. An agent that supplies a value for any of them has fabricated
-company strategy.
+Future uncertainty is handled as assumptions, risks, or measurements to
+validate — not as new open questions.
 
 ## Precedence
 

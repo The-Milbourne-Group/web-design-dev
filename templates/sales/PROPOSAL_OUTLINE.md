@@ -6,8 +6,9 @@
 > draft; only the founder issues a proposal
 > (`governance/AUTHORITY.md` §7).
 >
-> **Pricing is registered as open (`OPEN_QUESTIONS.md` Q-007).** Until the
-> founder configures it, write "to be determined." Never state a figure.
+> **Prices are approved (`SERVICES.md` §2.4).** Quote within the approved range;
+> the figure for an engagement follows the solution design and is founder-approved.
+> Minimum engagement $5,000.
 
 **Client:**
 **Date:**
@@ -51,7 +52,7 @@ Sequence and duration, with the assumptions it depends on. Label as
 assumptions, not commitments.
 
 ## 10. Commercial Terms
-**Pricing:** To be determined *(Q-007 — do not fill without founder input)*
+**Pricing:** *Within `SERVICES.md` §2.4; founder-approved for this engagement*
 **Payment schedule:** To be determined
 **What triggers a change order:** `sops/delivery/SCOPE_CHANGE.md`
 

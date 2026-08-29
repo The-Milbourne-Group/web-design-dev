@@ -8,7 +8,7 @@
 **Owner:** Founder
 **Status:** Active
 **Last reviewed:** 2026-08-29
-**Review trigger:** Recurring scope disputes traced to the proposal; package configuration (Q-011).
+**Review trigger:** Recurring scope disputes traced to the proposal; package or pricing revision.
 **Related:** `sops/sales/DISCOVERY.md`, `SERVICES.md`, `templates/sales/PROPOSAL_OUTLINE.md`
 
 ---
@@ -41,8 +41,7 @@ the traceability matrix and draft options; they may not decide the solution.
   questions
 - `SERVICES.md` §2 — the commercial progression and what each stage covers
 - `ICP.md` fit assessment from qualification
-- `OPEN_QUESTIONS.md` — **mandatory**; Q-011 means package contents are not
-  defined and must not be invented
+- `SERVICES.md` §2.4 and §7 — the approved price bands and package contents
 
 ## 5. Procedure
 
@@ -77,8 +76,8 @@ the traceability matrix and draft options; they may not decide the solution.
    the company does not have is not a stretch goal.
 
 7. **Record open dependencies.** Any requirement that cannot be specified
-   because a company decision is open (Q-007 pricing, Q-009 stack, Q-011
-   package contents) is marked as dependent — never filled with a default.
+   because a company decision is genuinely absent is marked as dependent —
+   never filled with a default.
 
 8. **Verify against discovery.** Re-read the discovery notes and confirm that
    nothing in the solution contradicts what the client actually said, and that
@@ -105,7 +104,7 @@ the traceability matrix and draft options; they may not decide the solution.
       client might buy.
 - [ ] Every problem raised in discovery is addressed or explicitly deferred.
 - [ ] Nothing contradicts what the client said.
-- [ ] No open value (Q-007, Q-009, Q-011) was filled with a default.
+- [ ] No requirement depends on a value nobody has decided.
 - [ ] Deferred items are recorded, not discarded.
 
 ## 8. Failure Conditions & Recovery
@@ -116,7 +115,7 @@ the traceability matrix and draft options; they may not decide the solution.
 | Scope grew beyond the stated problem | Return to §5.3; move the excess to deferred |
 | Solution addresses a problem the client did not raise | Either the discovery was incomplete or the solution is being sold — determine which |
 | A discovery problem is unaddressed | Address it or record it as an explicit exclusion; silence becomes a dispute later |
-| Package contents invented to fill the proposal | Stop — Q-011 is open; state "to be determined" and escalate |
+| Scope stated beyond the approved packages | Return to `SERVICES.md` §7; a proposal does not extend the offer set |
 | Entry engagement absorbing expansion work | Split it; propose expansion as a separate stage (`SERVICES.md` §2) |
 
 ## 9. Escalation

@@ -30,8 +30,8 @@ Python 3.11+, standard library only. No install, no credentials, no services.
 
 `clients/<slug>/opportunity.json` is the record. Every markdown file beside it
 is **generated from that record** — `README.md`, `QUALIFICATION.md`,
-`DISCOVERY.md`, `SOLUTION.md`, `PROPOSAL.md`, `PROPOSAL_DRAFT.md`,
-`PROJECT_BRIEF.md`. Edit the record, not the markdown: `mg render <slug>`
+DISCOVERY.md, SOLUTION.md, PROPOSAL.md, PROPOSAL_DRAFT.md and
+PROJECT_BRIEF.md. Edit the record, not the markdown: `mg render <slug>`
 overwrites the generated files.
 
 That is the whole answer to duplicate data entry. A fact captured at
@@ -149,7 +149,7 @@ document it comes from.
 | Qualify / disqualify needs `--approved-by` | `governance/AUTHORITY.md` §7 |
 | No solution design before client playback | `sops/sales/DISCOVERY.md` §5.9 |
 | A requirement with no source blocks approval | `sops/sales/SOLUTION_DESIGN.md` §5.2 |
-| Proposal issuance blocked while Q-007 / Q-011 are open | `SERVICES.md` §4, `sops/sales/PROPOSAL.md` §5.1 |
+| Figures below the $5,000 minimum engagement are flagged | `SERVICES.md` §2.4, D-038 |
 | A commercial figure is rejected until the founder decides terms | `SALES.md` §6 |
 | Declining a proposal requires loss reasoning | `sops/sales/PROPOSAL.md` §5.10 |
 | Kickoff needs acceptance criteria and named approvers | `sops/delivery/ONBOARDING.md` §5.4, §5.9 |
@@ -158,8 +158,9 @@ document it comes from.
 | A finding's `confirmed` flag must be a real boolean | evidence/inference boundary |
 | Duplicate company or contact email is refused | data continuity |
 
-`OPEN_QUESTIONS.md` is parsed at runtime, so when the founder resolves Q-007
-the gate opens on its own. No code change, one source of truth.
+`SERVICES.md` §2.4 is parsed at runtime for the approved bands and the minimum
+engagement value, so a pricing change is a document edit. No code change, one
+source of truth.
 
 ## The AI layer
 

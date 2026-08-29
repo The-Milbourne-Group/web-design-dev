@@ -126,7 +126,7 @@ render-blocking resources, font loading strategy, and behaviour on a
 constrained connection.
 
 A specific numeric performance budget depends on the approved stack
-(`OPEN_QUESTIONS.md` Q-009). Until set, record measured baselines at launch so
+(`TECH_STACK.md` §3, D-039). Record measured baselines at launch so
 regression is detectable.
 
 ---
