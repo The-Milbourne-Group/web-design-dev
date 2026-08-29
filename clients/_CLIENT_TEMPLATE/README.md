@@ -52,6 +52,7 @@ is stable across engagements.*
 | `QUALIFICATION.md` | Qualification | Fit assessment, source, outcome |
 | `DISCOVERY.md` | Discovery | Discovery notes |
 | `SOLUTION.md` | Solution design | Requirement traceability |
+| `PROPOSAL.md` | Proposal | What was proposed, and its outcome |
 | `PROJECT_BRIEF.md` | Onboarding | Scope, requirements, acceptance criteria |
 | `DECISIONS.md` | As needed | Engagement decisions and scope changes |
 | `ACCESS.md` | Onboarding | Access record — names and locations only |

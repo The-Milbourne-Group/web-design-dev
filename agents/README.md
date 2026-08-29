@@ -31,6 +31,7 @@ It is never automatically correct (`MASTER.md` §10.1).
 | Prioritization, routing, cross-domain conflicts, bottleneck analysis | `CEO_AGENT.md` |
 | Market analysis, positioning reasoning, opportunity evaluation, decision briefs | `STRATEGY_AGENT.md` |
 | Prospect research, qualification support, discovery prep, proposal drafting | `SALES_AGENT.md` |
+| Proposal issuance and commercial terms | **Founder**, via `sops/sales/PROPOSAL.md` |
 | Solution design support and requirement traceability | `SALES_AGENT.md` prepares; **founder decides** |
 | Search intent, content opportunity, technical SEO, growth measurement | `SEO_AGENT.md` |
 | Interface design, UX, hierarchy, design systems, responsive states | `DESIGN_AGENT.md` |
@@ -62,6 +63,7 @@ exactly one. These were ambiguous before this registry existed.
 | Whether an opportunity is worth pursuing | Strategy (analysis) → Founder (decision) | Sales supplies qualification evidence |
 | Whether to disqualify a prospect | Founder, via `sops/sales/QUALIFICATION.md` | Sales prepares and recommends |
 | What solution to propose | **Founder**, via `sops/sales/SOLUTION_DESIGN.md` (D-010) | Sales builds the traceability matrix; Strategy may supply analysis |
+| Whether a proposal may be issued | **Founder**, via `sops/sales/PROPOSAL.md` §5.1 | Sales drafts and files; issuance is never delegated |
 | Website content and messaging | SEO for search intent; Design for hierarchy | Both bound by `BRAND.md` |
 | Whether a deliverable is acceptable | QA verifies; **Founder accepts** | Dev and Design remediate |
 | Technology selection | Dev proposes; Founder approves (`TECH_STACK.md` §3) | — |

@@ -77,7 +77,7 @@ One of four outcomes, with written reasoning:
 |---|---|---|
 | **Qualified** | Strong fit; advance | `sops/sales/DISCOVERY.md` |
 | **Nurture** | Real fit, wrong timing | Record the revisit trigger |
-| **Clarification required** | Cannot assess yet | Named questions to resolve |
+| **Clarification required** | Cannot assess yet | Named questions to resolve; `Status` stays `Prospect` |
 | **Disqualified** | Poor fit or undeliverable | Decline courteously; record why |
 
 **Location:** `clients/<prospect-name>/QUALIFICATION.md`, with `Status` set in

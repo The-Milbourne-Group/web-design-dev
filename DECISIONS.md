@@ -355,6 +355,57 @@ to the phase table and quality gates.
 
 ---
 
+### D-018 — The proposal is a governed step with a filed artifact
+**Date:** 2026-08-29 · **Status:** Provisional · **Confidence:** High · **Owner:** Founder
+
+**Decision.** Proposals follow `sops/sales/PROPOSAL.md` and are recorded in
+`clients/<client>/PROPOSAL.md`: an issuance gate, founder approval, the scope
+and exclusions as issued, and the outcome with its reasoning.
+
+**Context.** The proposal was the only step in the commercial chain with no
+procedure. `SYSTEM_MAP.md` §3 listed a *template* in its Procedure column;
+`templates/README.md` was the only entry whose "Used by" named a person rather
+than an SOP; and the client directory had no file for it. Four consequences:
+
+1. The sole control preventing a fabricated price or package reaching a
+   client-facing document was a blockquote in a Tier 6 template — which
+   `governance/AUTHORITY.md` §4 states carries no authority. `RISKS.md` R-006
+   names fabricating open values the highest-frequency failure mode in this
+   system, and this is the point of highest consequence.
+2. `sops/delivery/ONBOARDING.md` §5.3 reconciles the project brief against
+   "what was sold," and `sops/delivery/SCOPE_CHANGE.md` §8 resolves scope
+   disputes against it — but nothing filed what was sold.
+3. `METRICS.md` §4 mandates discovery-to-proposal and proposal-to-close rates.
+   Neither was computable, because no procedure recorded issuance or outcome.
+4. `Lost` was a declared terminal status that no procedure assigned, and loss
+   reasoning — the strongest available evidence for Q-001 and Q-003, by the
+   same argument D-015 made for disqualifications — was never captured.
+
+**Reasoning.** The system could qualify, discover, and design a solution, then
+had no defined way to do the one thing that earns revenue. This adds no
+commercial policy; `SALES.md` §6–§7 and `SERVICES.md` §4 already set it. It
+makes the existing policy executable and gives the artifact a home.
+
+**Consequences.** New SOP and client-directory artifact; routing added to
+`SOP_INDEX.md` and `agents/README.md`; `SYSTEM_MAP.md` §3 now names a
+procedure; onboarding and scope change reconcile against the filed proposal;
+`clients/README.md` gains a status-assignment table and `Active`, `Launched`,
+and `Lost` are now set by named procedures.
+
+**Surfaced, not resolved.** `SERVICES.md` §4 requires a pricing model and
+defined deliverables before an offer is presented commercially. Q-007
+(Blocking) and Q-011 (High) leave both open, so **no proposal can currently be
+issued that satisfies `SERVICES.md` §4.** The SOP makes this a standing
+escalation rather than something discovered mid-engagement. Resolving it is a
+founder decision, not a documentation change.
+
+**Status note.** Recorded as `Provisional`: this creates a new SOP, which
+`governance/AUTHORITY.md` §7 places under "requires approval before action,"
+and `sops/operations/DECISION_LOG.md` §5.5 reserves `Confirmed` to the founder.
+Founder confirmation promotes it.
+
+---
+
 ### D-014 — Confirmed decisions are removed from "configuration required" lists
 **Date:** 2026-08-29 · **Status:** Confirmed · **Confidence:** High · **Owner:** Founder
 

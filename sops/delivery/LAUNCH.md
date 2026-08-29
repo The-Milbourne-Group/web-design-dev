@@ -84,7 +84,8 @@ externally visible action (`MASTER.md` §7.4).
     limitations, what to watch for, and how to report an issue.
 
 13. **Record the launch**: date, what shipped, known limitations, monitoring
-    in place, and ownership of ongoing responsibility.
+    in place, and ownership of ongoing responsibility. Set `Status: Launched`
+    in `clients/<client>/README.md` (`clients/README.md`).
 
 ## 6. Outputs
 
@@ -94,6 +95,7 @@ externally visible action (`MASTER.md` §7.4).
 - Analytics and monitoring confirmed live
 - Written client launch confirmation
 - Launch record with known limitations
+- `Status: Launched`
 
 ## 7. Quality Checks
 

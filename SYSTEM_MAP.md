@@ -117,7 +117,7 @@ The trace from strategy to expansion, with the governing document at each step.
 | Qualification | `ICP.md`, `SALES.md` | `sops/sales/QUALIFICATION.md` | Qualified / nurture / disqualified |
 | Discovery | `SALES.md` §4 | `sops/sales/DISCOVERY.md` | Discovery notes, confirmed understanding |
 | Solution | `SALES.md` §5, `SERVICES.md` | `sops/sales/SOLUTION_DESIGN.md` | Requirement traceability matrix, minimum viable scope |
-| Proposal | `SALES.md` §7 | `templates/sales/PROPOSAL_OUTLINE.md` | Founder-approved proposal |
+| Proposal | `SALES.md` §6–§7 | `sops/sales/PROPOSAL.md` | Founder-issued proposal, filed with its outcome |
 | Agreement | Founder only | — | Executed agreement |
 | Onboarding | `DELIVERY.md` §3 | `sops/delivery/ONBOARDING.md` | Client workspace, project brief |
 | Delivery | `DELIVERY.md` §2 | `sops/delivery/` | Built deliverable |
@@ -175,7 +175,7 @@ Every arrow terminates at the founder for anything reserved under
 ## 6. Client Lifecycle
 
 ```
-Prospect → Qualified → Discovery → Solution → Proposal → Agreement
+Prospect → Qualified → Discovery → Proposal → Agreement
     │                                                        │
     └── clients/<client>/ created HERE                       ▼
         (at qualification, not onboarding)   Onboarding → Delivery → QA → Launch
@@ -194,6 +194,9 @@ The directory is created at **qualification** so that qualification records,
 discovery notes, and solution traceability have a home before an agreement
 exists. It is retained after closure — including for disqualified
 opportunities, whose reasoning is the evidence base for Q-001 and Q-003.
+
+The `Status` vocabulary itself is owned by `clients/README.md` — this diagram
+shows the flow, not the permitted values.
 
 Client knowledge lives in `clients/<client>/` for the entire lifecycle and
 never leaves it (`MASTER.md` §7.1).

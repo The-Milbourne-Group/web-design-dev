@@ -95,7 +95,7 @@ Founder. Acceptance and access revocation are founder decisions.
 ### Expansion
 
 11. **Review expansion opportunity.** Consult the deferred items from
-    `SOLUTION.md` §5 and the commercial progression (`SERVICES.md` §2):
+    `SOLUTION.md` §4 and the commercial progression (`SERVICES.md` §2):
 
     - Are deferred items now worth proposing as an **Expansion** engagement?
     - Does the client need ongoing optimization, support, or managed systems

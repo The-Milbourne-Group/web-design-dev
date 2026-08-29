@@ -31,7 +31,7 @@
 | Template | Used by | Governed by |
 |---|---|---|
 | `sales/DISCOVERY_NOTES.md` | `sops/sales/DISCOVERY.md` | `SALES.md` §4 |
-| `sales/PROPOSAL_OUTLINE.md` | Sales agent, founder | `SALES.md` §7, `SERVICES.md` §4 |
+| `sales/PROPOSAL_OUTLINE.md` | `sops/sales/PROPOSAL.md` | `SALES.md` §7, `SERVICES.md` §4 |
 | `delivery/PROJECT_BRIEF.md` | `sops/delivery/ONBOARDING.md` | `DELIVERY.md` |
 | `strategy/DECISION_BRIEF.md` | `sops/operations/DECISION_LOG.md` | `MASTER.md` |
 | `automation/AUTOMATION_SPEC.md` | `sops/automation/WORKFLOW_REVIEW.md` | `AUTOMATION.md` §4 |

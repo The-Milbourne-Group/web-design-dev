@@ -39,6 +39,26 @@ Prospect → Qualified → Discovery → Proposal → Onboarding
 
 Terminal states: `Disqualified` · `Nurture` · `Lost` · `Closed`
 
+This list is the **single** definition of the permitted values. Every status is
+set by a named procedure — a status no procedure assigns is a status that never
+gets set, and the field stops describing reality.
+
+| Status | Set by |
+|---|---|
+| `Prospect` | `sops/sales/QUALIFICATION.md` §5.1 — on creating the directory |
+| `Qualified` · `Nurture` · `Disqualified` | `sops/sales/QUALIFICATION.md` §6 — the qualification outcome |
+| `Discovery` | `sops/sales/DISCOVERY.md` §6 |
+| `Proposal` | `sops/sales/SOLUTION_DESIGN.md` §6, held through `sops/sales/PROPOSAL.md` |
+| `Lost` | `sops/sales/PROPOSAL.md` §5.9 — proposal declined |
+| `Onboarding` | `sops/delivery/ONBOARDING.md` §5.1 |
+| `Active` | `sops/delivery/ONBOARDING.md` §5.11 — onboarding complete, delivery begins |
+| `Launched` | `sops/delivery/LAUNCH.md` §5.13 |
+| `Closed` | `sops/delivery/CLOSURE.md` §5.12 |
+
+An opportunity that cannot yet be assessed stays at `Prospect` with the
+outstanding questions recorded in `QUALIFICATION.md` — *Clarification required*
+is a qualification outcome, not a status.
+
 ## Client Isolation — Absolute Constraint
 
 Client context isolation is imposed by `MASTER.md` §7.1 and is not negotiable
@@ -68,6 +88,7 @@ clients/<client-name>/
 ├── QUALIFICATION.md     Fit assessment and source  (sops/sales/QUALIFICATION.md)
 ├── DISCOVERY.md         Discovery notes            (sops/sales/DISCOVERY.md)
 ├── SOLUTION.md          Requirement traceability   (sops/sales/SOLUTION_DESIGN.md)
+├── PROPOSAL.md          What was proposed, and its outcome (sops/sales/PROPOSAL.md)
 ├── PROJECT_BRIEF.md     Scope, requirements, acceptance criteria (at onboarding)
 ├── DECISIONS.md         Engagement decisions and scope changes
 ├── ACCESS.md            What access exists and where credentials are stored

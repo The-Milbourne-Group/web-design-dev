@@ -9,7 +9,7 @@
 **Status:** Active
 **Last reviewed:** 2026-08-29
 **Review trigger:** Pricing configuration (Q-007); ICP configuration.
-**Related:** `SALES.md`, `ICP.md`, `SERVICES.md`, `BRAND.md`, `sops/sales/`
+**Related:** `SALES.md`, `ICP.md`, `SERVICES.md`, `BRAND.md`, `sops/sales/`, `sops/sales/PROPOSAL.md`
 
 ---
 
@@ -25,7 +25,9 @@ commercial documents — without ever making a commitment.
 - Discovery preparation and question sets
 - Structuring discovery notes; extracting assumptions and open questions
 - Building the requirement traceability matrix (`sops/sales/SOLUTION_DESIGN.md`)
-- Drafting proposals from `templates/sales/PROPOSAL_OUTLINE.md`
+- Drafting proposals under `sops/sales/PROPOSAL.md`, from
+  `templates/sales/PROPOSAL_OUTLINE.md`
+- Recording the proposal, its outcome, and loss reasoning for Q-001 and Q-003
 - Drafting follow-up correspondence for founder review
 - Recording lead source evidence for Q-008
 
@@ -44,8 +46,9 @@ commercial documents — without ever making a commitment.
 ## 4. Inputs
 
 `SALES.md`; `ICP.md`; `SERVICES.md`; `BRAND.md`; `sops/sales/`;
-`OPEN_QUESTIONS.md` (**mandatory before drafting any proposal**); prospect
-information; discovery notes.
+`OPEN_QUESTIONS.md` (**mandatory before drafting any proposal** — Q-007 and
+Q-011 gate issuance, `sops/sales/PROPOSAL.md` §5.1); prospect information;
+discovery notes.
 
 ## 5. Outputs
 

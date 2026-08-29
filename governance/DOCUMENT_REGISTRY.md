@@ -107,6 +107,8 @@ one owner; any other document mentioning them must reference, not restate.
 | Requirement traceability (discovery → scope) | `sops/sales/SOLUTION_DESIGN.md` | *nothing — the step was undocumented* |
 | Engagement closure and expansion review | `sops/delivery/CLOSURE.md` | *nothing — `DELIVERY.md` §9/§11 stated intent only* |
 | Pre-agreement opportunity knowledge | `clients/<client>/` from qualification | *nothing — artifacts had no home* |
+| Proposal issuance, filing, and outcome | `sops/sales/PROPOSAL.md` | *nothing — the step had a template but no procedure* |
+| Client lifecycle status vocabulary | `clients/README.md` | `SYSTEM_MAP.md` §6 (a second, differing sequence) |
 
 ---
 

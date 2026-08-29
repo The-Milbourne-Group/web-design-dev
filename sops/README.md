@@ -18,7 +18,7 @@ The catalogue, routing table, structure standard, and writing rules live in
 
 ```
 sops/
-├── sales/       QUALIFICATION, DISCOVERY, SOLUTION_DESIGN
+├── sales/       QUALIFICATION, DISCOVERY, SOLUTION_DESIGN, PROPOSAL
 ├── delivery/    ONBOARDING, SCOPE_CHANGE, QA, LAUNCH, CLOSURE
 ├── operations/  DECISION_LOG, DOCUMENTATION
 └── automation/  WORKFLOW_REVIEW
