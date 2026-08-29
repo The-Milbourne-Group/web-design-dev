@@ -19,6 +19,7 @@ import tempfile
 from pathlib import Path
 
 from . import model as m
+from . import growth as gr
 from .governance import repo_root
 
 RECORD = "opportunity.json"
@@ -256,6 +257,126 @@ def _norm(name: str) -> str:
 
 def write_artifact(root: Path, slug: str, filename: str, content: str) -> Path:
     d = opp_dir(root, slug)
+    d.mkdir(parents=True, exist_ok=True)
+    _atomic_write(d / filename, content)
+    return d / filename
+
+
+# --------------------------------------------------------------------------
+# Targets — pre-contact prospects, upstream of the client pipeline
+# --------------------------------------------------------------------------
+#
+# A target lives in `growth/`, not `clients/`. `clients/README.md` creates a
+# directory at qualification, when a lead already exists; a target has not been
+# contacted and may never become one. Filing every researched company under
+# `clients/` would flood the pipeline and corrupt the buyer-evidence base that
+# Q-003 depends on.
+
+TARGET_RECORD = "target.json"
+
+
+def growth_dir(root: Path) -> Path:
+    return root / "growth"
+
+
+def target_dir(root: Path, slug: str) -> Path:
+    return growth_dir(root) / slug
+
+
+def target_exists(root: Path, slug: str) -> bool:
+    return (target_dir(root, slug) / TARGET_RECORD).exists()
+
+
+def load_target(root: Path, slug: str) -> "gr.Target":
+    path = target_dir(root, slug) / TARGET_RECORD
+    if not path.exists():
+        raise FileNotFoundError(
+            f"No target {slug!r}. `mg target list` shows what exists."
+        )
+    try:
+        data = json.loads(path.read_text(encoding="utf-8"))
+    except json.JSONDecodeError as e:
+        backups = list_target_backups(root, slug)
+        hint = (f"\n  {len(backups)} earlier version(s) intact — `mg target restore {slug}`"
+                if backups else "")
+        raise RecordError(
+            f"{path} is not valid JSON (line {e.lineno}, column {e.colno}: {e.msg}).\n"
+            f"  The file was not modified.{hint}"
+        ) from e
+    t = m.from_dict(gr.Target, data)
+    t.slug = slug
+    problems = gr.validate(t)
+    if problems:
+        raise RecordError(
+            f"{path} is readable but not a valid target:\n"
+            + "\n".join(f"    - {p}" for p in problems)
+        )
+    return t
+
+
+def save_target(root: Path, t: "gr.Target") -> Path:
+    problems = gr.validate(t)
+    if problems:
+        raise RecordError(
+            "Refusing to save an invalid target:\n"
+            + "\n".join(f"    - {p}" for p in problems)
+        )
+    d = target_dir(root, t.slug)
+    d.mkdir(parents=True, exist_ok=True)
+    path = d / TARGET_RECORD
+    _sweep_temp(d)
+    if path.exists():
+        _archive(d, path)
+    _atomic_write(path, json.dumps(m.to_dict(t), indent=2, ensure_ascii=False) + "\n")
+    return path
+
+
+def list_target_backups(root: Path, slug: str) -> list[Path]:
+    hist = target_dir(root, slug) / BACKUP_DIR
+    return sorted(hist.glob("*.json"), reverse=True) if hist.is_dir() else []
+
+
+def all_target_slugs(root: Path) -> list[str]:
+    gd = growth_dir(root)
+    if not gd.is_dir():
+        return []
+    return sorted(
+        p.name for p in gd.iterdir()
+        if p.is_dir() and not p.name.startswith("_") and (p / TARGET_RECORD).exists()
+    )
+
+
+def load_all_targets(root: Path) -> tuple[list["gr.Target"], list[tuple[str, str]]]:
+    good, bad = [], []
+    for slug in all_target_slugs(root):
+        try:
+            good.append(load_target(root, slug))
+        except (RecordError, FileNotFoundError) as e:
+            bad.append((slug, str(e).splitlines()[0]))
+    return good, bad
+
+
+def find_target_duplicates(root: Path, company: str, email: str = "",
+                           exclude: str = "") -> list[tuple[str, str]]:
+    key = _norm(company)
+    hits: list[tuple[str, str]] = []
+    targets, _ = load_all_targets(root)
+    for t in targets:
+        if t.slug == exclude:
+            continue
+        if key and _norm(t.company.name) == key:
+            hits.append((t.slug, f"same company ({t.company.name})"))
+            continue
+        if email:
+            for cont in t.contacts:
+                if cont.email and cont.email.lower() == email.lower():
+                    hits.append((t.slug, f"same contact email ({cont.email})"))
+                    break
+    return hits
+
+
+def write_target_artifact(root: Path, slug: str, filename: str, content: str) -> Path:
+    d = target_dir(root, slug)
     d.mkdir(parents=True, exist_ok=True)
     _atomic_write(d / filename, content)
     return d / filename

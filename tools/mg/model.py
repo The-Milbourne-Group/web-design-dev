@@ -460,47 +460,61 @@ def as_bool(value: Any, field_name: str = "") -> bool | None:
     )
 
 
+def _hints(cls) -> dict:
+    """Resolved type hints for a dataclass, cached.
+
+    Resolving in the class's own module is what makes this safe: an earlier
+    version matched types by bare name through one shared table, so
+    `growth.Fit` silently resolved to `model.Fit` and the record round-tripped
+    into the wrong object.
+    """
+    cached = _HINT_CACHE.get(cls)
+    if cached is None:
+        import sys as _sys
+        import typing
+        mod = _sys.modules.get(cls.__module__)
+        ns = dict(vars(mod)) if mod else {}
+        try:
+            cached = typing.get_type_hints(cls, globalns=ns)
+        except Exception:
+            cached = {f.name: f.type for f in fields(cls)}
+        _HINT_CACHE[cls] = cached
+    return cached
+
+
 def from_dict(cls, data: Any):
     if data is None:
         return cls()
     if not is_dataclass(cls):
         return data
+    hints = _hints(cls)
     kwargs = {}
     for f in fields(cls):
         if f.name not in data:
             continue
         val = data[f.name]
-        ftype = f.type
-        if isinstance(ftype, str):
-            ftype = _RESOLVE.get(ftype, ftype)
-        origin = getattr(ftype, "__args__", None)
+        ftype = hints.get(f.name, f.type)
+        args = getattr(ftype, "__args__", None)
         if isinstance(ftype, type) and is_dataclass(ftype):
             kwargs[f.name] = from_dict(ftype, val)
-        elif origin and isinstance(val, list):
-            inner = origin[0]
+        elif args and isinstance(val, list):
+            inner = args[0]
             if isinstance(inner, type) and is_dataclass(inner):
                 kwargs[f.name] = [from_dict(inner, v) for v in val]
             else:
                 kwargs[f.name] = val
-        elif _is_bool_field(f):
+        elif _is_bool_hint(ftype):
             kwargs[f.name] = as_bool(val, f"{cls.__name__}.{f.name}")
         else:
             kwargs[f.name] = val
     return cls(**kwargs)
 
 
-def _is_bool_field(f) -> bool:
-    t = f.type if isinstance(f.type, str) else getattr(f.type, "__name__", "")
-    return t in ("bool", "bool | None", "Optional[bool]")
+def _is_bool_hint(ftype) -> bool:
+    if ftype is bool:
+        return True
+    args = getattr(ftype, "__args__", None)
+    return bool(args) and set(args) <= {bool, type(None)}
 
 
-_RESOLVE = {
-    "Contact": Contact, "Company": Company, "Fit": Fit,
-    "Qualification": Qualification, "Finding": Finding, "Discovery": Discovery,
-    "Requirement": Requirement, "Solution": Solution,
-    "ProposalRecord": ProposalRecord, "FollowUp": FollowUp,
-    "Project": Project, "Hold": Hold, "BuyerEvidence": BuyerEvidence, "Event": Event,
-    "list[Contact]": list[Contact], "list[Finding]": list[Finding],
-    "list[Requirement]": list[Requirement], "list[FollowUp]": list[FollowUp],
-    "list[Event]": list[Event],
-}
+_HINT_CACHE: dict = {}

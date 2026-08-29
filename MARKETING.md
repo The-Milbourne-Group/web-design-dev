@@ -8,9 +8,9 @@
 **Parent Authority:** `MASTER.md` (Tier 1 — supreme), `STRATEGIC_CONFIGURATION.md` (Tier 2), `BUSINESS.md`, `BRAND.md`, `SERVICES.md`, `ICP.md`
 **Applies to:** All demand generation, content, SEO, and the company website.
 **Owner:** Founder
-**Status:** Active — channel selection open (Q-008).
+**Status:** Active — channels confirmed (D-026).
 **Last reviewed:** 2026-08-29
-**Review trigger:** Channel decision; Discovery Round 2; quarterly review.
+**Review trigger:** Channel performance evidence; quarterly review.
 **Related:** `METRICS.md`, `agents/SEO_AGENT.md`, `OPEN_QUESTIONS.md`
 
 ---
@@ -44,20 +44,36 @@ These are binding on every marketing artifact (D-001 – D-004, D-007, D-009):
   results, guarantees, or prices. See `BRAND.md` §6 and `OPEN_QUESTIONS.md`.
 
 ## 3. Core Channels
-Channels may include:
-- Company website
-- SEO
-- Case studies
-- Educational content
-- Direct outreach support
-- Partnerships
-- Referrals
-- Social distribution where strategically justified
 
-Do not treat every channel as mandatory. Initial channel selection is
-registered as open (`OPEN_QUESTIONS.md` Q-008) and depends on industry focus
-(Q-001) and founder advantages (Q-005). Until decided, concentrate effort
-rather than dispersing it across all candidates.
+Confirmed under D-026: a **concentrated** multi-channel strategy, in priority
+order. Concentrate resources on the first three; do not attempt simultaneous
+optimization of every channel.
+
+| # | Channel | Why this order |
+|---|---|---|
+| 1 | **Warm network and referrals** — former clients, existing professional relationships, business contacts, personal network where professionally appropriate, referral partners | Trust already exists and acquisition cost is lower |
+| 2 | **Targeted outbound** — focused campaigns toward businesses showing clear digital maturity gaps | Personalized and problem-led, never generic |
+| 3 | **Strategic partnerships** — referral relationships with complementary providers | Partners already hold trusted client relationships |
+| 4 | Authority and portfolio content | Evidence of expertise, not content volume |
+| 5 | Inbound search | A longer-term asset, not the immediate revenue source |
+
+### 3.1 Outbound Target Signals
+
+Observable indicators of a digital maturity gap (D-026): outdated websites;
+poor mobile experience; broken conversion paths; business expansion; new
+locations; recent hiring; rebranding activity; growing teams; complex manual
+workflows; digital systems inconsistent with company maturity.
+
+### 3.2 Referral Partner Categories
+
+Partners who meet digital problems exceeding their own delivery capability
+(D-023): marketing, branding and advertising agencies; graphic designers;
+business consultants; managed IT providers; software consultants; commercial
+photographers; SEO specialists; professional service firms serving established
+businesses.
+
+**Channel 1 depends on Q-013.** The warm network cannot be worked until the
+founder's actual relationships and former clients are documented.
 
 ## 4. Content Strategy
 Create content around:

@@ -25,6 +25,7 @@ def repo_root(start: Path | None = None) -> Path:
 # --------------------------------------------------------------------------
 
 _Q_HEAD = re.compile(r"^###\s+(Q-\d+)\s+—\s+(.+?)\s+·\s+(\w+)\s*$", re.M)
+_Q_ROW = re.compile(r"^\|\s*(Q-\d+)\s*—\s*([^|]+?)\s*\|[^|]*\|\s*(D-\d+)\s*\|", re.M)
 
 
 def open_questions(root: Path) -> dict[str, dict]:
@@ -36,6 +37,10 @@ def open_questions(root: Path) -> dict[str, dict]:
         out[qid] = {"id": qid, "title": title.strip(), "priority": prio, "resolved": False}
     for qid, title, prio in _Q_HEAD.findall(resolved_section):
         out[qid] = {"id": qid, "title": title.strip(), "priority": prio, "resolved": True}
+    # Resolved questions are recorded as table rows, not headings.
+    for qid, title, decision in _Q_ROW.findall(resolved_section):
+        out.setdefault(qid, {"id": qid, "title": title.strip(), "priority": "Resolved",
+                             "resolved": True, "decision": decision.strip()})
     return out
 
 
@@ -45,10 +50,14 @@ def is_open(root: Path, qid: str) -> bool:
 
 
 # Commercial values the system forbids stating while their question is open.
+# D-025 approved the pricing architecture and explicitly deferred the price
+# points; D-029 defers package contents until pricing exists. Both residuals are
+# Q-015. Keying the guard on the resolved parents would have opened the gate the
+# moment Q-007 moved to Resolved — an approved model is not an approved number.
 COMMERCIAL_GUARDS = {
-    "Q-007": "pricing, minimum engagement, or any commercial figure",
-    "Q-011": "package contents, deliverable lists, or turnaround guarantees",
+    "Q-015": "price points, minimum engagement value, or any commercial figure",
 }
+PRICING_QUESTION = "Q-015"
 
 # Money, not numbers. An earlier version matched any 3+ digit run, which
 # flagged years, `Q-007` and `D-005` in every generated file; a proximity
@@ -103,11 +112,12 @@ def scan_for_open_values(root: Path, text: str) -> list[str]:
     most damaging failure mode in the system.
     """
     problems: list[str] = []
-    if is_open(root, "Q-007"):
+    if is_open(root, PRICING_QUESTION):
         hits = find_money(text)
         if hits:
             problems.append(
-                f"Q-007 is open — pricing is not decided. Found figure(s) that read "
+                f"{PRICING_QUESTION} is open — price points are not decided (D-025 "
+                f"approved the model, not the numbers). Found figure(s) that read "
                 f"as commercial values: {', '.join(hits)}. "
                 f"Write 'to be determined' (SALES.md §6)."
             )
@@ -181,6 +191,68 @@ def unmapped_requirements(root: Path, opp: m.Opportunity) -> list[tuple[str, str
     return out
 
 
+def buyer_roles(root: Path) -> dict[str, list[str]]:
+    """Confirmed buyer roles from `ICP.md` §7 (D-021).
+
+    Read live rather than hard-coded: these were open until Discovery Round 2
+    and the shape may change again as real buyer evidence accumulates.
+    """
+    text = (root / "ICP.md").read_text(encoding="utf-8")
+    out: dict[str, list[str]] = {"primary": [], "secondary": []}
+    for key, label in (("primary", r"\*\*Primary economic buyers\.\*\*(.+?)\n\n"),
+                       ("secondary", r"\*\*Secondary buyers and champions\.\*\*(.+?)\n\n")):
+        mm = re.search(label, text, re.S)
+        if mm:
+            out[key] = [r.strip() for r in mm.group(1).replace("\n", " ").split("·") if r.strip()]
+    return out
+
+
+def size_bands(root: Path) -> list[tuple[str, str]]:
+    """Confirmed size bands from `ICP.md` §2.1 (D-021)."""
+    text = (root / "ICP.md").read_text(encoding="utf-8")
+    mm = re.search(r"^## 2\.1 Size Bands(.*?)(?=^## )", text, re.M | re.S)
+    if not mm:
+        return []
+    out = []
+    for line in mm.group(1).splitlines():
+        line = line.strip()
+        if line.startswith("|") and "employees" in line:
+            cells = [c.strip() for c in line.strip("|").split("|")]
+            if len(cells) >= 2:
+                out.append((cells[0], re.sub(r"\*\*", "", cells[1])))
+    return out
+
+
+def channels(root: Path) -> list[tuple[str, str]]:
+    """Confirmed acquisition channels in priority order from `MARKETING.md` §3."""
+    text = (root / "MARKETING.md").read_text(encoding="utf-8")
+    mm = re.search(r"^## 3\. Core Channels(.*?)(?=^### 3\.1)", text, re.M | re.S)
+    if not mm:
+        return []
+    out = []
+    for line in mm.group(1).splitlines():
+        line = line.strip()
+        if not line.startswith("|") or line.startswith("|---") or "Why this order" in line:
+            continue
+        cells = [c.strip() for c in line.strip("|").split("|")]
+        if len(cells) >= 2 and cells[0].isdigit():
+            name = re.sub(r"\*\*", "", cells[1]).split("—")[0].strip()
+            out.append((cells[0], name))
+    return out
+
+
+def outbound_signals(root: Path) -> list[str]:
+    """Observable digital-maturity-gap indicators from `MARKETING.md` §3.1."""
+    text = (root / "MARKETING.md").read_text(encoding="utf-8")
+    mm = re.search(r"^### 3\.1 Outbound Target Signals(.*?)(?=^### )", text, re.M | re.S)
+    if not mm:
+        return []
+    body = mm.group(1)
+    inner = re.search(r"\(D-026\):(.+?)\.\s*$", body, re.S)
+    raw = inner.group(1) if inner else body
+    return [x.strip() for x in raw.replace("\n", " ").split(";") if x.strip()]
+
+
 def service_stages() -> list[str]:
     return ["Entry", "Expansion", "Recurring"]
 
@@ -231,17 +303,20 @@ def proposal_gate(root: Path, opp: m.Opportunity) -> list[str]:
     "is not ready to sell". Q-007 and Q-011 leave both open.
     """
     blockers: list[str] = []
-    if is_open(root, "Q-007") and not opp.proposal.gate_terms_decided:
+    if is_open(root, PRICING_QUESTION) and not opp.proposal.gate_terms_decided:
         blockers.append(
-            "Q-007 open (pricing) — SERVICES.md §4 requires a pricing model before an "
-            "offer is presented. Record the founder's decision for THIS engagement with "
-            "`mg gate <slug> --terms-decided --approved-by Founder`."
+            f"{PRICING_QUESTION} open (price points) — D-025 approved value-oriented "
+            f"fixed-scope pricing but states exact price points require founder "
+            f"financial inputs before becoming policy, and SERVICES.md §4 requires a "
+            f"pricing model before an offer is presented. Record the founder's decision "
+            f"for THIS engagement with `mg gate <slug> --terms-decided --approved-by Founder`."
         )
-    if is_open(root, "Q-011") and not opp.proposal.gate_deliverables_defined:
+    if is_open(root, PRICING_QUESTION) and not opp.proposal.gate_deliverables_defined:
         blockers.append(
-            "Q-011 open (package contents) — SERVICES.md §4 requires defined deliverables. "
-            "Confirm the deliverables for THIS engagement with "
-            "`mg gate <slug> --deliverables-defined --approved-by Founder`."
+            f"{PRICING_QUESTION} open — D-029 defers final package contents until pricing "
+            f"economics exist, and SERVICES.md §4 requires defined deliverables. Confirm "
+            f"the deliverables for THIS engagement with "
+            f"`mg gate <slug> --deliverables-defined --approved-by Founder`."
         )
     if not opp.solution.approved_by:
         blockers.append(
