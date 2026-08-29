@@ -11,7 +11,7 @@ import json
 import sys
 from pathlib import Path
 
-from . import model as m, store, render, governance as gov, ai, metrics
+from . import model as m, store, render, governance as gov, ai, metrics, intake
 
 # ---------------------------------------------------------------- output ----
 
@@ -112,6 +112,126 @@ def cmd_new(root, a):
             print(f"  - {x}")
     print(f"\n{c('Next:', C.B)} {_next_action(root, opp)}")
     return 0
+
+
+def cmd_intake(root, a):
+    """Create a lead from a form POST, a forwarded email, or a call note."""
+    text = Path(a.from_file).read_text(encoding="utf-8") if a.from_file else sys.stdin.read()
+    if not text.strip():
+        err("Nothing to intake (empty input)."); return 1
+    parsed = intake.parse(text)
+    f = parsed["fields"]
+    if not f.get("company") and not f.get("contact") and not a.company:
+        err("Could not identify a company or a contact in the enquiry.")
+        dim("  Pass --company to name it, or add a `Company:` line to the source.")
+        return 1
+    if a.company:
+        f["company"] = a.company
+    slug = a.slug or m.slugify(f.get("company") or f.get("contact"))
+    if store.exists(root, slug) and not a.force:
+        err(f"{slug} already exists. Use --force to overwrite, or pick --slug.")
+        return 1
+
+    opp = intake.to_opportunity(parsed, slug)
+    if a.source:
+        opp.qualification.source = a.source
+    # The unparsed enquiry is kept verbatim: the record must never lose what
+    # the prospect actually wrote, and nothing here may be guessed.
+    opp.log("intake", f"lead captured via {a.channel}", a.actor)
+    opp.events.append(m.Event(at=m.now(), kind="enquiry", actor=a.channel,
+                              detail=parsed["raw"][:4000]))
+    opp.set_status(m.PROSPECT, a.actor, f"captured via {a.channel}")
+    written = _save_and_render(root, opp)
+    ok(f"Captured {c(slug, C.ACC)} via {a.channel}")
+    head("Parsed from the enquiry")
+    for k, v in f.items():
+        print(f"  {k:<16}{v[:70]}{'…' if len(v) > 70 else ''}")
+    if parsed["missing"]:
+        head("Not stated in the enquiry — ask, do not assume")
+        for k in parsed["missing"]:
+            print(f"  - {k}")
+    _report_render(written)
+    print(f"\n{c('Next:', C.B)} {_next_action(root, opp)}")
+    return 0
+
+
+def cmd_hold(root, a):
+    opp = store.load(root, a.slug)
+    if a.release:
+        if not opp.hold.on_hold:
+            warn(f"{a.slug} is not on hold."); return 1
+        opp.hold = m.Hold()
+        opp.log("hold", "released", a.actor)
+        _save_and_render(root, opp)
+        ok(f"{a.slug} released from hold — stage {opp.pipeline_stage()}")
+        print(f"\n{c('Next:', C.B)} {_next_action(root, opp)}")
+        return 0
+    if not a.reason:
+        err("A hold needs a reason. An opportunity paused without one is an "
+            "opportunity that quietly disappears.")
+        return 1
+    opp.hold = m.Hold(on_hold=True, reason=a.reason, since=m.today(),
+                      revisit_on=a.revisit or "")
+    opp.log("hold", f"on hold: {a.reason}", a.actor)
+    if a.revisit:
+        opp.follow_ups.append(m.FollowUp(
+            action=f"Revisit hold: {a.reason}", owner=a.owner or "Founder",
+            due=a.revisit, note="auto-created when placed on hold"))
+    _save_and_render(root, opp)
+    ok(f"{a.slug} on hold — {a.reason}")
+    if a.revisit:
+        dim(f"  Revisit scheduled for {a.revisit}")
+    else:
+        warn("  No revisit date. Use --revisit <date> so it resurfaces.")
+    return 0
+
+
+def cmd_next(root, a):
+    """The whole pipeline: stage, what happened last, what happens next, gaps."""
+    opps = [o for o in store.load_all(root) if o.status not in m.TERMINAL]
+    if not opps:
+        warn("Nothing open. `mg intake` or `mg new` to capture a lead.")
+        return 0
+    overdue = []
+    head(f"{len(opps)} open opportunit{'y' if len(opps)==1 else 'ies'}")
+    order = ["NEW", "QUALIFYING", "QUALIFIED", "DISCOVERY", "SOLUTION",
+             "PROPOSAL", "NEGOTIATION", "WON", "PROJECT INITIALIZED", "ON HOLD"]
+    for o in sorted(opps, key=lambda x: (order.index(x.pipeline_stage())
+                                         if x.pipeline_stage() in order else 99, x.slug)):
+        stage = o.pipeline_stage()
+        nf = o.next_follow_up()
+        last = next((e for e in reversed(o.events)
+                     if e.kind in ("status", "proposal", "followup", "hold", "intake")), None)
+        print(f"\n  {c(o.slug, C.B)}  {c(stage, C.ACC)}"
+              + (c(f"  (held: {o.hold.reason})", C.WARN) if o.hold.on_hold else ""))
+        print(f"    last    {last.detail[:72] if last else '—'}")
+        print(f"    next    {nf.action[:72] if nf else _next_action(root, o)}")
+        print(f"    owner   {nf.owner if nf else 'Founder'}"
+              + (f"    due {nf.due}" if nf and nf.due else ""))
+        if nf and nf.due and nf.due < m.today():
+            overdue.append((o.slug, nf))
+            print(f"    {c('OVERDUE', C.ERR)}")
+        gaps = _gaps(root, o)
+        if gaps:
+            print(f"    {c('missing', C.WARN)} {'; '.join(gaps[:3])}")
+    if overdue:
+        head(f"{len(overdue)} overdue")
+        for slug, nf in overdue:
+            print(f"  {slug:<24}{nf.action[:50]}  {c('due ' + nf.due, C.ERR)}")
+    return 0
+
+
+def _gaps(root: Path, opp: m.Opportunity) -> list[str]:
+    """Information the opportunity's current stage still needs."""
+    stage = {m.PROSPECT: "qualification", m.QUALIFIED: "qualification",
+             m.DISCOVERY: "discovery", m.PROPOSAL: "solution",
+             m.ONBOARDING: "project"}.get(opp.status)
+    gaps = list(gov.missing_for(stage, opp)) if stage else []
+    if opp.status == m.PROPOSAL and not opp.proposal.issued_on:
+        blockers = gov.proposal_gate(root, opp)
+        if blockers:
+            gaps.append(blockers[0].split(" — ")[0])
+    return gaps
 
 
 def cmd_set(root, a):
@@ -685,6 +805,25 @@ def build_parser() -> argparse.ArgumentParser:
     n.add_argument("--outcome-wanted", dest="outcome_wanted")
     n.add_argument("--force", action="store_true")
     n.set_defaults(fn=cmd_new)
+
+    it = sub.add_parser("intake", help="capture a lead from a form, email or note")
+    it.add_argument("--from", dest="from_file", help="file with the enquiry; default stdin")
+    it.add_argument("--channel", default="manual",
+                    help="how it arrived: form, email, phone, referral, manual")
+    it.add_argument("--company", help="override or supply the company name")
+    it.add_argument("--source", help="override the recorded source (evidence for Q-008)")
+    it.add_argument("--slug"); it.add_argument("--force", action="store_true")
+    it.set_defaults(fn=cmd_intake)
+
+    hd = sub.add_parser("hold", help="pause or resume an opportunity")
+    hd.add_argument("slug")
+    hd.add_argument("--reason"); hd.add_argument("--revisit", help="date to resurface it")
+    hd.add_argument("--owner")
+    hd.add_argument("--release", action="store_true")
+    hd.set_defaults(fn=cmd_hold)
+
+    nx = sub.add_parser("next", help="every open opportunity: stage, last, next, owner, gaps")
+    nx.set_defaults(fn=cmd_next)
 
     s = sub.add_parser("set", help="update opportunity fields")
     s.add_argument("slug")

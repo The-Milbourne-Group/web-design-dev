@@ -32,13 +32,23 @@ TASKS: dict[str, dict] = {
         "goal": "Assess ICP fit and recommend a qualification outcome.",
         "load": ["ICP.md", "SALES.md", "SERVICES.md", "sops/sales/QUALIFICATION.md"],
         "agent": "agents/SALES_AGENT.md",
-        "produces": "A recommendation with reasoning. You do NOT decide — the founder decides.",
+        "produces": ("A recommendation. You do NOT decide — the founder decides. "
+                     "Keep confirmed_facts and assessment strictly separate: a fact is "
+                     "something the record supports, an assessment is your reading of it. "
+                     "If a strategically ambiguous opportunity cannot be called on the "
+                     "evidence, recommend 'Clarification required' rather than guessing."),
         "schema": {
-            "high_fit_signals": ["str"], "problem_signals": ["str"],
-            "disqualifying_signals": ["str"], "stage": "Entry|Expansion|Recurring",
-            "feasible": "bool", "reasoning": "str",
+            "confirmed_facts": ["only what the record or public information directly "
+                                "supports — quote or cite it"],
+            "assessment": "your reasoned interpretation, clearly separate from the facts above",
+            "high_fit_signals": ["quoted verbatim from ICP.md §4"],
+            "problem_signals": ["quoted verbatim from ICP.md §5"],
+            "disqualifying_signals": ["quoted verbatim from ICP.md §6"],
+            "stage": "Entry|Expansion|Recurring",
+            "feasible": "bool",
+            "missing_information": ["what must be established before a confident decision"],
             "recommended_outcome": "Qualified|Nurture|Clarification required|Disqualified",
-            "open_items": ["str"],
+            "recommended_next_action": "the single most appropriate next step",
         },
     },
     "discovery-prep": {
@@ -197,13 +207,26 @@ def ingest(opp: m.Opportunity, task: str, data: dict) -> list[str]:
             f.stage = data["stage"]; changed.append("fit.stage")
         if data.get("feasible") is not None:
             f.feasible = bool(data["feasible"]); changed.append("fit.feasible")
+        q = opp.qualification
+        if data.get("confirmed_facts"):
+            q.confirmed_facts = list(data["confirmed_facts"]); changed.append("confirmed_facts")
+        if data.get("assessment"):
+            q.assessment = data["assessment"]; changed.append("assessment")
         if data.get("reasoning"):
             f.reasoning = data["reasoning"]; changed.append("fit.reasoning")
-        if data.get("open_items"):
-            opp.qualification.open_items = list(data["open_items"]); changed.append("open_items")
+        for key in ("missing_information", "open_items"):
+            if data.get(key):
+                q.open_items = sorted(set(q.open_items + list(data[key])))
+                changed.append("missing_information")
+                break
+        if data.get("recommended_next_action"):
+            q.recommended_next_action = data["recommended_next_action"]
+            changed.append("recommended_next_action")
         if data.get("recommended_outcome"):
+            q.recommended_outcome = data["recommended_outcome"]
             opp.log("ai", f"qualification recommendation: {data['recommended_outcome']}", "ai")
-            changed.append(f"recommendation logged ({data['recommended_outcome']}) — NOT applied; founder decides")
+            changed.append(f"recommendation recorded ({data['recommended_outcome']}) "
+                           f"— NOT applied; founder decides")
 
     elif task == "discovery-prep":
         if data.get("agenda"):

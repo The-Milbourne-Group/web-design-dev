@@ -29,13 +29,37 @@ import sys,json;print(json.load(open('clients/$1/opportunity.json'))['status'])"
 
 rm -rf clients/zz-e2e-*
 
-step "1 · Lead capture"
-expect_ok "lead captured" $MG new --company "ZZ E2E Joinery" --slug zz-e2e-main \
-  --source "Referral" --contact "Dan W" --role "Managing Director" \
-  --industry "Joinery" --size "~28 staff" \
-  --problem "Website makes us look like a two-man operation" \
-  --outcome-wanted "Win more commercial tenders"
+step "1 · Lead intake from a real channel"
+cat > "$SCRATCH/enquiry.txt" <<'MAIL'
+From: Dan W <dan@zz-e2e-joinery.example>
+Subject: Website enquiry
+Company: ZZ E2E Joinery
+Phone: 01752 887 431
+How did you hear about us: Referred by an architect
+
+We are pitching for commercial fit-out contracts and our website makes us look
+like a two-man operation. We want to win more of the tenders we are shortlisted
+for. Can we talk?
+
+Kind regards
+Dan
+MAIL
+expect_ok "email enquiry captured" $MG intake --from "$SCRATCH/enquiry.txt" \
+  --channel email --slug zz-e2e-main
 expect_status zz-e2e-main Prospect
+python3 -c "
+import json;o=json.load(open('clients/zz-e2e-main/opportunity.json'))
+assert o['company']['name']=='ZZ E2E Joinery', o['company']['name']
+assert o['contacts'][0]['name']=='Dan W', o['contacts'][0]
+assert o['contacts'][0]['email']=='dan@zz-e2e-joinery.example'
+assert 'architect' in o['qualification']['source']
+assert 'two-man operation' in o['qualification']['problem']
+assert any(e['kind']=='enquiry' for e in o['events']), 'raw enquiry not retained'
+" && ok "company, contact, email, source and problem parsed; raw enquiry retained" \
+  || bad "intake parsing lost information"
+expect_ok "form enquiry captured" bash -c "echo '{\"company\":\"ZZ E2E Form Co\",\"your name\":\"A Tester\",\"email\":\"a@zz-e2e-form.example\",\"message\":\"Site is dated\",\"how did you hear\":\"Google\"}' | $MG intake --channel form --slug zz-e2e-form"
+$MG set zz-e2e-main --industry "Joinery" --size "~28 staff" \
+  --desired-outcome "Win more commercial tenders" >/dev/null 2>&1
 
 step "2 · Qualification refuses incomplete evidence"
 expect_fail "blocked: missing authority, ICP signals, feasibility, stage" \
@@ -45,6 +69,22 @@ expect_ok "evidence recorded" $MG set zz-e2e-main --authority --decision-maker \
   --fit-signal "Have proven they can sell and operate successfully" \
   --signal "Website fails to establish credibility or communicate value" \
   --stage Entry --feasible
+cat > "$SCRATCH/q.json" <<'JSON'
+{"confirmed_facts":["Stated in the enquiry: pitching for commercial fit-out contracts"],
+ "assessment":"Reads as Entry stage, but the enquiry does not establish budget authority.",
+ "missing_information":["Who controls budget"],
+ "recommended_outcome":"Clarification required",
+ "recommended_next_action":"Call to establish decision authority"}
+JSON
+expect_ok "qualification analysis ingested" $MG ingest zz-e2e-main qualify --from "$SCRATCH/q.json"
+python3 -c "
+import json;q=json.load(open('clients/zz-e2e-main/opportunity.json'))
+assert q['qualification']['recommended_outcome']=='Clarification required'
+assert q['qualification']['outcome']=='', 'agent recommendation was applied as a decision'
+assert q['status']=='Prospect', q['status']
+assert q['qualification']['confirmed_facts'] and q['qualification']['assessment']
+" && ok "facts and assessment separate; recommendation recorded, not applied" \
+  || bad "agent recommendation leaked into the decision"
 expect_fail "blocked: no founder approval" $MG qualify zz-e2e-main --outcome Qualified
 expect_ok "founder qualifies" $MG qualify zz-e2e-main --outcome Qualified \
   --approved-by Founder --reasoning "Strong problem fit; decision-maker confirmed."
@@ -139,8 +179,35 @@ assert 'Tender document templating' in b, 'exclusions not carried'
   || bad "data continuity broken between sales and project"
 expect_ok "kickoff held" $MG kickoff zz-e2e-main --approved-by Founder
 expect_status zz-e2e-main Active
+python3 -c "
+import json;o=json.load(open('clients/zz-e2e-main/opportunity.json'))
+b=open('clients/zz-e2e-main/PROJECT_BRIEF.md').read()
+q=o['qualification']
+assert q['assessment'][:40] not in b, 'internal assessment transferred to the project'
+assert 'Clarification required' not in b, 'agent recommendation transferred'
+assert q['outcome_reasoning'][:25] not in b, 'internal decision reasoning transferred'
+assert 'highest-value asset' not in b, 'unconfirmed inference transferred as fact'
+scope=b.split('### In scope')[1].split('### Explicitly out of scope')[0]
+assert '\`R3\`' in scope and '(assumed)' in scope, 'assumed requirement lost its label'
+" && ok "internal reasoning and inferences withheld; scope and labels transferred" \
+  || bad "project initialization transferred information it should not"
 
-step "8 · A lost deal must record why"
+step "8 · Hold and release"
+expect_fail "blocked: hold with no reason" $MG hold zz-e2e-form
+expect_ok "placed on hold" $MG hold zz-e2e-form --reason "Contact on leave" --revisit 2026-12-01
+python3 -c "
+import sys;sys.path.insert(0,'tools')
+from mg import store, governance as g
+from pathlib import Path
+root=g.repo_root(Path('tools/mg/governance.py').resolve())
+o=store.load(root,'zz-e2e-form')
+assert o.hold.on_hold and o.pipeline_stage()=='ON HOLD', o.pipeline_stage()
+assert o.status=='Prospect', 'hold must not overwrite the authoritative status'
+assert o.next_follow_up(), 'hold with a revisit date must schedule a follow-up'
+" && ok "ON HOLD is derived; status preserved; revisit scheduled" || bad "hold model wrong"
+expect_ok "released from hold" $MG hold zz-e2e-form --release
+
+step "9 · A lost deal must record why"
 $MG new --company "ZZ E2E Lost" --slug zz-e2e-lost --source "Cold outreach" \
   --contact "R Patel" --problem "Site is dated" --outcome-wanted "More enquiries" >/dev/null 2>&1
 $MG set zz-e2e-lost --authority --decision-maker --contact "R Patel" \
@@ -160,7 +227,7 @@ expect_ok "decline with reasoning" $MG outcome zz-e2e-lost --outcome Declined \
   --reasoning "Chose lowest bid"
 expect_status zz-e2e-lost Lost
 
-step "9 · Disqualification keeps its evidence"
+step "10 · Disqualification keeps its evidence"
 $MG new --company "ZZ E2E Disqualified" --slug zz-e2e-dq --source "Web form" \
   --contact "T Nolan" --problem "Wants unlimited changes for a flat fee" \
   --outcome-wanted "Cheapest option" >/dev/null 2>&1
@@ -169,12 +236,13 @@ expect_ok "disqualified with reasoning" $MG qualify zz-e2e-dq --outcome Disquali
 [ -f clients/zz-e2e-dq/QUALIFICATION.md ] && ok "directory retained as ICP evidence" \
   || bad "disqualified directory lost"
 
-step "10 · Governance check and metrics"
+step "11 · Governance check, pipeline view and metrics"
 expect_ok "governance check clean" $MG check
+expect_ok "pipeline view renders" $MG next
 $MG metrics --json > "$SCRATCH/m.json"
 python3 -c "
 import json;s=json.load(open('$SCRATCH/m.json'))
-assert s['leads']>=3, s['leads']
+assert s['leads']>=4, s['leads']
 assert s['won']>=1 and s['lost']>=2, s
 assert s['close_rate'] is not None, 'proposal-to-close not computable'
 assert s['avg_proposal_hours'] is not None, 'proposal build time not computable'

@@ -11,13 +11,18 @@ LEAD → QUALIFICATION → DISCOVERY → ANALYSIS → SOLUTION → PROPOSAL
 ## Run it
 
 ```bash
-./mg list                      # the pipeline
-./mg status <slug>             # one opportunity: last, next, owner, when
+./mg intake --from enquiry.txt --channel email   # capture a lead from anything
+./mg next                      # every open opportunity: stage, last, next, owner, gaps
+./mg status <slug>             # one opportunity in full
 ./mg check                     # governance check across every opportunity
 ./mg metrics                   # conversion, cycle time, proposal build time
-tools/e2e.sh                   # end-to-end test of the whole slice (37 assertions)
+tools/e2e.sh                   # end-to-end test of the whole slice (47 assertions)
 tools/e2e.sh --keep            # same, but leaves the records for inspection
 ```
+
+`mg next` is the daily view. It answers, for every live opportunity: what stage,
+what happened last, what happens next, who owns it, when it is due, and what
+information is still missing.
 
 Python 3.11+, standard library only. No install, no credentials, no services.
 
@@ -36,6 +41,40 @@ again, which is also why "what was sold" is now reconcilable at onboarding.
 `clients/` was already the declared home for client knowledge (Tier 7,
 `clients/README.md`). Putting the pipeline in a CRM would have created a second
 source of truth, which `MASTER.md` §5.3 forbids.
+
+## Lead intake
+
+```bash
+./mg intake --from enquiry.txt --channel email    # forwarded email
+cat form-post.json | ./mg intake --channel form   # web form or API POST
+./mg intake --channel phone --company "Acme"      # note typed after a call
+```
+
+One entry point for every channel. It parses `Label: value` pairs, JSON bodies,
+and the free text of an email; pulls out email, phone and website; and keeps the
+original enquiry verbatim in the event log. **Anything it cannot find is
+reported as missing, never guessed** — an unparsed field is a question to ask
+the prospect.
+
+## Pipeline stages
+
+`status` is the authoritative field and `clients/README.md` owns its vocabulary.
+`mg next` shows a derived operating stage on top of it — NEW, QUALIFYING,
+QUALIFIED, DISCOVERY, SOLUTION, PROPOSAL, NEGOTIATION, WON, PROJECT INITIALIZED,
+NOT A FIT, LOST, ON HOLD — because status alone cannot distinguish a lead being
+worked from one just captured, or a proposal issued from one in negotiation.
+
+Hold is recorded alongside the status rather than replacing it, so a paused
+opportunity keeps the stage it actually reached:
+
+```bash
+./mg hold <slug> --reason "Contact on leave" --revisit 2026-12-01
+./mg hold <slug> --release
+```
+
+A hold needs a reason, and a revisit date schedules the follow-up that brings it
+back. `clients/README.md` has no ON HOLD status and adding one is a founder
+decision, so the tool does not invent one.
 
 ## The guards
 
@@ -74,10 +113,22 @@ asks for JSON. `ingest` merges the result, so no AI output is retyped.
 Tasks: `research`, `qualify`, `discovery-prep`, `discovery-analysis`,
 `solution`, `proposal`, `follow-up`.
 
-Two behaviours matter. A qualification recommendation is **logged, never
-applied** — the founder decides. And `discovery-analysis` requires every finding
-to be typed confirmed or inferred; inferences are printed back on ingest and
-stay labelled through to the project brief.
+Three behaviours matter.
+
+`qualify` returns four separated things — **confirmed facts** (what the record
+supports), **assessment** (the reading placed on it), **missing information**,
+and a **recommended next action**. The recommendation is recorded, never
+applied: the founder decides. On a strategically ambiguous opportunity the
+correct answer is `Clarification required`, not a guess.
+
+`discovery-analysis` requires every finding to be typed confirmed or inferred.
+Inferences are printed back on ingest and stay labelled all the way to the
+project brief.
+
+Project initialization carries the approved scope, exclusions, risks,
+constraints and labelled assumptions forward — and deliberately withholds
+internal reasoning, agent recommendations and unconfirmed inferences, so none of
+it hardens into a project requirement.
 
 ## Autonomy
 

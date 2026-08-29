@@ -137,6 +137,12 @@ class Qualification:
     desired_outcome: str = ""
     authority_confirmed: bool | None = None
     fit: Fit = field(default_factory=Fit)
+    # Kept apart deliberately: what the record actually supports, versus the
+    # reading placed on it. An assessment must never harden into a fact.
+    confirmed_facts: list[str] = field(default_factory=list)
+    assessment: str = ""
+    recommended_outcome: str = ""
+    recommended_next_action: str = ""
     outcome: str = ""            # Qualified | Nurture | Clarification required | Disqualified
     outcome_reasoning: str = ""
     open_items: list[str] = field(default_factory=list)
@@ -247,6 +253,21 @@ class BuyerEvidence:
 
 
 @dataclass
+class Hold:
+    """An opportunity paused while still live.
+
+    `clients/README.md` owns the status vocabulary and contains no ON HOLD
+    value; adding one is a Tier 7 change reserved to the founder. A hold is
+    therefore recorded alongside the status, not as one — the opportunity keeps
+    the stage it actually reached.
+    """
+    on_hold: bool = False
+    reason: str = ""
+    since: str = ""
+    revisit_on: str = ""
+
+
+@dataclass
 class Event:
     at: str = ""
     kind: str = ""
@@ -268,6 +289,7 @@ class Opportunity:
     follow_ups: list[FollowUp] = field(default_factory=list)
     project: Project = field(default_factory=Project)
     buyer_evidence: BuyerEvidence = field(default_factory=BuyerEvidence)
+    hold: Hold = field(default_factory=Hold)
     events: list[Event] = field(default_factory=list)
     schema_version: int = SCHEMA_VERSION
 
@@ -310,6 +332,38 @@ class Opportunity:
 
     def deferred(self) -> list[Requirement]:
         return [r for r in self.solution.requirements if not r.in_scope]
+
+    def pipeline_stage(self) -> str:
+        """The operating stage, in pipeline terms, derived from the record.
+
+        `status` is the authoritative field (`clients/README.md`); this is a
+        read-only view that distinguishes states the status alone cannot show —
+        qualifying vs qualified, negotiation, and hold.
+        """
+        if self.hold.on_hold:
+            return "ON HOLD"
+        s = self.status
+        if s == PROSPECT:
+            return "QUALIFYING" if self.qualification.outcome or self.qualification.fit.high_fit_signals else "NEW"
+        if s == QUALIFIED:
+            return "QUALIFIED"
+        if s == DISCOVERY:
+            return "SOLUTION" if self.solution.requirements else "DISCOVERY"
+        if s == PROPOSAL:
+            if self.proposal.outcome == "Negotiated":
+                return "NEGOTIATION"
+            return "PROPOSAL" if self.proposal.issued_on else "SOLUTION"
+        if s == ONBOARDING:
+            return "WON"
+        if s in (ACTIVE, LAUNCHED, CLOSED):
+            return "PROJECT INITIALIZED"
+        if s == DISQUALIFIED:
+            return "NOT A FIT"
+        if s == LOST:
+            return "LOST"
+        if s == NURTURE:
+            return "ON HOLD"
+        return s.upper()
 
     def open_follow_ups(self) -> list[FollowUp]:
         return [f for f in self.follow_ups if not f.done_on]
@@ -365,7 +419,7 @@ _RESOLVE = {
     "Qualification": Qualification, "Finding": Finding, "Discovery": Discovery,
     "Requirement": Requirement, "Solution": Solution,
     "ProposalRecord": ProposalRecord, "FollowUp": FollowUp,
-    "Project": Project, "BuyerEvidence": BuyerEvidence, "Event": Event,
+    "Project": Project, "Hold": Hold, "BuyerEvidence": BuyerEvidence, "Event": Event,
     "list[Contact]": list[Contact], "list[Finding]": list[Finding],
     "list[Requirement]": list[Requirement], "list[FollowUp]": list[FollowUp],
     "list[Event]": list[Event],

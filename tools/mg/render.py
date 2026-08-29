@@ -126,7 +126,24 @@ Decision-maker and budget owner established: **{_yn(q.authority_confirmed)}**
 {('Decision-maker: ' + opp.decision_maker.name) if opp.decision_maker else
  '*No accountable decision-maker recorded. `ICP.md` §6 treats this as a disqualification signal.*'}
 
-## 3. ICP Fit
+## 3. Confirmed Facts
+
+*Directly supported by the enquiry, the record, or public information.*
+
+{_b(q.confirmed_facts)}
+
+## 4. Assessment
+
+*Reasoned interpretation. **Not** fact — an assessment that hardens into a fact
+is how a qualification decision gets made on something nobody established
+(`MASTER.md` §8.2).*
+
+{q.assessment or q.fit.reasoning or '*No assessment recorded.*'}
+
+{('**Recommended (agent, not decided):** ' + q.recommended_outcome) if q.recommended_outcome else ''}
+{('**Recommended next action:** ' + q.recommended_next_action) if q.recommended_next_action else ''}
+
+## 5. ICP Fit
 
 *Assessed against `ICP.md` §4–§6. Numeric size bands are not used — they are
 open (`ASSUMPTIONS.md` A-005).*
@@ -140,22 +157,22 @@ open (`ASSUMPTIONS.md` A-005).*
 **Disqualification signals present:**
 {_b(f.disqualifying_signals, '*None identified.*')}
 
-## 4. Delivery Feasibility
+## 6. Delivery Feasibility
 
 Can the company deliver this responsibly with current capacity and capability:
 **{_yn(f.feasible)}**
 
-## 5. Commercial Progression
+## 7. Commercial Progression
 
 Located in: **{f.stage or '*not located*'}** (`SERVICES.md` §2)
 
-## 6. Outcome and Reasoning
+## 8. Outcome and Reasoning
 
 **{q.outcome or 'Pending'}**
 
 {q.outcome_reasoning or '*No reasoning recorded.*'}
 
-{('### Open items requiring resolution' + chr(10) + _b(q.open_items)) if q.open_items else ''}
+{('### Missing information requiring resolution' + chr(10) + _b(q.open_items)) if q.open_items else ''}
 
 ---
 
