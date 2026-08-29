@@ -72,32 +72,7 @@ specific commercial and legal terms before client use.
 
 ---
 
-### A-004 — Founder is the escalation authority
-**Assumed:** References to "the responsible authority" in `SECURITY.md` §7 and
-to approval throughout the system mean the founder.
 
-**Basis:** A-001; `STRATEGIC_CONFIGURATION.md` founder-led operating model.
-
-**Consequence if wrong:** Incident response and approval routing are
-misdirected.
-
-**Validates via:** Q-012.
-
----
-
-### A-005 — "Established SMB" is not yet quantified
-**Assumed:** The confirmed client category (D-006) carries no numeric size
-band, so qualification uses the qualitative signals in `ICP.md` §3–§4 rather
-than thresholds.
-
-**Basis:** D-006 confirms the category; Q-003 leaves the detail open.
-
-**Consequence if wrong:** If the founder has an implicit size band in mind,
-qualification will admit opportunities the founder would reject.
-
-**Validates via:** Q-003.
-
----
 
 ### A-006 — Audit-era interpretation of the entry offer
 **Assumed:** "Strategic Website & Digital Foundation" (D-005) means an
@@ -117,5 +92,33 @@ proposals would misrepresent the engagement.
 
 ## Retired Assumptions
 
-*None yet. When an assumption is confirmed or invalidated, move it here with
-the date, outcome, and what was corrected as a result.*
+### A-004 — Founder is the escalation authority
+**Assumed:** References to "the responsible authority" in `SECURITY.md` §7 and
+to approval throughout the system mean the founder.
+
+**Basis:** A-001; `STRATEGIC_CONFIGURATION.md` founder-led operating model.
+
+**Consequence if wrong:** Incident response and approval routing are
+misdirected.
+
+**Validates via:** Q-012.
+
+**Retired 2026-08-29** — confirmed by D-030: the founder is the named escalation authority, with response targets.
+
+---
+
+### A-005 — "Established SMB" is not yet quantified
+**Assumed:** The confirmed client category (D-006) carries no numeric size
+band, so qualification uses the qualitative signals in `ICP.md` §3–§4 rather
+than thresholds.
+
+**Basis:** D-006 confirms the category; Q-003 leaves the detail open.
+
+**Consequence if wrong:** If the founder has an implicit size band in mind,
+qualification will admit opportunities the founder would reject.
+
+**Validates via:** Q-003.
+
+**Retired 2026-08-29** — superseded by D-021, which sets explicit size bands. Qualification no longer relies on qualitative signals alone.
+
+---

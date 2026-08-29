@@ -16,7 +16,7 @@ LEAD → QUALIFICATION → DISCOVERY → ANALYSIS → SOLUTION → PROPOSAL
 ./mg status <slug>             # one opportunity in full
 ./mg check                     # governance check across every opportunity
 ./mg metrics                   # conversion, cycle time, proposal build time
-tools/e2e.sh                   # end-to-end test of the whole slice (57 assertions)
+tools/e2e.sh                   # end-to-end test of the whole slice (76 assertions)
 tools/e2e.sh --keep            # same, but leaves the records for inspection
 ```
 
@@ -41,6 +41,46 @@ again, which is also why "what was sold" is now reconcilable at onboarding.
 `clients/` was already the declared home for client knowledge (Tier 7,
 `clients/README.md`). Putting the pipeline in a CRM would have created a second
 source of truth, which `MASTER.md` §5.3 forbids.
+
+## The growth engine — `mg target`
+
+Upstream of the pipeline: identify a company, research it, assess fit, reach
+out, and convert it to a lead only when someone actually engages.
+
+```bash
+./mg target add --company "..." --via "Targeted outbound" --campaign q4
+./mg target brief <slug> target-research     # then: target ingest <slug> target-research
+./mg target brief <slug> target-assess
+./mg target compose <slug> --body-file msg.txt --grounded-in E1 --grounded-in E2
+./mg target approve <slug> --approved-by Founder --channel email
+./mg target sent <slug> --channel email
+./mg target respond <slug> --kind positive --text "..."
+./mg target convert <slug>                   # becomes clients/<slug>
+```
+
+Targets live in `growth/<slug>/`, not `clients/`. `clients/README.md` creates a
+directory at qualification, when a lead exists; a target has not been contacted
+and may never become one. Filing every researched company under `clients/`
+would flood the pipeline and corrupt the buyer evidence base.
+
+**Evidence is typed.** Every research item is `confirmed` (with a source),
+`inference`, or `unknown`. A confirmed item with no source is refused.
+
+**Personalisation must be grounded.** Every draft names the evidence refs it
+rests on, and those must be *confirmed*. A message resting on an inference is
+refused at approval — that is the mechanical version of "do not pretend
+outreach is personalised when it is not". The pilot caught exactly this: a
+draft telling a prospect "you're currently losing enquiries" when that was
+reasoning, not observation.
+
+**The tool never sends.** It drafts, records founder approval, and logs what
+you sent. Outreach is client-facing communication and founder-approved
+(`governance/AUTHORITY.md` §7).
+
+**Conversion needs a positive response.** Contacting someone does not make them
+a lead. On conversion, confirmed facts cross as facts *with their sources*,
+inferences cross as explicitly labelled assessment, and unknowns become open
+items — the boundary survives the handover.
 
 ## Lead intake
 

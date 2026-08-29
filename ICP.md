@@ -8,9 +8,9 @@
 **Parent Authority:** `MASTER.md` (Tier 1 — supreme), `STRATEGIC_CONFIGURATION.md` (Tier 2), `BUSINESS.md`, `SERVICES.md`
 **Applies to:** Qualification, outreach targeting, marketing audience, proposal fit assessment.
 **Owner:** Founder
-**Status:** Active — category confirmed, detailed profile open (Q-001 – Q-004).
+**Status:** Active — profile confirmed (D-019 – D-022). Founder advantage inventory open (Q-013).
 **Last reviewed:** 2026-08-29
-**Review trigger:** Discovery Round 2; accumulation of real buyer evidence.
+**Review trigger:** Evidence that specialization is warranted (D-019); accumulation of real buyer evidence.
 **Related:** `SALES.md`, `sops/sales/QUALIFICATION.md`, `MARKETING.md`, `OPEN_QUESTIONS.md`
 
 ---
@@ -31,8 +31,35 @@ These are founder-approved and must not be treated as open:
 | Geography | National, remote-first; local and regional relationships used selectively | D-008 |
 | Position | Boutique / premium specialist — not commodity, not lowest-cost | D-007 |
 
+| Market approach | Controlled testing of a limited set of markets sharing common characteristics; specialize only on evidence | D-019 |
+| Maturity target | Businesses that have proven they can sell and operate, but whose digital infrastructure has not kept pace | D-020 |
+| Primary trigger | *"Our business has outgrown our current website and digital systems, and they are now becoming a constraint on growth"* | D-022 |
+
 *Geography was previously listed in this document as requiring founder
 configuration after it had been decided. Corrected 2026-08-29 under D-014.*
+
+## 2.1 Size Bands
+
+Headcount is **not** the only qualification variable — revenue, complexity,
+urgency and digital maturity carry equal weight (D-021).
+
+| Band | Priority |
+|---|---|
+| 10–100 employees | **Primary target** |
+| 100–250 employees | Secondary, where decision-maker access remains practical |
+| 5–10 employees | Selective, where revenue and project economics justify it |
+| 250+ employees | Opportunistic until enterprise delivery capacity exists |
+
+Revenue qualification is used alongside budget availability, cost of the
+existing problem, strategic importance, decision-maker access and project
+scope — never as a rigid threshold on its own.
+
+## 2.2 Not Targeted
+
+Explicitly outside the profile (D-020): pre-revenue startups seeking
+inexpensive experimentation; businesses without validated demand; buyers
+seeking only the lowest-cost website; organizations that cannot connect a
+digital investment to a meaningful business objective.
 
 ## 3. ICP Principle
 
@@ -91,20 +118,41 @@ Declining a poor-fit opportunity is a correct outcome, not a lost sale.
 
 ## 7. Buyer Roles
 
-**Do not invent buyer titles.** Buyer roles and buying-committee composition
-are registered as open (Q-003).
+Confirmed under D-021. These are founder-approved and must not be treated as
+open — but a role observed on a real opportunity is still recorded as evidence,
+because the committee shape varies by size.
 
-Record actual buyer patterns as evidence accumulates — who initiated contact,
-who held budget, who could say no, who had to be convinced, plus industry and
-approximate size.
+**Primary economic buyers.** Founder / Owner · CEO / President · Managing
+Director · COO · Managing Partner.
 
-**Where:** the Buyer Evidence table in `clients/<client>/README.md`, completed
-for every qualified opportunity **including disqualified ones**. Q-003 cannot
-be resolved without this evidence, so failing to record it blocks the
-company's own configuration.
+Most appropriate where the problem affects business growth, operational
+efficiency, or overall digital infrastructure.
 
-Once a stable pattern emerges across engagements, propose it as a decision
-under `governance/CHANGE_MANAGEMENT.md` rather than asserting it here.
+**Secondary buyers and champions.** CMO / Marketing Director · VP of Marketing
+· Head of Marketing · Director of Operations · Head of Operations · CTO · IT
+Director · Digital Director · E-commerce leadership.
+
+**Typical buying committee.**
+
+| Organization | Committee |
+|---|---|
+| Smaller | One economic buyer (usually owner or CEO) plus one operational or marketing stakeholder |
+| Mid-sized | Economic buyer, departmental champion, technical reviewer where integrations or applications are involved, finance or procurement where required |
+
+**Qualification requirement.** A qualified opportunity should have:
+
+1. A meaningful business problem.
+2. A credible financial or operational reason to solve it.
+3. Access to an economic decision-maker.
+4. A realistic implementation timeline.
+5. Sufficient budget or budget potential.
+6. A problem that fits the company's capabilities.
+
+**Continue recording actual buyer patterns** in the Buyer Evidence table in
+`clients/<client>/README.md` — who initiated, who held budget, who could say no,
+who had to be convinced, plus industry and size. D-021 sets the expected shape;
+real engagements test whether it holds, and a variance is a change proposal
+under `governance/CHANGE_MANAGEMENT.md`.
 
 ## 8. Qualification Questions
 
@@ -123,9 +171,11 @@ Full procedure: `sops/sales/QUALIFICATION.md`.
 
 ## 9. Unresolved Configuration
 
-Industry focus, business-maturity targeting, exact size bands, buyer roles,
-buying trigger, and budget bands are tracked in `OPEN_QUESTIONS.md`
-(Q-001 – Q-004).
+The client profile is configured. What remains open is the **founder advantage
+inventory** (Q-013) — actual industry experience, existing relationships and
+referral opportunities, and past projects with case-study potential.
 
-Until resolved, qualification uses the qualitative signals in §4–§6 rather
-than numeric thresholds (`ASSUMPTIONS.md` A-005).
+This matters here because D-023 makes market selection the intersection of
+*founder access + technical advantage + market pain + project economics*. Three
+of those four terms are now known; the fourth is not, so no market may be
+selected as a permanent specialization yet (D-019).

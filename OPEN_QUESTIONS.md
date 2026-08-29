@@ -8,7 +8,7 @@
 **Owner:** Founder
 **Status:** Active
 **Last reviewed:** 2026-08-29
-**Review trigger:** Discovery Round 2; any question answered; any new blocking unknown.
+**Review trigger:** Any question answered; any new blocking unknown.
 **Related:** `DECISIONS.md`, `STRATEGIC_CONFIGURATION.md`, `ASSUMPTIONS.md`, `RISKS.md`
 
 ---
@@ -46,168 +46,99 @@ overlapping but non-identical lists. Those documents now link here.
 
 ---
 
-## Discovery Round 2 — Founder Input Required
+## Open
 
-These are the founder's own deferred questions, ported from
-`exports/EXECUTIVE_STRATEGIC_CONFIGURATION.docx` §11. They are deliberate
-dependencies, not oversights.
+*Discovery Round 2 resolved Q-001 – Q-012 (D-019 – D-030). What remains are the
+inputs the founder's own answers identified as still required — several
+decisions approved an architecture and explicitly deferred its values. **An
+approved model is not an approved number.***
 
-### Q-001 — Industry focus · Blocking
-**Question.** Should the company remain industry-agnostic initially, select
-one primary industry, focus on a cluster of related industries, or test
-multiple markets and specialize based on evidence?
+### Q-013 — Founder advantage inventory · Blocking
+**Question.** What are the founder's actual industry and professional
+experience, existing relationships and referral opportunities, and past
+projects with the strongest case-study potential?
 
-**Why it matters.** Determines ICP detail, messaging specificity, acquisition
-channel selection, and portfolio strategy. Nearly all marketing and sales
-configuration depends on it.
+**Why it matters.** D-023 makes founder advantage an explicit input to market
+selection and states no industry is chosen because it looks attractive in
+theory. The decision rule is the intersection of *founder access + technical
+advantage + market pain + project economics*, and one of those four terms is
+currently unknown.
 
-**Founder's recorded default.** Start controlled and evidence-driven, then
-specialize based on traction.
-
-**Blocks.** `ICP.md` §8, `MARKETING.md` channel strategy, acquisition build-out (`ROADMAP.md` Phase 2).
-
----
-
-### Q-002 — Business maturity target · High
-**Question.** Should the company target businesses that have proven they can
-sell and operate successfully, but whose digital infrastructure has not kept
-pace with growth?
-
-**Why it matters.** Sharpens qualification criteria and the buying trigger.
-
-**Founder's recorded default.** Yes.
-
-**Blocks.** `ICP.md` detailed profile.
+**Blocks.** Market selection under D-019; warm-network channel activation
+(D-026 priority 1); any claim of relevant prior work.
 
 ---
 
-### Q-003 — Detailed ICP and buyer roles · Blocking
-**Question.** What are the exact company-size bands, revenue or headcount
-ranges, buyer titles, and buying-committee composition?
+### Q-014 — Founder capacity and financial requirements · Blocking
+**Question.** What are the founder's actual available weekly hours, maximum
+safe concurrent-project capacity, revenue urgency, and minimum income
+requirement?
 
-**Why it matters.** Qualification, outreach targeting, proposal structure, and
-discovery all need a concrete buyer. `ICP.md` §6 currently — and correctly —
-refuses to invent buyer titles.
+**Why it matters.** D-024 sets a capacity policy and a revenue-first override
+but records the concurrent-project figure as an assumption to be measured.
+Delivery commitments made without it are commitments made on a guess.
 
-**Depends on.** Q-001, Q-002.
-
-**Blocks.** Outreach, qualification scoring, proposal targeting.
-
----
-
-### Q-004 — Primary buying trigger · High
-**Question.** Should the primary commercial trigger be: *"Our business has
-outgrown our current website and digital systems, and they are now becoming a
-constraint on growth"*?
-
-**Secondary triggers under consideration.** Rebranding, expansion, poor
-website performance, weak conversion, operational inefficiency, disconnected
-tools, excessive manual work.
-
-**Why it matters.** The trigger is the core of messaging and the opening of
-every qualification conversation.
+**Blocks.** Q-015; any commitment to concurrent delivery.
 
 ---
 
-### Q-005 — Founder advantages · Blocking
-**Question.** What existing founder advantages should influence market
-selection — industry experience, professional relationships, technical
-capabilities, sales experience, past projects, geographic relationships,
-communities, potential referral partners?
+### Q-015 — Price points and engagement economics · Blocking
+**Question.** What are the actual price points for each commercial layer, the
+exact minimum engagement value, and the monthly, quarterly and annual revenue
+and pipeline-coverage targets?
 
-**Why it matters.** The founder's own analysis identifies this, with Q-006, as
-the **highest-leverage input** because it may materially alter market
-selection. Answering Q-001 before Q-005 risks selecting a market that ignores
-the company's strongest unfair advantage.
+**Why it matters.** D-025 approved the pricing **architecture** and stated
+explicitly that exact price points require founder financial inputs before
+becoming policy. D-029 defers final package contents until pricing economics
+exist. **Until this is answered no proposal may state a figure**, and
+`SERVICES.md` §4 continues to bar presenting an offer without a pricing model.
 
-**Blocks.** Q-001 should not be finalized before this is answered.
+**Depends on.** Q-013, Q-014.
 
----
-
-### Q-006 — Revenue urgency and capacity · Blocking
-**Question.** Which best reflects the business: validate carefully, generate
-revenue quickly, build a scalable platform with slower commercialization, or
-balance revenue generation with deliberate system-building? What are the
-founder's actual weekly hours and concurrent-project capacity?
-
-**Why it matters.** Determines roadmap sequencing, acceptable engagement size,
-whether to prioritize acquisition over systems, and how much delivery the
-company can safely commit to. `ROADMAP.md` phase ordering assumes an answer.
-
-**Founder's recorded default.** Balanced, unless actual financial constraints
-require a revenue-first approach.
+**Blocks.** Proposal issuance; `SERVICES.md` package contents; `METRICS.md`
+revenue targets; all commercial forecasting.
 
 ---
 
-### Q-007 — Pricing and engagement economics · Blocking
-**Question.** What is the pricing model, minimum engagement size, package
-economics, margin target, and revenue target?
+### Q-016 — Named technology stack · High
+**Question.** Which specific technologies are the approved defaults for
+marketing websites, custom web applications, CMS, hosting and integrations?
 
-**Why it matters.** No proposal can be issued without it. `BUSINESS.md` §10
-mandates "pricing to be determined" until configured, and `SERVICES.md`
-withholds package definitions.
-
-**Depends on.** Q-003, Q-005, Q-006.
-
-**Blocks.** Proposals, `SERVICES.md` package definitions, `METRICS.md` revenue
-targets, all commercial forecasting.
+**Why it matters.** D-027 approved the stack **policy** — default architecture
+with documented exceptions — but states the named technologies are to be
+finalized in `TECH_STACK.md` based on what the company can confidently support.
+Until then every project still re-decides, and reusable assets cannot
+accumulate.
 
 ---
 
-### Q-008 — Acquisition channels · High
-**Question.** Which specific channels are the initial focus, and in what
-order?
+### Q-017 — Brand asset values · Medium
+**Question.** What are the official logo, colour palettes, typography system
+and spacing conventions?
 
-**Why it matters.** `MARKETING.md` §3 lists candidate channels but states none
-are mandatory. Without a decision, marketing effort disperses.
-
-**Depends on.** Q-001, Q-005.
-
----
-
-## Operational Open Questions
-
-### Q-009 — Approved technology stack · High
-**Question.** What is the company-wide approved stack for websites, web
-applications, hosting, CMS, and integrations?
-
-**Why it matters.** `TECH_STACK.md` §3 forbids claiming any technology is
-standard until authorized. Every project currently re-decides its stack,
-preventing reusable assets — a `ROADMAP.md` Phase 3 objective.
-
----
-
-### Q-010 — Visual identity · Medium
-**Question.** What are the official colours, typography, logo, and visual
-system?
-
-**Why it matters.** `BRAND.md` §8 forbids inventing these. Company website and
-all collateral depend on it.
-
----
-
-### Q-011 — Service package contents · High
-**Question.** For each stage in the D-005 progression, what are the exact
-deliverables, inclusions, exclusions, timelines, and guarantees?
-
-**Why it matters.** The progression is confirmed; its contents are not.
-Proposals cannot be standardized without it.
-
-**Depends on.** Q-007.
-
----
-
-### Q-012 — Escalation contact and response expectations · Medium
-**Question.** For security incidents and delivery escalations, who is the
-named responsible authority and what response time applies?
-
-**Why it matters.** `SECURITY.md` §7 says "escalate to the responsible
-authority" without naming one. In a founder-led company this is presumed to be
-the founder, recorded as an assumption (A-004) pending confirmation.
+**Why it matters.** D-028 approved the visual **direction** and the required
+asset list, not the assets. `BRAND.md` §8 continues to forbid inventing them.
 
 ---
 
 ## Resolved
 
-*None yet. When a question is answered, move it here with the resolution date
-and the `DECISIONS.md` ID that records the decision.*
+| Question | Resolved | Decision | Note |
+|---|---|---|---|
+| Q-001 — Industry focus | 2026-08-29 | D-019 | Controlled market testing; specialize on evidence |
+| Q-002 — Business maturity target | 2026-08-29 | D-020 | Yes — the digital maturity gap |
+| Q-003 — ICP and buyer roles | 2026-08-29 | D-021 | Size bands and buyer roles set; retires A-005 |
+| Q-004 — Primary buying trigger | 2026-08-29 | D-022 | Yes — outgrown digital infrastructure |
+| Q-005 — Founder advantages | 2026-08-29 | D-023 | Policy set; the inventory itself is Q-013 |
+| Q-006 — Revenue urgency and capacity | 2026-08-29 | D-024 | Balanced, with revenue override; figures are Q-014 |
+| Q-007 — Pricing and engagement economics | 2026-08-29 | D-025 | **Model only** — price points are Q-015 |
+| Q-008 — Acquisition channels | 2026-08-29 | D-026 | Concentrated multi-channel, first three |
+| Q-009 — Approved technology stack | 2026-08-29 | D-027 | **Policy only** — named technologies are Q-016 |
+| Q-010 — Visual identity | 2026-08-29 | D-028 | **Policy only** — asset values are Q-017 |
+| Q-011 — Service package contents | 2026-08-29 | D-029 | **Structure only** — contents follow Q-015 |
+| Q-012 — Escalation contact and response | 2026-08-29 | D-030 | Founder; response targets set; retires A-004 |
+
+**Three of these resolved a policy and deferred its values.** Q-007, Q-009,
+Q-010 and Q-011 each approved an architecture whose numbers or assets are still
+unknown, and those residuals are Q-015, Q-016 and Q-017. Treating the parent as
+fully answered is how an invented price reaches a client.

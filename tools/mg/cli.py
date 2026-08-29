@@ -268,6 +268,22 @@ def cmd_next(root, a):
         gaps = _gaps(root, o)
         if gaps:
             print(f"    {c('missing', C.WARN)} {'; '.join(gaps[:3])}")
+    targets, tbroken = store.load_all_targets(root)
+    if tbroken:
+        err(f"{len(tbroken)} target(s) unreadable: " + ", ".join(x for x, _ in tbroken))
+    from . import growth as _gr, growth_cli as _gc
+    live = [t for t in targets if t.status not in _gr.TARGET_TERMINAL]
+    if live:
+        head(f"{len(live)} live target{'' if len(live)==1 else 's'}   "
+             + c("(growth engine — upstream of the pipeline)", C.D))
+        for t in sorted(live, key=lambda x: _gr.TARGET_STATUSES.index(x.status)):
+            print(f"\n  {c(t.slug, C.B)}  {c(t.status, C.ACC)}"
+                  + (f"   {t.fit.band}" if t.fit.band else ""))
+            print(f"    next    {_gc._next(t)}")
+            if t.status == _gr.MONITORING:
+                last = next((e for e in reversed(t.events) if e.kind == "monitor"), None)
+                if last:
+                    print(f"    why     {last.detail[:70]}")
     if overdue:
         head(f"{len(overdue)} overdue")
         for slug, nf in overdue:
@@ -942,6 +958,43 @@ def cmd_metrics(root, a):
         for k, v in s["by_source"].items():
             label = k if len(k) <= 44 else k[:43] + "…"
             print(f"  {label:<46}{v}")
+
+    targets, _ = store.load_all_targets(root)
+    if targets:
+        g = metrics.growth_summary(targets, opps)
+        head("Growth engine")
+        for label, key, note in [
+            ("Identified", "identified", ""),
+            ("Researched", "researched", ""),
+            ("Assessed", "assessed", f"{g['strong_fit']} strong fit"),
+            ("Contacted", "contacted", f"{g['messages_sent']} message(s) sent"),
+            ("Responded", "responded",
+             f"{g['response_rate']}% of contacted" if g["response_rate"] is not None else ""),
+            ("Positive", "positive",
+             f"{g['positive_rate']}% of contacted" if g["positive_rate"] is not None else ""),
+            ("Converted to leads", "converted",
+             f"{g['conversion_rate']}% of contacted" if g["conversion_rate"] is not None else ""),
+            ("Disqualified", "disqualified", ""),
+        ]:
+            print(f"  {label:<22}{c(str(g[key]), C.B):<14}{c(note, C.D)}")
+        d = g["downstream"]
+        head("Outbound → pipeline   " + c("(what the activity actually produced)", C.D))
+        print(f"  {'Became qualified':<22}{d['qualified']}")
+        print(f"  {'Reached discovery':<22}{d['discovery']}")
+        print(f"  {'Reached proposal':<22}{d['proposed']}")
+        print(f"  {'Won':<22}{d['won']}")
+        if g["by_channel"]:
+            head("By channel   " + c("(D-026 priority order — this is the performance evidence)", C.D))
+            print(f"  {'channel':<22}{'sent':>6}{'resp':>6}{'pos':>6}{'conv':>6}")
+            for ch, r in sorted(g["by_channel"].items(), key=lambda kv: -kv[1]["sent"]):
+                print(f"  {ch[:20]:<22}{r['sent']:>6}{r['responded']:>6}"
+                      f"{r['positive']:>6}{r['converted']:>6}")
+        if len(g["by_campaign"]) > 1 or "uncategorised" not in g["by_campaign"]:
+            head("By campaign")
+            print(f"  {'campaign':<22}{'targets':>8}{'contacted':>10}{'pos':>6}{'conv':>6}")
+            for k, r in sorted(g["by_campaign"].items(), key=lambda kv: -kv[1]["targets"]):
+                print(f"  {k[:20]:<22}{r['targets']:>8}{r['contacted']:>10}"
+                      f"{r['positive']:>6}{r['converted']:>6}")
     return 0
 
 
@@ -1122,6 +1175,91 @@ def build_parser() -> argparse.ArgumentParser:
     ig.add_argument("--replace", action="store_true",
                     help="discard what is already recorded instead of merging into it")
     ig.set_defaults(fn=cmd_ingest)
+
+    # ---- growth engine: mg target <verb> ----
+    from . import growth as _gr, growth_cli as _gc
+    tg = sub.add_parser("target", help="the growth engine: identify, research, reach out")
+    tsub = tg.add_subparsers(dest="target_cmd", required=True)
+
+    ta = tsub.add_parser("add", help="identify a target company")
+    ta.add_argument("--company", required=True)
+    ta.add_argument("--slug"); ta.add_argument("--via", help="how it was found — Q-008 evidence")
+    ta.add_argument("--campaign"); ta.add_argument("--website"); ta.add_argument("--industry")
+    ta.add_argument("--size"); ta.add_argument("--location")
+    ta.add_argument("--contact"); ta.add_argument("--role"); ta.add_argument("--email")
+    ta.add_argument("--force", action="store_true")
+    ta.add_argument("--duplicate-ok", dest="duplicate_ok", action="store_true")
+    ta.set_defaults(fn=_gc.cmd_add)
+
+    tb = tsub.add_parser("brief", help="AI packet for a growth task")
+    tb.add_argument("slug")
+    tb.add_argument("task", choices=["target-research", "target-assess", "target-message"])
+    tb.set_defaults(fn=_gc.cmd_brief)
+
+    ti = tsub.add_parser("ingest", help="merge growth AI output")
+    ti.add_argument("slug")
+    ti.add_argument("task", choices=["target-research", "target-assess", "target-message"])
+    ti.add_argument("--from", dest="from_file")
+    ti.add_argument("--replace", action="store_true")
+    ti.set_defaults(fn=_gc.cmd_ingest)
+
+    td = tsub.add_parser("research", help="show how to research this target")
+    td.add_argument("slug")
+    td.set_defaults(fn=lambda r, a: _gc.cmd_brief(r, type("A", (), {"slug": a.slug, "task": "target-research"})()))
+
+    tas = tsub.add_parser("assess", help="show how to assess fit")
+    tas.add_argument("slug")
+    tas.set_defaults(fn=lambda r, a: _gc.cmd_brief(r, type("A", (), {"slug": a.slug, "task": "target-assess"})()))
+
+    tdr = tsub.add_parser("draft", help="begin an outreach draft")
+    tdr.add_argument("slug"); tdr.add_argument("--force", action="store_true")
+    tdr.set_defaults(fn=_gc.cmd_draft)
+
+    tc = tsub.add_parser("compose", help="record a message you wrote yourself")
+    tc.add_argument("slug"); tc.add_argument("--purpose"); tc.add_argument("--channel")
+    tc.add_argument("--body"); tc.add_argument("--body-file", dest="body_file")
+    tc.add_argument("--grounded-in", dest="grounded_in", action="append", metavar="REF")
+    tc.add_argument("--force", action="store_true")
+    tc.set_defaults(fn=_gc.cmd_compose)
+
+    tap = tsub.add_parser("approve", help="founder approval before sending")
+    tap.add_argument("slug"); tap.add_argument("--approved-by", dest="approved_by")
+    tap.add_argument("--channel"); tap.add_argument("--yes", action="store_true")
+    tap.add_argument("--force", action="store_true")
+    tap.set_defaults(fn=_gc.cmd_approve)
+
+    ts = tsub.add_parser("sent", help="record that you sent it")
+    ts.add_argument("slug"); ts.add_argument("--channel"); ts.add_argument("--on")
+    ts.add_argument("--follow-up", dest="follow_up")
+    ts.set_defaults(fn=_gc.cmd_sent)
+
+    tr = tsub.add_parser("respond", help="record a response")
+    tr.add_argument("slug")
+    tr.add_argument("--kind", required=True,
+                    choices=["positive", "neutral", "negative", "none"])
+    tr.add_argument("--text"); tr.add_argument("--on")
+    tr.set_defaults(fn=_gc.cmd_respond)
+
+    tm = tsub.add_parser("monitor", help="park a target with a reason")
+    tm.add_argument("slug"); tm.add_argument("--reason"); tm.add_argument("--revisit")
+    tm.set_defaults(fn=_gc.cmd_monitor)
+
+    tdq = tsub.add_parser("disqualify", help="disqualify with reasoning")
+    tdq.add_argument("slug"); tdq.add_argument("--reason")
+    tdq.set_defaults(fn=_gc.cmd_disqualify)
+
+    tcv = tsub.add_parser("convert", help="turn an engaged target into a lead")
+    tcv.add_argument("slug"); tcv.add_argument("--to", help="clients/<slug> to create")
+    tcv.add_argument("--force", action="store_true")
+    tcv.set_defaults(fn=_gc.cmd_convert)
+
+    tl = tsub.add_parser("list", help="the target pipeline")
+    tl.add_argument("--all", action="store_true")
+    tl.set_defaults(fn=_gc.cmd_list)
+
+    tsh = tsub.add_parser("show", help="one target in full")
+    tsh.add_argument("slug")
+    tsh.set_defaults(fn=_gc.cmd_show)
 
     ck = sub.add_parser("check", help="governance check across the pipeline")
     ck.set_defaults(fn=cmd_check)

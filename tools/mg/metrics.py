@@ -111,3 +111,107 @@ def _by_source(opps):
         s = o.qualification.source or "unrecorded"
         out[s] = out.get(s, 0) + 1
     return dict(sorted(out.items(), key=lambda kv: -kv[1]))
+
+
+# --------------------------------------------------------------------------
+# Growth engine
+# --------------------------------------------------------------------------
+
+def growth_summary(targets: list, opps: list[m.Opportunity]) -> dict:
+    """Which activities are producing qualified opportunities?
+
+    Attribution is by the source string the conversion writes into the
+    opportunity, so a downstream outcome traces back to the channel and
+    campaign that produced it — the evidence Q-008 needs.
+    """
+    from . import growth as gr
+
+    identified = len(targets)
+    researched = sum(1 for t in targets if t.confirmed())
+    assessed = sum(1 for t in targets if t.fit.band)
+    strong = sum(1 for t in targets if t.fit.band == "Strong")
+    contacted = sum(1 for t in targets if t.sent_touches())
+    responded = sum(1 for t in targets if t.has_response())
+    positive = sum(1 for t in targets if t.positive_response())
+    converted = [t for t in targets if t.status == gr.CONVERTED]
+    disqualified = sum(1 for t in targets if t.status == gr.DISQUALIFIED)
+    touches = sum(len(t.sent_touches()) for t in targets)
+
+    # downstream: what happened to the leads these targets became
+    by_slug = {o.slug: o for o in opps}
+    downstream = {"qualified": 0, "discovery": 0, "proposed": 0, "won": 0}
+    for t in converted:
+        o = by_slug.get(t.converted_to)
+        if not o:
+            continue
+        if _reached(o, m.QUALIFIED):
+            downstream["qualified"] += 1
+        if _reached(o, m.DISCOVERY):
+            downstream["discovery"] += 1
+        if _reached(o, m.PROPOSAL):
+            downstream["proposed"] += 1
+        if _reached(o, m.ONBOARDING):
+            downstream["won"] += 1
+
+    pct = lambda a, b: (round(100 * a / b) if b else None)
+    return {
+        "identified": identified,
+        "researched": researched,
+        "assessed": assessed,
+        "strong_fit": strong,
+        "contacted": contacted,
+        "messages_sent": touches,
+        "responded": responded,
+        "response_rate": pct(responded, contacted),
+        "positive": positive,
+        "positive_rate": pct(positive, contacted),
+        "converted": len(converted),
+        "conversion_rate": pct(len(converted), contacted),
+        "disqualified": disqualified,
+        "downstream": downstream,
+        "by_channel": _by_channel(targets),
+        "by_campaign": _by_campaign(targets),
+    }
+
+
+def _by_channel(targets) -> dict:
+    """Outcomes per channel actually used. Q-008 is open; this is the evidence."""
+    out: dict[str, dict] = {}
+    for t in targets:
+        for touch in t.sent_touches():
+            ch = touch.channel or "unrecorded"
+            row = out.setdefault(ch, {"sent": 0, "responded": 0, "positive": 0, "converted": 0})
+            row["sent"] += 1
+            if touch.response_on:
+                row["responded"] += 1
+            if touch.response_kind == "positive":
+                row["positive"] += 1
+        if t.status == "Converted" and t.sent_touches():
+            ch = t.sent_touches()[-1].channel or "unrecorded"
+            out.setdefault(ch, {"sent": 0, "responded": 0, "positive": 0, "converted": 0})
+            out[ch]["converted"] += 1
+    return out
+
+
+def _by_campaign(targets) -> dict:
+    out: dict[str, dict] = {}
+    for t in targets:
+        key = t.campaign or "uncategorised"
+        row = out.setdefault(key, {"targets": 0, "contacted": 0, "positive": 0, "converted": 0})
+        row["targets"] += 1
+        if t.sent_touches():
+            row["contacted"] += 1
+        if t.positive_response():
+            row["positive"] += 1
+        if t.status == "Converted":
+            row["converted"] += 1
+    return out
+
+
+def _by_source_origin(opps: list[m.Opportunity]) -> dict:
+    """Opportunity sources, so inbound and outbound are comparable."""
+    out: dict[str, int] = {}
+    for o in opps:
+        src = o.qualification.source or "unrecorded"
+        out[src] = out.get(src, 0) + 1
+    return dict(sorted(out.items(), key=lambda kv: -kv[1]))

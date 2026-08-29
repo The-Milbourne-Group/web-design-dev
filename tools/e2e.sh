@@ -14,7 +14,7 @@ MG=./mg
 KEEP=${1:-}
 PASS=0; FAIL=0
 SCRATCH=$(mktemp -d)
-trap 'rm -rf "$SCRATCH"; [ "$KEEP" = "--keep" ] || rm -rf clients/zz-e2e-*' EXIT
+trap 'rm -rf "$SCRATCH"; [ "$KEEP" = "--keep" ] || rm -rf clients/zz-e2e-* growth/zz-e2e-*' EXIT
 
 ok()   { PASS=$((PASS+1)); printf '  \033[32m✓\033[0m %s\n' "$1"; }
 bad()  { FAIL=$((FAIL+1)); printf '  \033[31m✗\033[0m %s\n' "$1"; }
@@ -27,7 +27,7 @@ expect_status(){ local s; s=$(python3 -c "
 import sys,json;print(json.load(open('clients/$1/opportunity.json'))['status'])"); \
   [ "$s" = "$2" ] && ok "status is $2" || bad "status is $s, expected $2"; }
 
-rm -rf clients/zz-e2e-*
+rm -rf clients/zz-e2e-* growth/zz-e2e-*
 
 step "1 · Lead intake from a real channel"
 cat > "$SCRATCH/enquiry.txt" <<'MAIL'
@@ -270,7 +270,83 @@ import json;d=json.load(open('clients/zz-e2e-form/opportunity.json'))
 assert d['company']['name']=='ZZ E2E Form Co', d['company']
 " && ok "restored record is the real one" || bad "restore returned wrong content"
 
-step "12 · Governance check, pipeline view and metrics"
+step "12 · Growth engine: target to lead"
+rm -rf growth/zz-e2e-*
+expect_ok "target identified" $MG target add --company "ZZ E2E Fabrication" \
+  --slug zz-e2e-tgt --via "Targeted outbound" --campaign "zz-e2e" \
+  --contact "R Tester" --role "Managing Director" --email "r@zz-e2e-fab.example"
+expect_fail "blocked: duplicate target" $MG target add --company "ZZ E2E Fabrication" --slug zz-e2e-tgt2
+cat > "$SCRATCH/res.json" <<'JSON'
+{"research":[
+ {"ref":"E1","statement":"Announced a second site","kind":"confirmed","source":"News page","observed_on":"2026-08-29"},
+ {"ref":"E2","statement":"Website footer reads 2019","kind":"confirmed","source":"Their site","observed_on":"2026-08-29"},
+ {"ref":"E3","statement":"Probably losing enquiries","kind":"inference","source":"Reasoned from E2"},
+ {"ref":"E4","statement":"Whether they tender for frameworks","kind":"unknown","source":""}]}
+JSON
+expect_ok "research ingested" $MG target ingest zz-e2e-tgt target-research --from "$SCRATCH/res.json"
+python3 -c "
+import json;r=json.load(open('growth/zz-e2e-tgt/target.json'))['research']
+k={x['ref']:x['kind'] for x in r}
+assert k=={'E1':'confirmed','E2':'confirmed','E3':'inference','E4':'unknown'}, k
+" && ok "evidence typed: confirmed / inference / unknown held apart" || bad "evidence typing lost"
+cat > "$SCRATCH/badev.json" <<'JSON'
+{"research":[{"ref":"E9","statement":"They use SAP","kind":"confirmed","source":""}]}
+JSON
+expect_fail "blocked: confirmed evidence with no source" \
+  $MG target ingest zz-e2e-tgt target-research --from "$SCRATCH/badev.json"
+cat > "$SCRATCH/ass.json" <<'JSON'
+{"signals":[{"signal":"Digital infrastructure that has not kept pace with growth","kind":"problem","evidence_ref":"E1"}],
+ "band":"Strong","reasoning":"Growing, site stopped in 2019.","recommended_action":"Initiate outreach"}
+JSON
+expect_ok "fit assessed" $MG target ingest zz-e2e-tgt target-assess --from "$SCRATCH/ass.json"
+cat > "$SCRATCH/badmsg.json" <<'JSON'
+{"purpose":"reach out","subject":"hi","body":"You are losing enquiries right now.","grounded_in":["E3"]}
+JSON
+$MG target ingest zz-e2e-tgt target-message --from "$SCRATCH/badmsg.json" >/dev/null 2>&1
+expect_fail "blocked: draft resting on an inference" \
+  $MG target approve zz-e2e-tgt --approved-by Founder --yes
+cat > "$SCRATCH/msg.json" <<'JSON'
+{"purpose":"Second site while the site reads 2019","subject":"Your expansion",
+ "body":"I saw the second site announcement. Your website footer still reads 2019.",
+ "grounded_in":["E1","E2"]}
+JSON
+expect_ok "grounded draft accepted" $MG target ingest zz-e2e-tgt target-message --from "$SCRATCH/msg.json"
+expect_fail "blocked: approval without founder" $MG target approve zz-e2e-tgt --yes
+expect_ok "founder approves" $MG target approve zz-e2e-tgt --approved-by Founder --channel email --yes
+expect_fail "blocked: convert before any response" $MG target convert zz-e2e-tgt
+expect_ok "recorded as sent" $MG target sent zz-e2e-tgt --channel email --on 2026-09-02
+expect_fail "blocked: convert on no response yet" $MG target convert zz-e2e-tgt
+expect_ok "positive response recorded" $MG target respond zz-e2e-tgt --kind positive --text "Worth a call."
+expect_ok "converted to a lead" $MG target convert zz-e2e-tgt --to zz-e2e-converted
+python3 -c "
+import json
+q=json.load(open('clients/zz-e2e-converted/opportunity.json'))['qualification']
+facts=' '.join(q['confirmed_facts'])
+assert 'second site' in facts and 'source:' in facts, facts
+assert 'Probably losing enquiries' not in facts, 'inference crossed as a confirmed fact'
+assert 'inference, not fact' in q['assessment'], q['assessment'][:80]
+assert 'Targeted outbound' in q['source'], q['source']
+assert q['fit']['problem_signals'], 'ICP signals not carried'
+" && ok "confirmed facts carried with sources; inference carried as labelled assessment" \
+  || bad "evidence boundary broken on conversion"
+expect_fail "blocked: disqualify with no reasoning" $MG target disqualify zz-e2e-tgt2 --reason ""
+$MG target add --company "ZZ E2E Cheap" --slug zz-e2e-dq --via "Warm network" >/dev/null 2>&1
+expect_ok "target disqualified with reasoning" $MG target disqualify zz-e2e-dq \
+  --reason "Shopping on price alone — ICP.md §6, off-strategy per D-007"
+GM=$($MG metrics --json 2>/dev/null)
+python3 -c "
+import json,sys
+sys.path.insert(0,'tools')
+from pathlib import Path
+from mg import store, metrics, governance as g
+root=g.repo_root(Path('tools/mg/governance.py').resolve())
+t,_=store.load_all_targets(root); o=store.load_all(root)
+s=metrics.growth_summary(t,o)
+assert s['contacted']>=1 and s['positive']>=1 and s['converted']>=1, s
+assert s['by_channel'].get('email',{}).get('converted',0)>=1, s['by_channel']
+" && ok "growth metrics attribute the conversion to its channel" || bad "growth attribution broken"
+
+step "13 · Governance check, pipeline view and metrics"
 expect_ok "governance check clean" $MG check
 expect_ok "pipeline view renders" $MG next
 $MG metrics --json > "$SCRATCH/m.json"
