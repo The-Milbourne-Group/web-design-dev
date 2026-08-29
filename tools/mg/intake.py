@@ -43,6 +43,35 @@ ALIASES = {
 
 NOISE = {"re", "fwd", "sent", "to", "cc", "bcc", "date", "reply-to"}
 
+# Free mailbox providers: the domain is not the prospect's website.
+GENERIC_HOSTS = {
+    "gmail.com", "googlemail.com", "outlook.com", "hotmail.com", "live.com",
+    "yahoo.com", "yahoo.co.uk", "icloud.com", "me.com", "aol.com",
+    "protonmail.com", "proton.me", "gmx.com", "mail.com", "btinternet.com",
+}
+
+KNOWN_TLD = {
+    "com", "co", "net", "org", "io", "uk", "example", "dev", "app", "ai",
+    "eu", "de", "fr", "es", "it", "nl", "ie", "us", "ca", "au", "nz", "biz",
+    "info", "agency", "studio", "design", "group", "services", "solutions",
+}
+
+
+def _plausible_host(host: str) -> bool:
+    host = host.strip().strip(".,;:").lower()
+    if not host or "@" in host or " " in host:
+        return False
+    parts = host.split(".")
+    if len(parts) < 2 or any(not p for p in parts):
+        return False
+    if parts[-1] not in KNOWN_TLD:
+        return False
+    return all(len(p) >= 2 for p in parts[:-1])
+
+
+def _is_generic_host(host: str) -> bool:
+    return host.strip().lower() in GENERIC_HOSTS
+
 
 def parse(text: str) -> dict:
     """Extract what is actually present. Returns {fields, raw, missing}."""
@@ -76,12 +105,18 @@ def parse(text: str) -> dict:
         if found:
             out["email"] = found.group(0)
     if "website" not in out:
-        for cand in URL.findall(text):
-            if "@" in cand or cand.lower().endswith((".png", ".jpg")):
-                continue
-            if "email" in out and cand.split(".")[0] in out["email"]:
+        # Strip addresses first: the local part of `a.reeve@example.com` matched
+        # the URL pattern and was recorded as the website.
+        without_emails = EMAIL.sub(" ", text)
+        for cand in URL.findall(without_emails):
+            if _plausible_host(cand):
                 out["website"] = cand
                 break
+        # Otherwise fall back to the domain of the contact's own address.
+        if "website" not in out and out.get("email") and "@" in out["email"]:
+            host = out["email"].split("@", 1)[1].strip()
+            if _plausible_host(host) and not _is_generic_host(host):
+                out["website"] = host
     if "phone" not in out:
         found = PHONE.search(re.sub(r"\d{4}-\d{2}-\d{2}", "", text))
         if found and len(re.sub(r"\D", "", found.group(0))) >= 9:

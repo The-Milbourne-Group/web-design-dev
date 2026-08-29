@@ -139,6 +139,48 @@ def icp_signals(root: Path) -> dict[str, list[str]]:
     }
 
 
+def capabilities(root: Path) -> list[str]:
+    """The approved capability set from `SERVICES.md` §3, read live.
+
+    Offers are assembled from these; anything outside them is work the company
+    has not said it does (`SERVICES.md` §3, §6).
+    """
+    text = (root / "SERVICES.md").read_text(encoding="utf-8")
+    mm = re.search(r"^##\s+3\. Underlying Capabilities(.*?)(?=^##\s)", text, re.M | re.S)
+    if not mm:
+        return []
+    out = []
+    for line in mm.group(1).splitlines():
+        line = line.strip()
+        if not line.startswith("|") or line.startswith("|---") or "Applied in" in line:
+            continue
+        cell = line.strip("|").split("|")[0].strip()
+        if cell:
+            out.append(cell.split("—")[0].strip())
+    return out
+
+
+def capability_keys(root: Path) -> dict[str, str]:
+    """Short keys operators tag requirements with, mapped to the full entry."""
+    keys = {}
+    for cap in capabilities(root):
+        key = re.sub(r"[^a-z0-9]+", "-", cap.lower()).strip("-")
+        keys[key] = cap
+    return keys
+
+
+def unmapped_requirements(root: Path, opp: m.Opportunity) -> list[tuple[str, str]]:
+    """In-scope requirements not tagged with an approved capability."""
+    valid = set(capability_keys(root))
+    out = []
+    for r in opp.in_scope():
+        if not r.capability:
+            out.append((r.ref, "no capability tag"))
+        elif r.capability not in valid:
+            out.append((r.ref, f"capability {r.capability!r} is not in SERVICES.md §3"))
+    return out
+
+
 def service_stages() -> list[str]:
     return ["Entry", "Expansion", "Recurring"]
 
@@ -297,6 +339,25 @@ def _terms(text: str) -> set[str]:
         if w in _STOP:
             continue
         out.add(w[:-1] if w.endswith("s") and not w.endswith("ss") else w)
+    return out
+
+
+def contradictions(opp: m.Opportunity) -> list[tuple[str, list[str]]]:
+    """Confirmed findings on one topic attributed to different people.
+
+    Not semantic contradiction detection — that needs judgement. This is the
+    mechanical signal that reliably precedes one: two people told us something
+    about the same thing, and only one version can be carried into a proposal.
+    """
+    by_topic: dict[str, list[m.Finding]] = {}
+    for f in opp.discovery.findings:
+        if f.confirmed and f.topic:
+            by_topic.setdefault(f.topic.strip().lower(), []).append(f)
+    out = []
+    for topic, group in by_topic.items():
+        sources = {(f.source or "").strip().lower() for f in group}
+        if len(group) > 1 and len(sources) > 1:
+            out.append((group[0].topic, [f"{f.ref}: {f.statement} — {f.source}" for f in group]))
     return out
 
 

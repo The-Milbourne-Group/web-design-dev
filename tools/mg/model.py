@@ -187,6 +187,7 @@ class Requirement:
     statement: str = ""
     source: str = ""             # finding ref, "client statement", or assumption id
     kind: str = "Confirmed"      # Confirmed | Assumed
+    capability: str = ""         # which SERVICES.md §3 capability delivers this
     in_scope: bool = True        # False => deferred
     deferred_reason: str = ""
 
@@ -377,6 +378,50 @@ class Opportunity:
 # (de)serialisation — plain dict/JSON, no third-party dependency
 # --------------------------------------------------------------------------
 
+def validate(opp: "Opportunity") -> list[str]:
+    """Structural problems that make a record unsafe to operate on."""
+    problems: list[str] = []
+    if not opp.slug:
+        problems.append("record has no slug")
+    if opp.status not in STATUSES:
+        problems.append(
+            f"status {opp.status!r} is not a permitted value. "
+            f"clients/README.md defines exactly: {', '.join(STATUSES)}"
+        )
+    if opp.created_on and not _is_date(opp.created_on):
+        problems.append(f"created_on {opp.created_on!r} is not an ISO date")
+    seen: set[str] = set()
+    for f in opp.discovery.findings:
+        if not isinstance(f.confirmed, bool):
+            problems.append(
+                f"finding {f.ref or '?'}: `confirmed` is {f.confirmed!r}, not a boolean — "
+                f"the evidence/inference boundary cannot be evaluated"
+            )
+        if f.ref and f.ref in seen:
+            problems.append(f"duplicate finding ref {f.ref!r}")
+        seen.add(f.ref)
+    seen = set()
+    for r in opp.solution.requirements:
+        if r.kind not in ("Confirmed", "Assumed"):
+            problems.append(f"requirement {r.ref or '?'}: kind {r.kind!r} "
+                            f"must be Confirmed or Assumed")
+        if r.ref and r.ref in seen:
+            problems.append(f"duplicate requirement ref {r.ref!r}")
+        seen.add(r.ref)
+    for fu in opp.follow_ups:
+        if fu.due and not _is_date(fu.due):
+            problems.append(f"follow-up due {fu.due!r} is not an ISO date")
+    return problems
+
+
+def _is_date(value: str) -> bool:
+    try:
+        _dt.date.fromisoformat(str(value)[:10])
+        return True
+    except ValueError:
+        return False
+
+
 def to_dict(obj: Any) -> Any:
     if is_dataclass(obj):
         return {f.name: to_dict(getattr(obj, f.name)) for f in fields(obj)}
@@ -385,6 +430,34 @@ def to_dict(obj: Any) -> Any:
     if isinstance(obj, dict):
         return {k: to_dict(v) for k, v in obj.items()}
     return obj
+
+
+_TRUE = {"true", "yes", "y", "1", "confirmed", "t"}
+_FALSE = {"false", "no", "n", "0", "inferred", "assumed", "f", ""}
+
+
+def as_bool(value: Any, field_name: str = "") -> bool | None:
+    """Coerce to a real bool, or raise. Never guess.
+
+    An AI returning `"confirmed": "yes please"` previously stored the string,
+    and every truthiness test then read it as confirmed — silently converting an
+    inference into a fact. That is the one boundary this system cannot lose, so
+    an unrecognised value is an error, not a default.
+    """
+    if value is None or isinstance(value, bool):
+        return value
+    if isinstance(value, (int, float)) and value in (0, 1):
+        return bool(value)
+    if isinstance(value, str):
+        v = value.strip().lower()
+        if v in _TRUE:
+            return True
+        if v in _FALSE:
+            return False
+    raise ValueError(
+        f"{field_name or 'value'}: expected true/false, got {value!r}. "
+        f"Leaving it ambiguous would let an inference be read as a confirmed fact."
+    )
 
 
 def from_dict(cls, data: Any):
@@ -409,9 +482,16 @@ def from_dict(cls, data: Any):
                 kwargs[f.name] = [from_dict(inner, v) for v in val]
             else:
                 kwargs[f.name] = val
+        elif _is_bool_field(f):
+            kwargs[f.name] = as_bool(val, f"{cls.__name__}.{f.name}")
         else:
             kwargs[f.name] = val
     return cls(**kwargs)
+
+
+def _is_bool_field(f) -> bool:
+    t = f.type if isinstance(f.type, str) else getattr(f.type, "__name__", "")
+    return t in ("bool", "bool | None", "Optional[bool]")
 
 
 _RESOLVE = {

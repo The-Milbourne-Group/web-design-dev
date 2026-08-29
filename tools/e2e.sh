@@ -119,18 +119,19 @@ expect_ok "playback confirmed" $MG discovery zz-e2e-main --playback 2026-09-05
 step "4 · Solution design refuses unsourced scope"
 cat > "$SCRATCH/bad.json" <<'JSON'
 {"problem_restatement":"Website misrepresents the firm at tender stage",
- "requirements":[{"ref":"R1","statement":"Case study library","source":"D2","kind":"Confirmed","in_scope":true},
+ "requirements":[{"ref":"R1","statement":"Case study library","source":"D2","kind":"Confirmed","capability":"website-development","in_scope":true},
                  {"ref":"R9","statement":"Client login portal","source":"","kind":"Confirmed","in_scope":true}],
  "stage":"Entry","feasibility":"Within capability"}
 JSON
 $MG ingest zz-e2e-main solution --from "$SCRATCH/bad.json" >/dev/null 2>&1
 expect_fail "blocked: requirement R9 has no source" $MG solution zz-e2e-main --approved-by Founder
+expect_ok "bad requirement removed" $MG drop zz-e2e-main --requirement R9 --yes
 cat > "$SCRATCH/sol.json" <<'JSON'
 {"problem_restatement":"Website misrepresents the firm at the tender verification step",
  "requirements":[
-  {"ref":"R1","statement":"Commercial case study library from existing photography","source":"D2","kind":"Confirmed","in_scope":true},
-  {"ref":"R2","statement":"CMS so the client can publish without a third party","source":"D1","kind":"Confirmed","in_scope":true},
-  {"ref":"R3","statement":"Enquiry measurement baseline","source":"Assumption — inferred from D3","kind":"Assumed","in_scope":true},
+  {"ref":"R1","statement":"Commercial case study library from existing photography","source":"D2","kind":"Confirmed","capability":"website-development","in_scope":true},
+  {"ref":"R2","statement":"CMS so the client can publish without a third party","source":"D1","kind":"Confirmed","capability":"website-development","in_scope":true},
+  {"ref":"R3","statement":"Enquiry measurement baseline","source":"Assumption — inferred from D3","kind":"Assumed","capability":"optimization-and-support","in_scope":true},
   {"ref":"R4","statement":"Tender document templating","source":"D2","kind":"Confirmed","in_scope":false,"deferred_reason":"Expansion candidate; not the credibility problem"}],
  "stage":"Entry","feasibility":"Within capability; client content capacity is the constraint",
  "open_dependencies":["Q-009 — no approved stack, CMS is a per-project decision"]}
@@ -216,7 +217,7 @@ $MG set zz-e2e-lost --authority --decision-maker --contact "R Patel" \
   --stage Entry --feasible >/dev/null 2>&1
 $MG qualify zz-e2e-lost --outcome Qualified --approved-by Founder --reasoning "Fit" >/dev/null 2>&1
 $MG discovery zz-e2e-lost --held-on 2026-09-04 --playback 2026-09-06 >/dev/null 2>&1
-echo '{"problem_restatement":"Dated site","requirements":[{"ref":"R1","statement":"Rebuild","source":"client statement","kind":"Confirmed","in_scope":true}],"stage":"Entry","feasibility":"ok"}' > "$SCRATCH/s2.json"
+echo '{"problem_restatement":"Dated site","requirements":[{"ref":"R1","statement":"Rebuild","source":"client statement","kind":"Confirmed","capability":"website-development","in_scope":true}],"stage":"Entry","feasibility":"ok"}' > "$SCRATCH/s2.json"
 $MG ingest zz-e2e-lost solution --from "$SCRATCH/s2.json" >/dev/null 2>&1
 $MG solution zz-e2e-lost --verified --approved-by Founder >/dev/null 2>&1
 $MG gate zz-e2e-lost --terms-decided --deliverables-defined --approved-by Founder >/dev/null 2>&1
@@ -236,7 +237,40 @@ expect_ok "disqualified with reasoning" $MG qualify zz-e2e-dq --outcome Disquali
 [ -f clients/zz-e2e-dq/QUALIFICATION.md ] && ok "directory retained as ICP evidence" \
   || bad "disqualified directory lost"
 
-step "11 · Governance check, pipeline view and metrics"
+step "11 · Hardening: capability gate, merge safety, recovery"
+cat > "$SCRATCH/oos.json" <<'JSON'
+{"requirements":[{"ref":"R7","statement":"Native mobile app","source":"D1","kind":"Confirmed","capability":"mobile-apps","in_scope":true}]}
+JSON
+$MG ingest zz-e2e-lost solution --from "$SCRATCH/oos.json" >/dev/null 2>&1
+expect_fail "blocked: capability not in SERVICES.md §3" \
+  $MG solution zz-e2e-lost --approved-by Founder
+expect_ok "out-of-scope requirement removed" $MG drop zz-e2e-lost --requirement R7 --yes
+echo '{"findings":[{"ref":"DX","topic":"z","statement":"later finding","confirmed":true,"source":"client"}]}' > "$SCRATCH/m2.json"
+$MG ingest zz-e2e-main discovery-analysis --from "$SCRATCH/m2.json" >/dev/null 2>&1
+python3 -c "
+import json;f=json.load(open('clients/zz-e2e-main/opportunity.json'))['discovery']['findings']
+refs=[x['ref'] for x in f]
+assert 'D1' in refs and 'DX' in refs, refs
+" && ok "re-ingest merges; earlier findings survive" || bad "re-ingest destroyed prior findings"
+echo '{"findings":[{"ref":"DY","statement":"x","confirmed":"maybe"}]}' > "$SCRATCH/amb.json"
+expect_fail "blocked: ambiguous confirmed value" \
+  $MG ingest zz-e2e-main discovery-analysis --from "$SCRATCH/amb.json"
+expect_fail "blocked: duplicate company" bash -c \
+  "$MG new --company 'ZZ E2E Joinery' --slug zz-e2e-dupe"
+printf '{"slug": "zz-e2e-form", broken' > clients/zz-e2e-form/opportunity.json
+# `mg check` exits non-zero when it finds issues, so capture then grep —
+# piping under `set -o pipefail` would report the exit code, not the match.
+CHECK_OUT=$($MG check 2>&1 || true)
+grep -q "cannot be read" <<<"$CHECK_OUT" && ok "unreadable record surfaced by check" || bad "corrupt record hidden"
+NEXT_OUT=$($MG next 2>&1 || true)
+grep -q "unreadable" <<<"$NEXT_OUT" && ok "unreadable record surfaced by next" || bad "corrupt record silently omitted"
+expect_ok "record recovered from history" $MG restore zz-e2e-form --yes
+python3 -c "
+import json;d=json.load(open('clients/zz-e2e-form/opportunity.json'))
+assert d['company']['name']=='ZZ E2E Form Co', d['company']
+" && ok "restored record is the real one" || bad "restore returned wrong content"
+
+step "12 · Governance check, pipeline view and metrics"
 expect_ok "governance check clean" $MG check
 expect_ok "pipeline view renders" $MG next
 $MG metrics --json > "$SCRATCH/m.json"

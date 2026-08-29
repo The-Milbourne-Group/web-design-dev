@@ -260,9 +260,9 @@ def discovery(opp: m.Opportunity) -> str:
 def solution(opp: m.Opportunity) -> str:
     s = opp.solution
     rows = "\n".join(
-        f"| `{r.ref}` | {r.statement} | {r.source} | {r.kind} |"
+        f"| `{r.ref}` | {r.statement} | {r.source} | {r.kind} | {r.capability or '—'} |"
         for r in opp.in_scope()
-    ) or "| — | *no requirements* | — | — |"
+    ) or "| — | *no requirements* | — | — | — |"
     deferred = "\n".join(
         f"| `{r.ref}` | {r.statement} | {r.deferred_reason or '—'} |"
         for r in opp.deferred()
@@ -284,8 +284,8 @@ def solution(opp: m.Opportunity) -> str:
 or a documented assumption. **A requirement with no source is removed, not
 justified** (`SOLUTION_DESIGN.md` §5.2).*
 
-| Requirement | Statement | Source | Type |
-|---|---|---|---|
+| Requirement | Statement | Source | Type | Capability |
+|---|---|---|---|---|
 {rows}
 
 ## 3. Minimum Viable Scope
@@ -296,7 +296,9 @@ responsibly solves the stated problem. Everything else is deferred.
 ## 4. Deferred
 
 *Considered and deliberately excluded. Feeds proposal exclusions and the
-expansion review at closure (`sops/delivery/CLOSURE.md` §5.11).*
+expansion review at closure (`sops/delivery/CLOSURE.md` §5.11). An item deferred
+because no approved capability delivers it is not an expansion candidate — it is
+work the company does not do (`SERVICES.md` §3).*
 
 | Requirement | Statement | Reason deferred |
 |---|---|---|

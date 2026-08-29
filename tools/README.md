@@ -16,7 +16,7 @@ LEAD → QUALIFICATION → DISCOVERY → ANALYSIS → SOLUTION → PROPOSAL
 ./mg status <slug>             # one opportunity in full
 ./mg check                     # governance check across every opportunity
 ./mg metrics                   # conversion, cycle time, proposal build time
-tools/e2e.sh                   # end-to-end test of the whole slice (47 assertions)
+tools/e2e.sh                   # end-to-end test of the whole slice (57 assertions)
 tools/e2e.sh --keep            # same, but leaves the records for inspection
 ```
 
@@ -76,6 +76,28 @@ A hold needs a reason, and a revisit date schedules the follow-up that brings it
 back. `clients/README.md` has no ON HOLD status and adding one is a founder
 decision, so the tool does not invent one.
 
+## When something goes wrong
+
+Every save is atomic (temp file, then rename) and archives the previous version
+under `clients/<slug>/.history/`. An interrupted or killed process leaves the
+record whole — verified against repeated SIGKILLs mid-write.
+
+```bash
+./mg check                          # includes any record that cannot be read
+./mg restore <slug> --list          # archived versions
+./mg restore <slug> --version 1     # recover one
+./mg drop <slug> --requirement R9   # remove a mis-ingested item
+```
+
+A record that fails validation is never written and never silently skipped:
+`mg check`, `mg list` and `mg next` all name it and point at `mg restore`.
+`mg check` exits non-zero when it finds anything, so it works as a cron or
+pre-commit health check.
+
+Persistence and backup are git: the records are committed with the repository,
+so history and off-machine recovery already exist. Nothing else is required at
+this scale.
+
 ## The guards
 
 The tool refuses what the operating system reserves. Each refusal names the
@@ -92,6 +114,9 @@ document it comes from.
 | Declining a proposal requires loss reasoning | `sops/sales/PROPOSAL.md` §5.10 |
 | Kickoff needs acceptance criteria and named approvers | `sops/delivery/ONBOARDING.md` §5.4, §5.9 |
 | Only documented status transitions are permitted | `clients/README.md` |
+| Every in-scope requirement names an approved capability | `SERVICES.md` §3 |
+| A finding's `confirmed` flag must be a real boolean | evidence/inference boundary |
+| Duplicate company or contact email is refused | data continuity |
 
 `OPEN_QUESTIONS.md` is parsed at runtime, so when the founder resolves Q-007
 the gate opens on its own. No code change, one source of truth.
@@ -124,6 +149,11 @@ correct answer is `Clarification required`, not a guess.
 `discovery-analysis` requires every finding to be typed confirmed or inferred.
 Inferences are printed back on ingest and stay labelled all the way to the
 project brief.
+
+Ingest **merges** by default and never discards what is already recorded — a
+re-run analysis adds and updates rather than replacing. `--replace` is the
+explicit way to discard. Contradictions (two confirmed findings on one topic
+from different sources) are surfaced before solution design.
 
 Project initialization carries the approved scope, exclusions, risks,
 constraints and labelled assumptions forward — and deliberately withholds

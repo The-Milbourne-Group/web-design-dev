@@ -81,11 +81,19 @@ TASKS: dict[str, dict] = {
                  "with no source is REMOVED, not justified."),
         "load": ["SERVICES.md", "SALES.md", "sops/sales/SOLUTION_DESIGN.md"],
         "agent": "agents/SALES_AGENT.md prepares; founder decides (D-010)",
-        "produces": "A traceability matrix and a minimum viable scope recommendation.",
+        "produces": ("A traceability matrix and a minimum viable scope recommendation. "
+                     "Every requirement must name the approved capability that delivers "
+                     "it. If a client need maps to no approved capability, say so "
+                     "plainly — do not scope work the company has not said it does."),
         "schema": {
             "problem_restatement": "str",
-            "requirements": [{"ref": "R1", "statement": "str", "source": "D1 / client statement / assumption",
-                              "kind": "Confirmed|Assumed", "in_scope": "bool",
+            "requirements": [{"ref": "R1", "statement": "str",
+                              "source": "D1 / client statement / assumption",
+                              "kind": "Confirmed|Assumed",
+                              "capability": "which SERVICES.md §3 capability delivers this "
+                                            "— see the list below; if none does, the "
+                                            "company does not offer it",
+                              "in_scope": "bool",
                               "deferred_reason": "str if in_scope false"}],
             "stage": "Entry|Expansion|Recurring", "feasibility": "str",
             "open_dependencies": ["str"],
@@ -133,6 +141,13 @@ def packet(root: Path, opp: m.Opportunity, task: str) -> str:
     load_list = "\n".join(f"  - {p}" for p in ALWAYS + t["load"])
     open_list = "\n".join(f"  - {o}" for o in open_now)
     icp_block = ""
+    if task == "solution":
+        from .governance import capability_keys
+        caps = capability_keys(root)
+        icp_block = ("\n## Approved capabilities (SERVICES.md §3) — tag every requirement\n"
+                     + "\n".join(f"  {k}  — {v}" for k, v in caps.items())
+                     + "\n\nA client need that maps to none of these is not something the "
+                       "company offers. Name it as out of scope; never invent a capability.\n")
     if task in ("qualify", "research"):
         icp_block = (
             "\n## ICP signals you may match against (ICP.md — quote these, invent none)\n"
@@ -191,12 +206,65 @@ Return ONLY a JSON object matching this shape, in a ```json fenced block:
 # Ingestion — merge structured AI output into the record
 # --------------------------------------------------------------------------
 
-def ingest(opp: m.Opportunity, task: str, data: dict) -> list[str]:
-    """Merge a result packet. Returns a list of what changed."""
+def _merge_refs(existing: list, incoming: list, cls, label: str,
+                changed: list[str], replace: bool) -> list:
+    """Merge by `ref`, never silently dropping what is already recorded.
+
+    Replacing the list outright destroyed prior findings on a second ingest —
+    a client's discovery disappearing because an analysis was re-run. Entries
+    with a known ref are updated; new refs are appended; anything already
+    recorded and not mentioned again survives.
+    """
+    parsed = [m.from_dict(cls, x) for x in incoming]
+    if replace:
+        changed.append(f"{label} replaced ({len(parsed)})")
+        return parsed
+    by_ref = {getattr(x, "ref", "") or f"_{i}": x for i, x in enumerate(existing)}
+    added = updated = 0
+    for item in parsed:
+        key = getattr(item, "ref", "") or f"_new{added}"
+        if key in by_ref:
+            by_ref[key] = item
+            updated += 1
+        else:
+            by_ref[key] = item
+            added += 1
+    if added or updated:
+        note = f"{label} ({added} added"
+        note += f", {updated} updated" if updated else ""
+        note += f", {len(existing) - updated} kept)" if existing else ")"
+        changed.append(note)
+    return list(by_ref.values())
+
+
+def _merge_list(existing: list[str], incoming: list[str], label: str,
+                changed: list[str], replace: bool) -> list[str]:
+    if replace:
+        changed.append(f"{label} replaced")
+        return list(incoming)
+    merged = list(existing)
+    added = 0
+    for item in incoming:
+        if item not in merged:
+            merged.append(item)
+            added += 1
+    if added:
+        changed.append(f"{label} (+{added})")
+    return merged
+
+
+def ingest(opp: m.Opportunity, task: str, data: dict, replace: bool = False) -> list[str]:
+    """Merge a result packet. Returns a list of what changed.
+
+    Merges by default. `replace=True` is the explicit, opt-in way to discard
+    what is already recorded.
+    """
     changed: list[str] = []
 
     if task in ("research", "qualify"):
         f = opp.qualification.fit
+        if replace:
+            f.high_fit_signals = f.problem_signals = f.disqualifying_signals = []
         for key, attr in (("high_fit_signals", "high_fit_signals"),
                           ("problem_signals", "problem_signals"),
                           ("disqualifying_signals", "disqualifying_signals")):
@@ -238,25 +306,34 @@ def ingest(opp: m.Opportunity, task: str, data: dict) -> list[str]:
     elif task == "discovery-analysis":
         d = opp.discovery
         if data.get("findings"):
-            d.findings = [m.from_dict(m.Finding, x) for x in data["findings"]]
+            d.findings = _merge_refs(d.findings, data["findings"], m.Finding,
+                                     "findings", changed, replace)
             nc = sum(1 for x in d.findings if not x.confirmed)
-            changed.append(f"findings ({len(d.findings)}: {len(d.findings)-nc} confirmed, {nc} inferred)")
+            changed.append(f"now {len(d.findings)} findings: "
+                           f"{len(d.findings)-nc} confirmed, {nc} inferred")
         for k in ("objectives", "problems", "constraints", "risks",
                   "opportunities", "unknowns", "assumptions"):
             if data.get(k):
-                setattr(d, k, list(data[k])); changed.append(k)
-        if data.get("success_indicators"):
-            d.success_indicators = list(data["success_indicators"]); changed.append("success_indicators")
-        if data.get("stakeholders"):
-            d.stakeholders = list(data["stakeholders"]); changed.append("stakeholders")
+                setattr(d, k, _merge_list(getattr(d, k), list(data[k]), k, changed, replace))
+        for k, key in (("success_indicators", "indicator"), ("stakeholders", "name")):
+            if data.get(k):
+                cur = getattr(d, k)
+                if replace:
+                    setattr(d, k, list(data[k])); changed.append(f"{k} replaced")
+                else:
+                    seen = {x.get(key) for x in cur}
+                    added = [x for x in data[k] if x.get(key) not in seen]
+                    setattr(d, k, cur + added)
+                    if added:
+                        changed.append(f"{k} (+{len(added)})")
 
     elif task == "solution":
         s = opp.solution
         if data.get("problem_restatement"):
             s.problem_restatement = data["problem_restatement"]; changed.append("problem_restatement")
         if data.get("requirements"):
-            s.requirements = [m.from_dict(m.Requirement, x) for x in data["requirements"]]
-            changed.append(f"requirements ({len(s.requirements)})")
+            s.requirements = _merge_refs(s.requirements, data["requirements"],
+                                         m.Requirement, "requirements", changed, replace)
         if data.get("stage"):
             s.stage = data["stage"]; changed.append("stage")
         if data.get("feasibility"):

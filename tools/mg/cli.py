@@ -32,6 +32,30 @@ def head(s): print(f"\n{c(s, C.B)}")
 def dim(s):  print(c(s, C.D))
 
 
+def _warn_duplicates(root: Path, company: str, email: str = "", exclude: str = "") -> bool:
+    """Report look-alike opportunities. Returns True if any were found."""
+    dupes = store.find_duplicates(root, company, email, exclude)
+    if dupes:
+        warn(f"{len(dupes)} existing opportunit{'y' if len(dupes)==1 else 'ies'} look like this one:")
+        for slug, why in dupes:
+            print(f"    {c(slug, C.ACC)}  — {why}")
+        dim("  Splitting one prospect across two records splits their discovery too.")
+    return bool(dupes)
+
+
+def _confirm(prompt: str, assume_yes: bool) -> bool:
+    if assume_yes:
+        return True
+    if not sys.stdin.isatty():
+        err(f"{prompt} Refusing in a non-interactive session — pass --yes to confirm.")
+        return False
+    try:
+        return input(f"{prompt} [y/N] ").strip().lower() in ("y", "yes")
+    except (EOFError, KeyboardInterrupt):
+        print()
+        return False
+
+
 def _save_and_render(root: Path, opp: m.Opportunity) -> list[str]:
     store.save(root, opp)
     written = []
@@ -76,7 +100,11 @@ def _next_action(root: Path, opp: m.Opportunity) -> str:
             return f"Onboarding needs: {miss[0]}"
         return f"mg kickoff {opp.slug} --approved-by Founder"
     if s == m.ACTIVE:
-        return "Delivery in progress — sops/delivery/"
+        nf = opp.next_follow_up()
+        if nf:
+            return f"{nf.action} — {nf.owner}" + (f", due {nf.due}" if nf.due else " (no date set)")
+        return (f"Delivery in progress with no next action scheduled. "
+                f"mg followup {opp.slug} --action '...' --due <date>")
     if s in m.TERMINAL:
         return "—"
     return "—"
@@ -86,9 +114,23 @@ def _next_action(root: Path, opp: m.Opportunity) -> str:
 
 def cmd_new(root, a):
     slug = a.slug or m.slugify(a.company)
-    if store.exists(root, slug) and not a.force:
-        err(f"{slug} already exists. Use --force to overwrite, or pick --slug.")
-        return 1
+    if store.exists(root, slug):
+        if not a.force:
+            err(f"{slug} already exists. Pick a different --slug, or --force to replace it.")
+            return 1
+        existing, _ = store.load_quietly(root, slug)
+        if existing is not None:
+            warn(f"--force will replace {slug}: status {existing.status}, "
+                 f"{len(existing.discovery.findings)} finding(s), "
+                 f"{len(existing.events)} event(s).")
+            dim(f"  The current version is archived and recoverable with `mg restore {slug}`.")
+            if not _confirm(f"Replace {slug}?", a.yes):
+                err("Cancelled."); return 1
+    if _warn_duplicates(root, a.company, getattr(a, "email", "") or "", exclude=slug):
+        if not a.duplicate_ok:
+            err("Refusing to create a possible duplicate. "
+                "Pass --duplicate-ok if these really are different organisations.")
+            return 1
     opp = m.Opportunity(slug=slug, created_on=m.today())
     opp.company.name = a.company
     opp.company.website = a.website or ""
@@ -129,8 +171,14 @@ def cmd_intake(root, a):
         f["company"] = a.company
     slug = a.slug or m.slugify(f.get("company") or f.get("contact"))
     if store.exists(root, slug) and not a.force:
-        err(f"{slug} already exists. Use --force to overwrite, or pick --slug.")
+        err(f"{slug} already exists. Pick a different --slug, or --force to replace it.")
+        dim(f"  To add this enquiry to the existing record instead: mg followup {slug} --note ...")
         return 1
+    if _warn_duplicates(root, f.get("company", ""), f.get("email", ""), exclude=slug):
+        if not a.duplicate_ok:
+            err("Refusing to create a possible duplicate. "
+                "Pass --duplicate-ok if these really are different organisations.")
+            return 1
 
     opp = intake.to_opportunity(parsed, slug)
     if a.source:
@@ -188,7 +236,13 @@ def cmd_hold(root, a):
 
 def cmd_next(root, a):
     """The whole pipeline: stage, what happened last, what happens next, gaps."""
-    opps = [o for o in store.load_all(root) if o.status not in m.TERMINAL]
+    loaded, broken = store.load_all_with_errors(root)
+    if broken:
+        err(f"{len(broken)} record(s) unreadable and NOT shown below:")
+        for slug, msg in broken:
+            print(f"    {slug}: {msg}")
+        dim("  `mg check` explains; `mg restore <slug>` recovers.\n")
+    opps = [o for o in loaded if o.status not in m.TERMINAL]
     if not opps:
         warn("Nothing open. `mg intake` or `mg new` to capture a lead.")
         return 0
@@ -363,6 +417,19 @@ def cmd_solution(root, a):
             "(sops/sales/SOLUTION_DESIGN.md §5.2).")
         return 1
 
+    unmapped = gov.unmapped_requirements(root, opp)
+    if unmapped and not a.force:
+        err("Requirement(s) not delivered by an approved capability:")
+        for ref, why in unmapped:
+            stmt = next((r.statement for r in opp.in_scope() if r.ref == ref), "")
+            print(f"    {ref}  {stmt[:56]}  — {why}", file=sys.stderr)
+        dim("  Offers are assembled from the capabilities in `SERVICES.md` §3. "
+            "Work outside them is not something the company has said it does, and "
+            "proposing it is how an engagement gets sold that cannot be delivered.")
+        dim("  Tag each requirement with one of: "
+            + ", ".join(gov.capability_keys(root)))
+        return 1
+
     if a.approved_by:
         miss = gov.missing_for("solution", opp)
         if miss and not a.force:
@@ -381,6 +448,11 @@ def cmd_solution(root, a):
     ok(f"{a.slug} — solution updated"
        + (f" · approved by {s.approved_by}" if s.approved_by else ""))
     _report_render(written)
+    clashes = gov.contradictions(opp)
+    if clashes:
+        head("Unresolved contradictions in discovery")
+        for topic, items in clashes:
+            print(f"  {c(topic, C.WARN)}: " + " | ".join(i.split(':')[0] for i in items))
     un = gov.unaddressed_problems(opp)
     if un:
         head("Discovery problems with no matching requirement")
@@ -593,9 +665,85 @@ def cmd_kickoff(root, a):
         opp.set_status(m.ACTIVE, approver, "onboarding complete, delivery begins")
     except m.StageError as e:
         err(str(e)); return 1
+    # An engagement with no next action is one that goes quiet. What delivery
+    # waits on first is almost always a client-side dependency.
+    if not opp.open_follow_ups():
+        first = (opp.project.client_dependencies
+                 or ["Confirm delivery start with the client"])[0]
+        opp.follow_ups.append(m.FollowUp(
+            action=f"Delivery checkpoint — {first}", owner="Founder",
+            due=a.first_review or "", note="auto-created at kickoff"))
     written = _save_and_render(root, opp)
     ok(f"{a.slug} — kickoff held, status {c(m.ACTIVE, C.ACC)}")
     _report_render(written)
+    return 0
+
+
+def cmd_drop(root, a):
+    """Remove a finding or a requirement from the record.
+
+    Merging on ingest means a mistaken analysis leaves residue. Without this an
+    operator would have to hand-edit the JSON, which is how records get broken.
+    """
+    opp = store.load(root, a.slug)
+    removed: list[str] = []
+    if a.finding:
+        keep, gone = [], []
+        for f in opp.discovery.findings:
+            (gone if f.ref in a.finding else keep).append(f)
+        if gone:
+            opp.discovery.findings = keep
+            removed += [f"finding {f.ref}: {f.statement[:50]}" for f in gone]
+    if a.requirement:
+        keep, gone = [], []
+        for r in opp.solution.requirements:
+            (gone if r.ref in a.requirement else keep).append(r)
+        if gone:
+            opp.solution.requirements = keep
+            removed += [f"requirement {r.ref}: {r.statement[:50]}" for r in gone]
+    if not removed:
+        wanted = (a.finding or []) + (a.requirement or [])
+        err(f"Nothing matched {', '.join(wanted) or 'the given refs'}.")
+        return 1
+    head(f"Removing from {a.slug}")
+    for r in removed:
+        print(f"  {r}")
+    if not _confirm("Remove these?", a.yes):
+        err("Cancelled."); return 1
+    opp.log("drop", "; ".join(removed)[:300], a.actor)
+    written = _save_and_render(root, opp)
+    ok(f"{a.slug} — removed {len(removed)} item(s)")
+    dim(f"  Previous version archived; recover with `mg restore {a.slug}`.")
+    _report_render(written)
+    return 0
+
+
+def cmd_restore(root, a):
+    backups = store.list_backups(root, a.slug)
+    if not backups:
+        err(f"No archived versions for {a.slug}."); return 1
+    if a.list:
+        head(f"{len(backups)} archived version(s) — {a.slug}")
+        for i, b in enumerate(backups):
+            try:
+                d = json.loads(b.read_text(encoding="utf-8"))
+                desc = f"status {d.get('status','?')}, {len(d.get('events',[]))} events"
+            except json.JSONDecodeError:
+                desc = c("unreadable", C.ERR)
+            print(f"  [{i}] {b.stem:<20} {desc}")
+        dim(f"\n  mg restore {a.slug} --version <n>")
+        return 0
+    idx = a.version
+    if not _confirm(f"Restore {a.slug} from version [{idx}] ({backups[idx].stem})? "
+                    f"The current record is archived first.", a.yes):
+        err("Cancelled."); return 1
+    try:
+        src = store.restore(root, a.slug, idx)
+    except (store.RecordError, IndexError) as e:
+        err(str(e)); return 1
+    opp = store.load(root, a.slug)
+    _save_and_render(root, opp)
+    ok(f"{a.slug} restored from {src.name} — status {opp.status}")
     return 0
 
 
@@ -644,7 +792,11 @@ def cmd_status(root, a):
 
 
 def cmd_list(root, a):
-    opps = store.load_all(root)
+    opps, broken = store.load_all_with_errors(root)
+    if broken:
+        err(f"{len(broken)} record(s) unreadable and NOT listed: "
+            + ", ".join(s for s, _ in broken))
+        dim("  `mg check` explains; `mg restore <slug>` recovers.\n")
     if not opps:
         warn("No opportunities. `mg new --company '...'` to capture a lead.")
         return 0
@@ -678,7 +830,7 @@ def cmd_ingest(root, a):
         data = ai.extract_json(raw)
     except Exception as e:
         err(f"Could not parse result: {e}"); return 1
-    changed = ai.ingest(opp, a.task, data)
+    changed = ai.ingest(opp, a.task, data, replace=a.replace)
     if not changed:
         warn("Nothing merged."); return 1
     opp.log("ingest", f"{a.task}: {', '.join(changed)}", "ai")
@@ -695,6 +847,15 @@ def cmd_ingest(root, a):
             head("Inferences — not client statements, must stay labelled")
             for f in inferred:
                 print(f"  {c(f.ref, C.WARN)} {f.statement}")
+        clashes = gov.contradictions(opp)
+        if clashes:
+            head("Same topic, different sources — resolve before solution design")
+            for topic, items in clashes:
+                print(f"  {c(topic, C.WARN)}")
+                for it in items:
+                    print(f"    {it}")
+            dim("  Only one version can be carried into a proposal. Confirm which, "
+                "or record the disagreement as an open question.")
     if a.task == "solution":
         uns = [r.ref for r in opp.in_scope() if not r.source]
         if uns:
@@ -707,9 +868,15 @@ def cmd_ingest(root, a):
 
 def cmd_check(root, a):
     """Governance check across the pipeline."""
-    opps = store.load_all(root)
-    problems = 0
+    opps, broken = store.load_all_with_errors(root)
+    problems = len(broken)
     head("Governance check")
+    if broken:
+        err(f"{len(broken)} record(s) cannot be read:")
+        for slug, msg in broken:
+            print(f"    {slug}: {msg}")
+            if store.list_backups(root, slug):
+                dim(f"      recoverable: mg restore {slug}")
     qs = gov.open_questions(root)
     openq = [q for q in qs.values() if not q["resolved"]]
     print(f"  Open questions: {len(openq)} of {len(qs)}"
@@ -803,7 +970,10 @@ def build_parser() -> argparse.ArgumentParser:
     n.add_argument("--phone"); n.add_argument("--website"); n.add_argument("--industry")
     n.add_argument("--size"); n.add_argument("--problem")
     n.add_argument("--outcome-wanted", dest="outcome_wanted")
-    n.add_argument("--force", action="store_true")
+    n.add_argument("--force", action="store_true", help="replace an existing record")
+    n.add_argument("--yes", action="store_true", help="skip the confirmation prompt")
+    n.add_argument("--duplicate-ok", dest="duplicate_ok", action="store_true",
+                   help="create even though a similar opportunity exists")
     n.set_defaults(fn=cmd_new)
 
     it = sub.add_parser("intake", help="capture a lead from a form, email or note")
@@ -813,6 +983,9 @@ def build_parser() -> argparse.ArgumentParser:
     it.add_argument("--company", help="override or supply the company name")
     it.add_argument("--source", help="override the recorded source (evidence for Q-008)")
     it.add_argument("--slug"); it.add_argument("--force", action="store_true")
+    it.add_argument("--yes", action="store_true")
+    it.add_argument("--duplicate-ok", dest="duplicate_ok", action="store_true",
+                    help="capture even though a similar opportunity exists")
     it.set_defaults(fn=cmd_intake)
 
     hd = sub.add_parser("hold", help="pause or resume an opportunity")
@@ -912,8 +1085,24 @@ def build_parser() -> argparse.ArgumentParser:
 
     k = sub.add_parser("kickoff", help="hold kickoff, move to Active")
     k.add_argument("slug"); k.add_argument("--approved-by", dest="approved_by")
+    k.add_argument("--first-review", dest="first_review",
+                   help="date of the first delivery checkpoint")
     k.add_argument("--force", action="store_true")
     k.set_defaults(fn=cmd_kickoff)
+
+    dr = sub.add_parser("drop", help="remove a finding or requirement from a record")
+    dr.add_argument("slug")
+    dr.add_argument("--finding", action="append", metavar="REF")
+    dr.add_argument("--requirement", action="append", metavar="REF")
+    dr.add_argument("--yes", action="store_true")
+    dr.set_defaults(fn=cmd_drop)
+
+    rs = sub.add_parser("restore", help="recover an earlier version of a record")
+    rs.add_argument("slug")
+    rs.add_argument("--version", type=int, default=0, help="0 = most recent archived")
+    rs.add_argument("--list", action="store_true", help="show archived versions")
+    rs.add_argument("--yes", action="store_true")
+    rs.set_defaults(fn=cmd_restore)
 
     st = sub.add_parser("status", help="one opportunity in full")
     st.add_argument("slug"); st.set_defaults(fn=cmd_status)
@@ -930,6 +1119,8 @@ def build_parser() -> argparse.ArgumentParser:
     ig = sub.add_parser("ingest", help="merge AI output back into the record")
     ig.add_argument("slug"); ig.add_argument("task", choices=sorted(ai.TASKS))
     ig.add_argument("--from", dest="from_file", help="file with the JSON result; default stdin")
+    ig.add_argument("--replace", action="store_true",
+                    help="discard what is already recorded instead of merging into it")
     ig.set_defaults(fn=cmd_ingest)
 
     ck = sub.add_parser("check", help="governance check across the pipeline")
@@ -949,10 +1140,36 @@ def main(argv=None) -> int:
     try:
         root = gov.repo_root(Path.cwd() / "x")
     except RuntimeError:
-        root = gov.repo_root(Path(__file__).resolve())
+        try:
+            root = gov.repo_root(Path(__file__).resolve())
+        except RuntimeError as e:
+            err(str(e)); return 2
     try:
         return args.fn(root, args)
-    except (m.StageError, m.ApprovalRequired, m.OpenValueError) as e:
-        err(str(e)); return 1
+    except (m.StageError, m.ApprovalRequired, m.OpenValueError, store.RecordError) as e:
+        err(str(e))
+        return 1
+    except ValueError as e:
+        # Raised by model.as_bool when an AI hands back an ambiguous boolean.
+        err(str(e))
+        return 1
     except FileNotFoundError as e:
-        err(str(e)); return 1
+        path = getattr(e, "filename", None)
+        err(f"File not found: {path}" if path else str(e))
+        return 1
+    except PermissionError as e:
+        err(f"Permission denied: {getattr(e, 'filename', e)}")
+        return 1
+    except OSError as e:
+        err(f"Filesystem error: {e}")
+        dim("  No record was written. Re-run once the cause is resolved.")
+        return 1
+    except KeyboardInterrupt:
+        print()
+        err("Interrupted. Records are written atomically, so nothing is half-saved.")
+        return 130
+    except Exception as e:                      # noqa: BLE001 — last resort
+        err(f"Unexpected {type(e).__name__}: {e}")
+        dim("  The record on disk was not modified unless a success line printed above.")
+        dim("  `mg check` reports any record left unreadable; `mg restore <slug>` recovers one.")
+        return 1
