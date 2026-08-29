@@ -71,11 +71,13 @@ Templates and scaffolds.
 **Changes:** Freely — they carry no authority.
 **Test:** Is this a starting point rather than a statement of fact?
 
-### 7. Project Knowledge — *what is true about one engagement*
-Client context, requirements, decisions, and artifacts.
+### 7. Project Knowledge — *what is true about one client or opportunity*
+Client context, qualification, discovery, requirements, decisions, artifacts.
 
-**Lives in:** `clients/<client>/`
-**Changes:** Constantly, within the engagement.
+**Lives in:** `clients/<client>/` — created at **qualification**, not at
+onboarding, so that qualification and discovery artifacts have a home before
+an agreement exists.
+**Changes:** Constantly, through the lifecycle.
 **Test:** Would this be meaningless to a different client?
 
 ### Plus: Temporary Knowledge
@@ -94,7 +96,7 @@ AI artifact into a location that implies authority.
 Use this order. Stop at the first match.
 
 ```
-Is it specific to one client or engagement?        → clients/<client>/
+Is it specific to one client, prospect, or engagement?  → clients/<client>/
 Is it a decision the founder has approved?         → DECISIONS.md
 Is it a question the founder must answer?          → OPEN_QUESTIONS.md
 Is it an unconfirmed premise being relied on?      → ASSUMPTIONS.md

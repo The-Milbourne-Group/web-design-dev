@@ -50,6 +50,13 @@ Recommend the minimum viable scope that can responsibly solve the relevant probl
 
 Do not sell features merely because they are technically possible.
 
+**Every requirement must trace to a discovery finding, an explicit client
+statement, or a documented assumption.** A requirement with no source is
+removed, not justified — this is where fabricated scope enters a commercial
+engagement.
+
+Procedure: `sops/sales/SOLUTION_DESIGN.md`.
+
 ## 6. Commercial Constraints
 
 Binding on every sales conversation and proposal:

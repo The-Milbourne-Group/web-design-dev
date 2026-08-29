@@ -36,7 +36,7 @@ Then load only what the task needs (§3). More context is not better context
 | Working on | Also load |
 |---|---|
 | Strategy, positioning, market | `STRATEGIC_CONFIGURATION.md`, `DECISIONS.md`, `BUSINESS.md` |
-| Sales, qualification, proposals | `SALES.md`, `ICP.md`, `SERVICES.md`, `sops/sales/` |
+| Sales, qualification, proposals | `SALES.md`, `ICP.md`, `SERVICES.md`, `sops/sales/`, the opportunity's `clients/` directory |
 | Marketing, content, SEO | `MARKETING.md`, `BRAND.md`, `ICP.md` |
 | Delivery, project execution | `DELIVERY.md`, `sops/delivery/`, the client's directory |
 | Design | `WEB_STANDARDS.md`, `BRAND.md` |
@@ -46,6 +46,15 @@ Then load only what the task needs (§3). More context is not better context
 | Anything touching client data | `SECURITY.md` — mandatory |
 | Changing any document | `governance/CHANGE_MANAGEMENT.md`, `governance/DOCUMENT_REGISTRY.md` |
 | Acting in an agent role | `agents/README.md` and that agent's file |
+
+**No row matches your task?** Do not guess a document set. Find the subject's
+owner in `governance/DOCUMENT_REGISTRY.md` and load that, plus its
+dependencies. If the subject has no owner, that is a gap — record it in
+`OPEN_QUESTIONS.md` and escalate rather than inventing a home for it.
+
+**`SECURITY.md` applies to all work**, not only work touching client data.
+Load it whenever an action involves access, credentials, external tools, or
+client information in any form.
 
 Lost? `SYSTEM_MAP.md` shows the whole architecture.
 
@@ -104,7 +113,7 @@ externally visible, or client-facing.
 Use the placement decision tree in
 `governance/KNOWLEDGE_ARCHITECTURE.md` §3. Briefly:
 
-- Client-specific → `clients/<client>/`
+- Client- or prospect-specific → `clients/<client>/` (created at qualification)
 - A founder decision → `DECISIONS.md`
 - An unknown → `OPEN_QUESTIONS.md`
 - An unconfirmed premise being relied on → `ASSUMPTIONS.md`

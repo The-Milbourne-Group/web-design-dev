@@ -56,7 +56,7 @@
 ├── sops/                        Procedures (Tier 4)
 ├── agents/                      AI role definitions (Tier 5)
 ├── templates/                   Reusable starting points (Tier 6)
-├── clients/                     Engagement knowledge (Tier 7), isolated
+├── clients/                     Client and opportunity knowledge (Tier 7), isolated
 └── exports/                     Generated artifacts — no authority
 ```
 
@@ -116,16 +116,17 @@ The trace from strategy to expansion, with the governing document at each step.
 | Marketing | `MARKETING.md` | — | Qualified demand |
 | Qualification | `ICP.md`, `SALES.md` | `sops/sales/QUALIFICATION.md` | Qualified / nurture / disqualified |
 | Discovery | `SALES.md` §4 | `sops/sales/DISCOVERY.md` | Discovery notes, confirmed understanding |
-| Solution | `SALES.md` §5, `SERVICES.md` | — | Recommended approach |
+| Solution | `SALES.md` §5, `SERVICES.md` | `sops/sales/SOLUTION_DESIGN.md` | Requirement traceability matrix, minimum viable scope |
 | Proposal | `SALES.md` §7 | `templates/sales/PROPOSAL_OUTLINE.md` | Founder-approved proposal |
 | Agreement | Founder only | — | Executed agreement |
 | Onboarding | `DELIVERY.md` §3 | `sops/delivery/ONBOARDING.md` | Client workspace, project brief |
 | Delivery | `DELIVERY.md` §2 | `sops/delivery/` | Built deliverable |
 | QA | `WEB_STANDARDS.md` | `sops/delivery/QA.md` | Verification record |
 | Launch | `DELIVERY.md` §8 | `sops/delivery/LAUNCH.md` | Live, verified deliverable |
-| Measurement | `METRICS.md` | — | Outcome data |
+| Measurement | `METRICS.md` | `sops/delivery/CLOSURE.md` | Baseline, delivery metrics |
 | Optimization | `MARKETING.md`, `WEB_STANDARDS.md` | — | Improvements |
-| Expansion | `SERVICES.md` §2.2–2.3 | Back to qualification | Next engagement |
+| Closure | `DELIVERY.md` §9 | `sops/delivery/CLOSURE.md` | Acceptance, handover, retrospective, buyer evidence |
+| Expansion | `SERVICES.md` §2.2–2.3 | `sops/delivery/CLOSURE.md` §5.11 → qualification | Next engagement |
 
 **Scope changes** at any delivery step route through
 `sops/delivery/SCOPE_CHANGE.md`.
@@ -174,17 +175,25 @@ Every arrow terminates at the founder for anything reserved under
 ## 6. Client Lifecycle
 
 ```
-Prospect → Qualified → Discovery → Proposal → Agreement
-                                                  │
-                                                  ▼
-                        Onboarding → Delivery → QA → Launch
-                                                       │
-                                                       ▼
-                                        Measurement → Optimization
-                                                       │
-                                                       ▼
-                                              Expansion / Recurring
+Prospect → Qualified → Discovery → Solution → Proposal → Agreement
+    │                                                        │
+    └── clients/<client>/ created HERE                       ▼
+        (at qualification, not onboarding)   Onboarding → Delivery → QA → Launch
+                                                                          │
+                                                            Closure ──────┘
+                                                               │
+                                    acceptance · handover · measurement
+                                    access revocation · retrospective
+                                    buyer evidence · expansion review
+                                                               │
+                                                               ▼
+                                                    Expansion / Recurring
 ```
+
+The directory is created at **qualification** so that qualification records,
+discovery notes, and solution traceability have a home before an agreement
+exists. It is retained after closure — including for disqualified
+opportunities, whose reasoning is the evidence base for Q-001 and Q-003.
 
 Client knowledge lives in `clients/<client>/` for the entire lifecycle and
 never leaves it (`MASTER.md` §7.1).

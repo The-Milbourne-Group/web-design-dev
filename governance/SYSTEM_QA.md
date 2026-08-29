@@ -163,3 +163,31 @@ rebuilt to the ten-element standard; all eight agents rebuilt to `MASTER.md`
 **Not verified:** the accuracy of founder-approved strategy itself — this
 system records the founder's decisions, it does not validate them. Nine items
 remain open by design (`OPEN_QUESTIONS.md`).
+
+### 2026-08-29 — Integration and execution test
+
+**Checked:** orientation from a cold start; ten end-to-end business scenarios
+(lead, discovery, solution design, proposal, onboarding, delivery, scope
+change, conflicting knowledge, missing information, closure); all eight agents
+for context, authority, output, escalation, and overlap; eleven adversarial
+cases.
+
+**Failures found and fixed:**
+
+| ID | Severity | Defect | Fix |
+|---|---|---|---|
+| P0-1 | System breaking | Qualification and discovery artifacts had no storage location; placement rule routed them to "do not file"; `ICP.md` §7 buyer evidence for blocking Q-003 had nowhere to accumulate | D-015 |
+| P1-2 | High | Discovery→proposal step undocumented; no SOP, no owner — the entry point for fabricated scope | D-016 |
+| P1-3 | High | No closure procedure; access left granted, no measurement baseline, confirmed expansion strategy had no operational trigger | D-017 |
+| P1-4 | High | `SERVICES.md` §5 pointed to `DELIVERY.md` §5 for change orders, which did not define them; `DELIVERY.md` had no route to `SCOPE_CHANGE.md` | Both corrected to point at the SOP |
+| P2-5 | Friction | `DELIVERY.md` §6 quality gates named no verifier and no standard | Phase gate table added |
+| P2-6 | Friction | `CLAUDE.md` §3 had no fallback when no loading row matched; `SECURITY.md` framed as conditional | Fallback and always-applies note added |
+
+**Regression:** all fixes re-tested. One defect introduced during remediation
+(`SOLUTION.md` referenced before the template existed) was caught by the
+broken-reference check and corrected. Full suite clean: references resolve,
+metadata complete, no secret values, 8/8 agents and 11/11 SOPs at standard.
+
+**Not verified:** SOPs remain untested against a live engagement. They are
+constructed from the domain documents, not transcribed from observed practice
+— treat the first real pass through each as a draft to correct.

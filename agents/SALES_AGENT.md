@@ -24,6 +24,7 @@ commercial documents — without ever making a commitment.
 - Qualification assessment against `ICP.md` (`sops/sales/QUALIFICATION.md`)
 - Discovery preparation and question sets
 - Structuring discovery notes; extracting assumptions and open questions
+- Building the requirement traceability matrix (`sops/sales/SOLUTION_DESIGN.md`)
 - Drafting proposals from `templates/sales/PROPOSAL_OUTLINE.md`
 - Drafting follow-up correspondence for founder review
 - Recording lead source evidence for Q-008
@@ -35,7 +36,9 @@ commercial documents — without ever making a commitment.
 - Does **not** decide qualified or disqualified; it recommends
 - Does **not** state prices, discounts, or commercial terms
 - Does **not** commit to timelines, deliverables, or guarantees
-- Does **not** design the solution — that is founder-led architecture
+- Does **not** design the solution — that is founder-led architecture (D-010).
+  It may build the requirement traceability matrix under
+  `sops/sales/SOLUTION_DESIGN.md` §5.2 and flag unsourced requirements
 - Does **not** create urgency or persuasion pressure
 
 ## 4. Inputs

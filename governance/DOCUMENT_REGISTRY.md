@@ -83,8 +83,8 @@ documents your change may falsify — the downstream impact pass in
 | `agents/README.md` | 5 | Agent registry and task routing | Founder |
 | `agents/*.md` | 5 | One agent's mission, authority, and boundaries | Founder |
 | `templates/**` | 6 | Reusable structure — no factual authority | Founder |
-| `clients/_CLIENT_TEMPLATE/` | 6 | Project initialization scaffold | Founder |
-| `clients/<client>/**` | 7 | One engagement's knowledge | Founder |
+| `clients/_CLIENT_TEMPLATE/` | 6 | Opportunity and project initialization scaffold | Founder |
+| `clients/<client>/**` | 7 | One client or opportunity's knowledge, from qualification to closure | Founder |
 | `exports/` | — | Generated presentation artifacts — **no authority** | Founder |
 
 ---
@@ -104,6 +104,9 @@ one owner; any other document mentioning them must reference, not restate.
 | Authority and precedence | `governance/AUTHORITY.md` | `MASTER.md` §5.1, both READMEs, `STRATEGIC_CONFIGURATION.md` |
 | Open configuration items | `OPEN_QUESTIONS.md` | `BUSINESS.md` §15, `ICP.md` §8, `SERVICES.md` §6, `TECH_STACK.md` §3, `EXECUTIVE_SUMMARY.md`, `STRATEGIC_CONFIGURATION.md`, `.docx` §11 |
 | Repository architecture | `SYSTEM_MAP.md` | former `MASTER.md` §19 (specified files that did not exist) |
+| Requirement traceability (discovery → scope) | `sops/sales/SOLUTION_DESIGN.md` | *nothing — the step was undocumented* |
+| Engagement closure and expansion review | `sops/delivery/CLOSURE.md` | *nothing — `DELIVERY.md` §9/§11 stated intent only* |
+| Pre-agreement opportunity knowledge | `clients/<client>/` from qualification | *nothing — artifacts had no home* |
 
 ---
 

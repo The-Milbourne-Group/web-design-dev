@@ -94,10 +94,17 @@ Declining a poor-fit opportunity is a correct outcome, not a lost sale.
 **Do not invent buyer titles.** Buyer roles and buying-committee composition
 are registered as open (Q-003).
 
-Record actual buyer patterns as evidence accumulates: who initiated contact,
-who held budget, who could say no, and who had to be convinced. Once a stable
-pattern emerges, propose it as a decision under
-`governance/CHANGE_MANAGEMENT.md` rather than asserting it here.
+Record actual buyer patterns as evidence accumulates — who initiated contact,
+who held budget, who could say no, who had to be convinced, plus industry and
+approximate size.
+
+**Where:** the Buyer Evidence table in `clients/<client>/README.md`, completed
+for every qualified opportunity **including disqualified ones**. Q-003 cannot
+be resolved without this evidence, so failing to record it blocks the
+company's own configuration.
+
+Once a stable pattern emerges across engagements, propose it as a decision
+under `governance/CHANGE_MANAGEMENT.md` rather than asserting it here.
 
 ## 8. Qualification Questions
 

@@ -36,9 +36,11 @@ Founder.
 
 ## 5. Procedure
 
-1. **Initialize the client workspace.** Copy `clients/_CLIENT_TEMPLATE/` to
-   `clients/<client-name>/`. This directory is the engagement's sole home
-   (`governance/KNOWLEDGE_ARCHITECTURE.md` §5).
+1. **Convert the opportunity directory to an engagement.** The directory
+   already exists — it was created at qualification and holds
+   `QUALIFICATION.md`, `DISCOVERY.md`, and `SOLUTION.md`. Set
+   `Status: Onboarding`. Do not create a second directory
+   (`clients/README.md`).
 
 2. **Complete the project brief** (`templates/delivery/PROJECT_BRIEF.md`)
    from the agreement and discovery notes. Carry assumptions and open

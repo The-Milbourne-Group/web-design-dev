@@ -36,32 +36,37 @@ Founder. An agent may prepare the assessment; the founder decides the outcome.
 
 ## 5. Procedure
 
-1. **Record the source.** How the prospect arrived is evidence for Q-008
-   (acquisition channels). Log it even when the opportunity is disqualified.
+1. **Create the opportunity directory.** Copy `clients/_CLIENT_TEMPLATE/` to
+   `clients/<prospect-name>/` and set `Status: Prospect`. This is where every
+   artifact from here to closure lives (`clients/README.md`).
 
-2. **Assess ICP fit** against `ICP.md` §4 and §5. Note which specific high-fit
+2. **Record the source** in `QUALIFICATION.md`. How the prospect arrived is
+   evidence for Q-008 (acquisition channels). Log it even when the opportunity
+   is disqualified.
+
+3. **Assess ICP fit** against `ICP.md` §4 and §5. Note which specific high-fit
    characteristics and problem signals are present. Do not score against
    numeric size bands — those are open (`ASSUMPTIONS.md` A-005).
 
-3. **Identify the problem and desired outcome** in the prospect's own words.
+4. **Identify the problem and desired outcome** in the prospect's own words.
    If neither can be stated in one sentence, the outcome is *Clarification
    required*, not *Qualified*.
 
-4. **Confirm authority.** Establish who owns the decision and who controls
+5. **Confirm authority.** Establish who owns the decision and who controls
    budget. "I'd have to check with my partner" is an unresolved decision-maker,
    not an objection to overcome.
 
-5. **Check disqualification signals** in `ICP.md` §6. Any single strong signal
+6. **Check disqualification signals** in `ICP.md` §6. Any single strong signal
    is sufficient to disqualify — they do not need to accumulate.
 
-6. **Assess delivery feasibility.** Can the company deliver this responsibly
+7. **Assess delivery feasibility.** Can the company deliver this responsibly
    with current capacity and capability? A capability the company does not
    have is not a stretch goal.
 
-7. **Locate the engagement in the commercial progression** (`SERVICES.md` §2).
+8. **Locate the engagement in the commercial progression** (`SERVICES.md` §2).
    An opportunity that fits no stage is off-strategy.
 
-8. **Record the outcome and reasoning** — including for disqualified
+9. **Record the outcome and reasoning** — including for disqualified
    opportunities, which are the most useful evidence for ICP configuration.
 
 ## 6. Outputs
@@ -75,7 +80,14 @@ One of four outcomes, with written reasoning:
 | **Clarification required** | Cannot assess yet | Named questions to resolve |
 | **Disqualified** | Poor fit or undeliverable | Decline courteously; record why |
 
-Plus: source recorded; ICP evidence captured; risks noted.
+**Location:** `clients/<prospect-name>/QUALIFICATION.md`, with `Status` set in
+that directory's `README.md`.
+
+Plus: source recorded; ICP and buyer evidence captured in the directory
+`README.md` for Q-003; risks noted.
+
+**Disqualified opportunities keep their directory.** The reasoning is the
+primary evidence for resolving Q-001 and Q-003 (`ICP.md` §7).
 
 ## 7. Quality Checks
 
@@ -85,6 +97,7 @@ Plus: source recorded; ICP evidence captured; risks noted.
 - [ ] The decision-maker is identified or explicitly recorded as unknown.
 - [ ] Reasoning would be intelligible to someone else in three months.
 - [ ] Disqualification reasoning is recorded, not just the verdict.
+- [ ] The opportunity directory exists and `Status` is set.
 
 ## 8. Failure Conditions & Recovery
 

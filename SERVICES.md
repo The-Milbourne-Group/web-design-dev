@@ -112,7 +112,8 @@ Do not accept vague terms such as "anything needed" or "unlimited revisions"
 without explicit commercial controls.
 
 A material change in objectives, deliverables, integrations, or requirements
-requires a change order before implementation — governed by `DELIVERY.md` §5.
+requires a change order before implementation. Policy: `DELIVERY.md` §5.
+Procedure: `sops/delivery/SCOPE_CHANGE.md`.
 
 ## 6. Service Selection
 

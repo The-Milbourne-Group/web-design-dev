@@ -269,6 +269,92 @@ after changing the markdown; never edit the export as a source.
 
 ---
 
+### D-015 — Client directories are created at qualification, not onboarding
+**Date:** 2026-08-29 · **Status:** Confirmed · **Confidence:** High · **Owner:** Founder
+
+**Decision.** `clients/<client>/` covers the full lifecycle from qualification
+through closure, including disqualified opportunities. It is created by
+`sops/sales/QUALIFICATION.md`, not by `sops/delivery/ONBOARDING.md`.
+
+**Context.** Integration testing found the sales-to-delivery chain broken: the
+qualification SOP produced a written fit assessment, the discovery SOP produced
+notes, and neither named a storage location. `clients/` was created only at
+onboarding — after qualification, discovery, and proposal had already run. The
+placement rule in `governance/KNOWLEDGE_ARCHITECTURE.md` §3 routed prospect
+artifacts to "temporary; do not file it," while
+`sops/delivery/ONBOARDING.md` §5.2 required carrying assumptions forward from
+discovery notes that had nowhere to exist.
+
+Compounding it, `ICP.md` §7 instructed operators to accumulate buyer evidence
+to resolve Q-003 — a *blocking* open question — with no location to accumulate
+it. The system could not generate the evidence needed to unblock its own
+configuration.
+
+**Alternatives considered.** A separate `pipeline/` directory promoted to
+`clients/` at agreement. Rejected: it introduces a migration step that can be
+skipped, and duplicates the isolation rules that already govern `clients/`.
+
+**Reasoning.** One directory per opportunity, from first qualification,
+reusing the existing isolation model unchanged. Retaining disqualified
+opportunities is deliberate — that reasoning is the primary evidence for
+Q-001 and Q-003.
+
+**Consequences.** Updated `clients/README.md`, `_CLIENT_TEMPLATE/`,
+`sops/sales/QUALIFICATION.md`, `sops/sales/DISCOVERY.md`,
+`sops/delivery/ONBOARDING.md`, `ICP.md` §7,
+`governance/KNOWLEDGE_ARCHITECTURE.md`, `governance/DOCUMENT_REGISTRY.md`,
+`CLAUDE.md`, `SYSTEM_MAP.md`.
+
+---
+
+### D-016 — Requirement traceability is mandatory between discovery and proposal
+**Date:** 2026-08-29 · **Status:** Confirmed · **Confidence:** High · **Owner:** Founder
+
+**Decision.** Every requirement entering a proposal must trace to a discovery
+finding, an explicit client statement, or a documented assumption. A
+requirement with no source is removed, not justified. Procedure:
+`sops/sales/SOLUTION_DESIGN.md`.
+
+**Context.** Integration testing found the step between discovery and proposal
+entirely undocumented — no SOP, and no agent owning it.
+`agents/SALES_AGENT.md` disclaimed solution design as "founder-led
+architecture" without pointing anywhere, so the step existed only as
+undocumented human knowledge. This is the point where fabricated scope enters
+a commercial engagement.
+
+**Reasoning.** The traceability matrix makes fabrication mechanically
+detectable: a requirement either has a source or it does not.
+
+**Consequences.** New SOP; `SALES.md` §5 extended with the policy;
+`clients/_CLIENT_TEMPLATE/SOLUTION.md` added; sales agent may build the matrix
+but not decide the solution.
+
+---
+
+### D-017 — Engagements close through a defined procedure including expansion review
+**Date:** 2026-08-29 · **Status:** Confirmed · **Confidence:** High · **Owner:** Founder
+
+**Decision.** Closure follows `sops/delivery/CLOSURE.md`: acceptance,
+handover, measurement baseline, access revocation, retrospective, buyer
+evidence capture, and expansion review.
+
+**Context.** `DELIVERY.md` §9 and §11 stated intent in two sentences with no
+procedure. Four consequences: acceptance was never formally confirmed, client
+access remained granted indefinitely after delivery (a standing security
+exposure under `SECURITY.md` §5), no measurement baseline was captured so
+later optimization value could not be demonstrated, and the confirmed
+commercial progression (D-005) had **no operational trigger** — nothing moved
+an engagement into the expansion or recurring stage that the company's
+commercial model depends on.
+
+**Reasoning.** The recurring stage is the company's durable-revenue strategy.
+A strategy with no procedure is an aspiration.
+
+**Consequences.** New SOP; `DELIVERY.md` §9 and §11 point to it; closure added
+to the phase table and quality gates.
+
+---
+
 ### D-014 — Confirmed decisions are removed from "configuration required" lists
 **Date:** 2026-08-29 · **Status:** Confirmed · **Confidence:** High · **Owner:** Founder
 

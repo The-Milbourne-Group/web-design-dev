@@ -1,13 +1,15 @@
 # <CLIENT NAME>
 
-> Copy this directory to `clients/<client-name>/` when an engagement begins.
-> Follow `sops/delivery/ONBOARDING.md`.
+> Copy this directory to `clients/<client-name>/` when an opportunity is
+> **qualified** (`sops/sales/QUALIFICATION.md`), not at onboarding.
+> Complete files as the opportunity advances.
 
 **Client:**
 **Engagement:**
 **Stage:** Entry / Expansion / Recurring (`SERVICES.md` §2)
-**Status:** Onboarding / Active / On hold / Launched / Closed
-**Started:**
+**Status:** Prospect / Qualified / Discovery / Proposal / Onboarding / Active / Launched / Closed / Disqualified / Nurture / Lost
+**Source:** *How this opportunity arrived — evidence for Q-008*
+**First contact:**
 **Owner:** Founder
 **Last updated:**
 
@@ -26,22 +28,38 @@
 
 ## Current Status
 
-What phase the engagement is in, what is in progress, and what is blocked.
+What stage this is in, what is in progress, and what is blocked.
+
+## Buyer Evidence
+
+*Recorded per `ICP.md` §7 to resolve Q-003. Do not generalize into `ICP.md`
+directly — propose it under `governance/CHANGE_MANAGEMENT.md` once a pattern
+is stable across engagements.*
+
+| | |
+|---|---|
+| **Who initiated contact** | |
+| **Who held budget** | |
+| **Who could say no** | |
+| **Who had to be convinced** | |
+| **Industry / sector** | |
+| **Approximate size** | |
 
 ## Contents
 
-| File | Purpose |
-|---|---|
-| `PROJECT_BRIEF.md` | Scope, requirements, stakeholders, acceptance criteria |
-| `DISCOVERY.md` | Discovery notes carried from sales |
-| `DECISIONS.md` | Decisions specific to this engagement |
-| `ACCESS.md` | Access record — names and locations only |
-| `QA/` | Verification records |
+| File | Created at | Purpose |
+|---|---|---|
+| `QUALIFICATION.md` | Qualification | Fit assessment, source, outcome |
+| `DISCOVERY.md` | Discovery | Discovery notes |
+| `SOLUTION.md` | Solution design | Requirement traceability |
+| `PROJECT_BRIEF.md` | Onboarding | Scope, requirements, acceptance criteria |
+| `DECISIONS.md` | As needed | Engagement decisions and scope changes |
+| `ACCESS.md` | Onboarding | Access record — names and locations only |
+| `QA/` | QA | Verification records |
 
 ## Rules
 
-- **Never record a credential value here** — `ACCESS.md` names systems and
-  storage locations only (`MASTER.md` §7.3).
+- **Never record a credential value here** (`MASTER.md` §7.3).
 - **Never reference another client** (`MASTER.md` §7.1).
 - **Never edit company documents from this directory** — raise a change
   proposal (`governance/CHANGE_MANAGEMENT.md` §4).

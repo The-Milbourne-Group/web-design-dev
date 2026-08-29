@@ -43,8 +43,15 @@ were omitted and why.
 | 9 | Launch | Deployment, configuration, analytics, monitoring, backup, launch verification |
 | 10 | Measurement & Optimization | Traffic, conversion, search visibility, user behaviour, performance, business outcomes |
 
-Craft standards for phases 3–8 are in `WEB_STANDARDS.md`. Procedures for
-phases 1, 8, and 9 are in `sops/delivery/`.
+Craft standards for phases 3–8 are in `WEB_STANDARDS.md`. Procedures:
+
+| Phase | Procedure |
+|---|---|
+| 1 Onboarding | `sops/delivery/ONBOARDING.md` |
+| 8 QA | `sops/delivery/QA.md` |
+| 9 Launch | `sops/delivery/LAUNCH.md` |
+| 10 Closure | `sops/delivery/CLOSURE.md` |
+| Any phase — scope change | `sops/delivery/SCOPE_CHANGE.md` |
 
 ## 3. Onboarding
 Confirm:
@@ -61,10 +68,33 @@ Confirm:
 Understand business context, users, objectives, existing systems, constraints, and success indicators.
 
 ## 5. Scope Control
-Any material change in objectives, deliverables, integrations, or assumptions must be evaluated before implementation.
+
+Any material change in objectives, deliverables, integrations, or assumptions
+must be evaluated **before** implementation, and a Material or Directional
+change requires a written change order with client approval.
+
+Procedure: `sops/delivery/SCOPE_CHANGE.md`, which defines the change classes,
+the impact assessment, and the approval routing.
 
 ## 6. Quality Gates
-Before progressing, confirm the relevant phase outputs are acceptable.
+
+Before progressing, confirm the phase outputs are acceptable — against a
+standard, by a named party.
+
+| Phase | Verified against | Confirmed by |
+|---|---|---|
+| Onboarding | Agreement and `PROJECT_BRIEF.md` | Founder |
+| Discovery | Client playback confirmation | Client, then founder |
+| Strategy / Architecture | Discovery findings and traceability | Founder |
+| Content / Design | `WEB_STANDARDS.md` §2–§3, brand | Founder, then client approver |
+| Development | `WEB_STANDARDS.md` §4, requirements | Founder |
+| QA | Acceptance criteria, `WEB_STANDARDS.md` | QA verifies; **founder accepts** |
+| Launch | `sops/delivery/LAUNCH.md` checklist | Founder authorizes |
+| Closure | Acceptance criteria | Client accepts in writing |
+
+**QA verifies; the founder accepts.** These are distinct acts and must not be
+performed as one (`agents/README.md` §4). Where a phase has no named client
+approver, that is an onboarding defect (`sops/delivery/ONBOARDING.md` §5.4).
 
 ## 7. Client Communication
 Communicate:
@@ -79,8 +109,15 @@ Do not hide blockers.
 ## 8. QA and Launch
 Verify requirements appropriate to the project, including functionality, responsive behavior, accessibility, integrations, performance, and failure conditions.
 
-## 9. Post-Launch
-Confirm launch status, monitoring, ownership, known limitations, and next optimization opportunities.
+## 9. Post-Launch and Closure
+
+Confirm launch status, monitoring, ownership, known limitations, and next
+optimization opportunities.
+
+Closing an engagement — acceptance, handover, measurement baseline, access
+revocation, retrospective, and expansion review — follows
+`sops/delivery/CLOSURE.md`. An engagement is not complete when the work ships;
+it is complete when it has been accepted, measured, secured, and reviewed.
 
 ## 10. Escalation
 
@@ -98,6 +135,6 @@ Escalating early is correct. Discovering a problem at launch is not.
 ## 11. Retrospective
 
 For meaningful projects, record what should be reused, improved, automated, or
-avoided. Where a retrospective reveals a defect in a company document, raise a
+avoided — as part of `sops/delivery/CLOSURE.md` §5.9. Where a retrospective reveals a defect in a company document, raise a
 change proposal under `governance/CHANGE_MANAGEMENT.md` — do not edit company
 documents from inside a project (`governance/AUTHORITY.md` §5).

@@ -68,7 +68,10 @@ Founder. Discovery is founder-led work (D-010) and is not delegated.
 
 ## 6. Outputs
 
-- Completed discovery notes (`templates/sales/DISCOVERY_NOTES.md`)
+**Location:** `clients/<prospect-name>/DISCOVERY.md` — the directory created at
+qualification. Set `Status: Discovery`.
+
+- Completed discovery notes (structure: `templates/sales/DISCOVERY_NOTES.md`)
 - Explicit list of assumptions, labelled as assumptions
 - Open questions requiring answers before proposal
 - Stakeholder and decision map
@@ -83,6 +86,7 @@ Founder. Discovery is founder-led work (D-010) and is not delegated.
 - [ ] Success indicators are measurable and have a data source.
 - [ ] The accountable decision-maker is confirmed.
 - [ ] Playback occurred and correction was obtained.
+- [ ] Notes are stored in the opportunity directory, not left as session output.
 - [ ] No solution was promised and no price discussed.
 
 ## 8. Failure Conditions & Recovery
