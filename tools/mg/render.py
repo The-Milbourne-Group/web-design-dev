@@ -9,7 +9,7 @@ from __future__ import annotations
 from pathlib import Path
 
 from . import model as m
-from .governance import is_open
+from .governance import is_open, PRICING_QUESTION, minimum_engagement
 
 
 def _b(items, empty="*None recorded.*", bullet="-"):
@@ -78,7 +78,7 @@ def readme(opp: m.Opportunity) -> str:
 
 ## Buyer Evidence
 
-*Recorded per `ICP.md` §7 to resolve Q-003. Do not generalize into `ICP.md`
+*Recorded per `ICP.md` §7 to test the D-021 buyer roles. Do not generalize into `ICP.md`
 directly — propose it under `governance/CHANGE_MANAGEMENT.md` once a pattern is
 stable across engagements.*
 
@@ -107,7 +107,7 @@ def qualification(opp: m.Opportunity) -> str:
 
 **Outcome:** {q.outcome or '*pending*'}
 **Decided by:** {q.decided_by or '—'} · **On:** {q.decided_on or '—'}
-**Source:** {q.source or '*not recorded*'} *(evidence for Q-008)*
+**Source:** {q.source or '*not recorded*'} *(channel evidence, D-026)*
 
 ---
 
@@ -177,7 +177,7 @@ Located in: **{f.stage or '*not located*'}** (`SERVICES.md` §2)
 ---
 
 *No price, timeline or deliverable was quoted during qualification
-(`SALES.md` §6 — pricing is open, Q-007).*
+(`SALES.md` §6 — no price is quoted during qualification).*
 """
 
 
@@ -348,13 +348,14 @@ def proposal_record(opp: m.Opportunity, root: Path) -> str:
 
 ## 1. Issuance Gate
 
-*`sops/sales/PROPOSAL.md` §5.1. `SERVICES.md` §4 requires a pricing model and
-defined deliverables before an offer is presented commercially.*
+*`sops/sales/PROPOSAL.md` §5.1. Prices are approved (`SERVICES.md` §2.4,
+D-038); the figure for **this** engagement remains a founder decision, and the
+entry range is $7,500–$25,000 with the price following the solution design.*
 
 | Check | Status |
 |---|---|
-| Commercial terms decided and recorded by the founder | {'Yes' if p.gate_terms_decided else '**No — Q-007 open**'} |
-| Deliverables defined for this engagement | {'Yes' if p.gate_deliverables_defined else '**No — Q-011 open**'} |
+| Commercial terms recorded for this engagement | {'Yes' if p.gate_terms_decided else '**No**'} |
+| Deliverables defined for this engagement | {'Yes' if p.gate_deliverables_defined else '**No**'} |
 | Gate passed — cleared to issue | {'Yes' if (p.gate_terms_decided and p.gate_deliverables_defined) else '**No**'} |
 
 {p.gate_notes and ('**Gate notes:** ' + p.gate_notes) or ''}
@@ -377,7 +378,7 @@ defined deliverables before an offer is presented commercially.*
 
 {p.commercial_terms}
 
-{'*Pricing is registered open (Q-007). "To be determined" is the only permitted value until the founder decides.*' if is_open(root, 'Q-007') else ''}
+{f'*Approved commercial configuration: `SERVICES.md` §2.4. Minimum engagement ${minimum_engagement(root):,}.*' if minimum_engagement(root) else ''}
 
 ## 6. Revision History
 
@@ -395,7 +396,7 @@ defined deliverables before an offer is presented commercially.*
 ### Loss reasoning
 {p.loss_reason or '*n/a*'}
 
-*Evidence for Q-001 and Q-003 (`ICP.md` §7). A loss recorded only as "lost"
+*Market-selection evidence under D-019 and D-036 (`ICP.md` §7). A loss recorded only as "lost"
 teaches the company nothing.*
 """
 
@@ -545,7 +546,7 @@ responsibly solves the problem above.
 
 ## 6. Deliverables
 
-{'*Package deliverables are not yet defined (Q-011). The scope above states what is included; formal deliverable definitions are to be determined.*' if is_open(root, 'Q-011') and not p.gate_deliverables_defined else scope}
+{scope if p.gate_deliverables_defined else scope + chr(10) + chr(10) + '*Deliverable definitions for this engagement are not yet confirmed.*'}
 
 ## 7. Exclusions
 
@@ -561,6 +562,12 @@ or correct them.*
 ## 9. Timeline
 
 {'To be determined.' if not p.gate_terms_decided else '*As agreed with the founder.*'}
+
+## 9.1 Payment Structure
+
+50% at project commitment · 25% at the approved design/implementation
+milestone · 25% before launch or final handoff. Work begins once the initial
+payment is received.
 
 ## 10. Client Responsibilities
 

@@ -9,7 +9,7 @@
 > `templates/sales/PROPOSAL_OUTLINE.md`.
 >
 > **Never write a price, package content, or timeline guarantee the founder
-> has not decided** (`SALES.md` §6; Q-007, Q-011 open).
+> has not approved for this engagement** (`SERVICES.md` §2.4; minimum $5,000).
 
 **Status:** Draft / Issued / Negotiating / Accepted / Declined / No decision
 **Version issued:**
@@ -73,7 +73,7 @@ assumptions — never stated as established client needs (`MASTER.md` §8.2).*
 ### Loss reasoning
 
 *For declined or stalled proposals — scope, price, timing, trust, competitor,
-or no decision. This is evidence for Q-001 and Q-003 (`ICP.md` §7); a loss
+or no decision. This is market-selection evidence (D-019, D-036); a loss
 recorded only as "lost" teaches the company nothing
 (`sops/sales/PROPOSAL.md` §5.10).*
 

@@ -69,7 +69,7 @@ Founder. Acceptance and access revocation are founder decisions.
 
 6. **Record delivery metrics** for the company: duration, rework, defects,
    and profitability where measurable (`METRICS.md` §6). This is the evidence
-   base for pricing (Q-007).
+   base for refining pricing from actual delivery margin (D-038).
 
 ### Security
 
@@ -90,7 +90,7 @@ Founder. Acceptance and access revocation are founder decisions.
 
 10. **Capture buyer evidence.** Complete the Buyer Evidence table in
     `clients/<client>/README.md` — who decided, who held budget, industry,
-    size. This is the evidence Q-003 needs (`ICP.md` §7).
+    size. This tests the D-021 buyer roles (`ICP.md` §7).
 
 ### Expansion
 
@@ -129,7 +129,7 @@ Founder. Acceptance and access revocation are founder decisions.
 - [ ] Measurement baseline recorded — otherwise future value cannot be shown.
 - [ ] Access revoked and `ACCESS.md` updated.
 - [ ] No credential values anywhere in the directory.
-- [ ] Buyer evidence captured for Q-003.
+- [ ] Buyer evidence captured (tests D-021).
 - [ ] Expansion reviewed and recorded, including a negative result.
 
 ## 8. Failure Conditions & Recovery

@@ -362,6 +362,499 @@ answer approved an architecture but deferred its values, that is stated in the
 entry and the residual is registered as a new open question — an approved model
 is not an approved number.*
 
+## Launch Configuration — Founder Decisions (2026-08-29)
+
+*The configuration moves from discovery into execution. Rounds 2 and 3 decided
+method; this round supplies the values. `OPEN_QUESTIONS.md` now holds no pending
+founder decision.*
+
+### D-036 — Founder advantage is operating capability, not credentials
+**Date:** 2026-08-29 · **Status:** Confirmed · **Confidence:** High · **Owner:** Founder
+
+**Decision.** The founder's competitive advantage is the ability to combine
+business-oriented digital strategy, hands-on website and application
+implementation, systems thinking, automation, integration capability and
+AI-enabled operational leverage within a founder-led boutique delivery model.
+
+**The advantage must never claim** specific years of experience, relationships,
+previous clients, measurable outcomes, or expertise credentials that are not
+documented. It rests on demonstrated operating capability and the company's
+implementation model.
+
+**The six confirmed advantages.**
+
+1. **Systems thinking** — websites are treated as components of a broader
+   business system: credibility, conversion, customer journeys, operations,
+   integrations, workflows, measurement. The company is not limited to isolated
+   website production.
+2. **Strategy-to-implementation continuity** — the founder both defines the
+   business and digital problem and translates the solution into practical
+   implementation, reducing the usual disconnect between the two.
+3. **Broad technical capability** — strategic website planning, implementation,
+   web applications where justified, digital systems, integrations, workflow
+   improvement, automation, optimization. **Not represented as expert-level
+   individual mastery of every capability**: the advantage is the ability to
+   architect, direct, implement and quality-control appropriate solutions,
+   using specialist capacity when required.
+4. **AI-enabled operational leverage** — AI is used for research, analysis,
+   structured documentation, workflow support and repetitive internal
+   operations, under human oversight. **AI novelty is not the competitive
+   advantage** (consistent with D-002).
+5. **Founder-led boutique model** — the founder remains directly involved in
+   strategy, sales, solution architecture and quality control. The company
+   competes on thoughtful implementation and business understanding, not
+   high-volume commodity delivery.
+6. **Demonstrated internal systems capability** — the company's executable
+   commercial operating system evidences the ability to design structured
+   operating processes, translate requirements into executable workflows,
+   enforce governance through software, integrate AI-assisted work into
+   human-controlled operations, and build systems that preserve evidence and
+   decision boundaries. **This is evidence of current systems-design
+   capability, not of unrelated past client work.**
+
+**Initial market.** Established small-to-mid-sized service and professional
+businesses with growth ambitions whose digital presence or infrastructure has
+become fragmented, outdated, underperforming, or disconnected from operational
+needs — prioritising the overlap of digital infrastructure problems, need for
+strategic website improvement, expansion potential into systems or workflow
+work, sufficient project economics, and comfort working remotely with a
+boutique specialist. The company begins broad enough to test demand rather than
+falsely claiming an industry specialization before evidence exists (D-019).
+
+**Amends D-026.** No pre-existing founder access advantage is claimed without
+documented evidence, so acquisition uses a **diversified early-stage approach**
+rather than a warm-network-first order: (1) targeted outbound, (2) founder
+network where available, (3) referrals as they develop, (4) portfolio and
+content evidence, (5) selective partnerships. D-026's channel *set* stands; its
+priority ordering is superseded by this decision.
+
+**Resolves.** Q-013, and the residual Q-018.
+
+---
+
+### D-037 — Controlled founder-capacity model and commercial validation
+**Date:** 2026-08-29 · **Status:** Confirmed · **Confidence:** High · **Owner:** Founder
+
+**Decision.** The company operates a controlled founder-capacity model during
+launch.
+
+**Capacity.**
+
+- The founder remains the primary strategic and delivery authority.
+- **Maximum one major implementation engagement in active build at a time.**
+- **Maximum two active client engagements simultaneously**, and only where the
+  second is discovery, strategy, optimization or support — never a second major
+  build.
+- Work requiring more than one major concurrent implementation is not accepted
+  unless specialist capacity is explicitly planned and commercially justified.
+- Sufficient founder capacity is preserved for sales, administration, QA and
+  business development.
+- **Delivery capacity is never sold on theoretical future hiring.**
+
+**Revenue urgency — controlled commercial validation.** Revenue generation is
+prioritized over further speculative internal system building. The company now
+prioritizes acquiring and delivering real client work over expanding internal
+documentation, unless a missing control creates material risk.
+
+**Financial operating principle.** Until actual operating data exists: maintain
+lean fixed costs; avoid commitments requiring high recurring overhead; prefer
+project-funded growth; preserve cash flow; **collect deposits before
+significant implementation work**; use staged payments tied to commercial
+milestones.
+
+**No personal income requirement is invented.** Launch capacity and commercial
+commitments are constrained by actual workload and project economics, not by a
+fabricated revenue target.
+
+**Initial validation target.** Close and successfully deliver **three
+profitable projects**. Achieve consistent positive project contribution margin
+before adding fixed overhead. Scale decisions require evidence from actual
+delivery margins and capacity.
+
+**Amends D-024.** D-024 set "balanced, with a revenue-first override." The
+override is now active: the operating classification is controlled commercial
+validation with revenue prioritized over speculative internal building.
+
+**Resolves.** Q-014, and the residual Q-019.
+
+---
+
+### D-038 — Commercial configuration and price points
+**Date:** 2026-08-29 · **Status:** Confirmed · **Confidence:** High · **Owner:** Founder
+
+**Decision.** All figures **USD**.
+
+| Offer | Price |
+|---|---|
+| **Minimum engagement** | **$5,000** |
+| Strategic Website & Digital Foundation (Entry) | **$7,500 – $25,000** |
+| Strategic Assessment / Discovery | **$1,500 – $5,000** |
+| Expansion — systems, integrations, workflow, automation, applications | **from $5,000** |
+| Recurring — optimization, support, managed digital systems | **from $750 / month** |
+
+**Minimum engagement exceptions.** An implementation engagement below $5,000 is
+not accepted unless the work is explicitly strategic, or creates exceptional
+portfolio or relationship value — **and the founder explicitly records the
+exception.**
+
+**Entry pricing is determined by** strategic complexity, information
+architecture, content requirements, design complexity, implementation
+complexity, integrations, workflow requirements, timeline and risk. **A false
+fixed price must not be published for work requiring discovery.**
+
+**Strategic assessment** exists for structured problem definition, discovery
+and solution development, and **must not become unlimited unpaid consulting**.
+It may be credited partially toward a subsequent implementation at the
+founder's discretion where commercially justified.
+
+**Recurring tiers** above the floor are determined by response requirements,
+maintenance burden, reporting, optimization work, system complexity, and
+automation or integration ownership. **Unlimited support is never promised.**
+
+**Payment structure** for implementation projects: **50% at project commitment,
+25% at the approved design/implementation milestone, 25% before launch or final
+handoff.** Where an executed agreement requires a different structure, the legal
+agreement hierarchy is preserved. **Work does not begin until the required
+initial payment is received.**
+
+**Revenue objective.** Not arbitrary scale: close and successfully deliver
+three profitable projects within the initial validation period, establish
+reliable project economics, then refine pricing using actual delivery effort,
+margin and client outcomes.
+
+**Pricing philosophy.** The company competes on strategic value, implementation
+quality, business understanding, systems capability and measurable improvement.
+**It does not compete on being the lowest-cost provider** (D-007).
+
+**Resolves.** Q-015, and the residual Q-020. **The proposal issuance gate no
+longer blocks on pricing.**
+
+---
+
+### D-039 — Named technology stack
+**Date:** 2026-08-29 · **Status:** Confirmed · **Confidence:** High · **Owner:** Founder
+
+**Decision.** The standard technology configuration for the initial operating
+model. **The named stack is a default, not a prohibition against justified
+alternatives** (D-034 exception policy applies).
+
+| Category | Approved default |
+|---|---|
+| Website platform | **Next.js with TypeScript** |
+| Styling | **Tailwind CSS**, reusable component and design-token approach |
+| Content management | By requirement — native/static, then headless CMS, then a specialized platform only where clearly justified |
+| Hosting and deployment | **Vercel or equivalent managed modern hosting** |
+| Backend / application services | Managed services and established platforms |
+| Database | **PostgreSQL**, managed, where persistent relational data is required |
+| Automation and integration | APIs and appropriate automation tooling |
+
+**Website platform** is used for modern custom websites, strong performance,
+flexible content architecture, application functionality and future
+extensibility.
+
+**Do not force a CMS** where it creates unnecessary complexity.
+
+**Hosting vendor** is finally selected per project against client requirements,
+security, compliance, cost, ownership and operational requirements. No vendor is
+mandatory where a client requirement demands another compliant option.
+
+**Architecture principle.** Prefer the simplest secure architecture that
+satisfies the documented requirements. **Custom infrastructure requires a
+documented business or technical justification.**
+
+**Automation is implemented only where** the process is sufficiently stable,
+inputs and outputs are understood, failure modes are acceptable, and ownership
+and monitoring are defined (consistent with `MASTER.md` §11).
+
+**All production work** must meet existing security, web standards,
+accessibility, QA, backup and version-control requirements.
+
+**Resolves.** Q-016, and the residual Q-021.
+
+---
+
+### D-040 — Brand system values
+**Date:** 2026-08-29 · **Status:** Confirmed · **Confidence:** High · **Owner:** Founder
+
+**Decision.** The brand is configured around the established positioning:
+boutique, strategic, credible, modern, technically sophisticated, restrained,
+and premium without being ostentatious.
+
+**Communicates** clarity, precision, strategic thinking, technical competence,
+stability, modernity, restraint.
+
+**Avoids** generic agency gradients, excessive AI imagery, neon "startup"
+aesthetics, clutter, visual novelty without purpose, and low-cost freelancer
+aesthetics.
+
+**Typography.** Primary: **Inter**. Fallback: system sans-serif. Restrained
+hierarchy emphasizing clarity and readability.
+
+**Colour system.**
+
+| Role | Value |
+|---|---|
+| Primary — near-black | `#111111` |
+| Secondary — off-white | `#F7F7F5` |
+| Neutral — slate/gray | `#6B7280` |
+| Light neutral | `#E5E7EB` |
+| Accent — deep blue | `#1D4ED8` |
+
+**The accent is used selectively.** Do not create an overly colourful
+interface.
+
+**Spacing.** Consistent system on **4px increments**, with generous whitespace.
+
+**Border radius.** Restrained: **4px to 8px**. Avoid excessively rounded
+"consumer app" styling.
+
+**Visual identity.** The wordmark initially prioritizes **THE MILBOURNE
+GROUP**. A typography-based identity is acceptable for launch. **Launch is not
+delayed waiting for an elaborate logo**; a fuller identity system may evolve
+once market evidence exists.
+
+**Brand decision principle.** The brand supports credibility and clarity. It
+must not become a separate speculative design project that delays commercial
+launch.
+
+**Resolves.** Q-017, and the residual Q-022.
+
+---
+
+## Discovery Round 3 — Founder Decisions (2026-08-29)
+
+*Round 3 decided **method**, not values. Each answer specifies what must be
+recorded and how it will be used; the founder's own closing list names nineteen
+factual inputs that still require direct configuration. The residuals are
+Q-018 – Q-022. Recording a method as though it were a value is the failure this
+separation exists to prevent.*
+
+### D-031 — The founder advantage inventory is a required input to market selection
+**Date:** 2026-08-29 · **Status:** Confirmed · **Confidence:** High · **Owner:** Founder
+
+**Decision.** The company maintains a formal founder advantage inventory and
+uses it as a required input to market selection, acquisition strategy and
+positioning. No industry is selected solely because it appears attractive in
+theory.
+
+**Five required categories.**
+
+1. **Industry and professional experience** — for each industry: name, nature
+   and approximate depth of experience, organization types worked with, typical
+   problems encountered, relevant terminology, existing credibility, and
+   whether decision-makers can be accessed directly. *The objective is not to
+   claim specialization where none exists; it is to identify where learning
+   cost is already lower and market access already stronger.*
+2. **Technical advantages** — each capability classified as **Core strength**
+   (can confidently sell and deliver), **Supported capability** (deliverable
+   with appropriate scope or external support), or **Development area** (not
+   yet appropriate as a primary sales promise). Market strategy emphasizes core
+   strengths.
+3. **Existing professional relationships** — category, strength, industry,
+   buyer access, referral potential, whether direct outreach is appropriate,
+   and introduction opportunities. Separated into: warm with direct opportunity
+   potential; referral potential; requiring development; and **contacts that
+   must not be treated as commercial opportunities.**
+4. **Referral partner opportunities** — relationship strength, client overlap,
+   service complementarity, referral frequency potential, mutual commercial
+   value, geographic relevance, reputation. Prioritized where both parties gain
+   without competing directly.
+5. **Past projects and case-study potential** — industry, client type and size,
+   original problem, scope, technologies, complexity, key decisions, outcome,
+   measurable results where available, **permission to discuss publicly**,
+   available visuals, and relevance to target markets. Ranked by business
+   outcome, technical complexity, strategic relevance, evidence quality,
+   obtainable permission, and similarity to desired future work.
+
+**Case-study policy.** Never claim results that cannot be substantiated. Where
+quantitative outcomes are unavailable, case studies may document qualitative
+improvement — maintainability, reduced manual work, user experience, workflow
+speed, integration, content management, performance, scalability. **The
+distinction between measured outcomes and qualitative improvements must remain
+explicit** (consistent with `BRAND.md` §6).
+
+**Market-selection scoring.** Candidate markets are evaluated on founder
+access, technical advantage, market pain, project economics, existing
+credibility, referral potential, and repeatability.
+
+**No permanent market specialization is approved until this inventory has been
+evaluated.**
+
+**Resolves.** Q-013 *as to method.* The inventory content is Q-018.
+
+---
+
+### D-032 — Capacity and financial requirements are measured, not assumed
+**Date:** 2026-08-29 · **Status:** Confirmed · **Confidence:** High · **Owner:** Founder
+
+**Decision.** Actual founder capacity and financial requirements must be
+measured and recorded before the company commits to a concurrent delivery model
+or finalizes revenue targets. The company operates conservatively until then.
+
+**Weekly hours** are recorded split across sales and business development,
+client delivery, project management, administration, internal systems,
+marketing, and learning. **Total available hours are not deliverable client
+capacity.**
+
+**Capacity is a matrix, not a project count.** A major custom application and a
+small optimization engagement do not consume equivalent capacity, so capacity is
+measured by engagement category:
+
+| Category | Examples |
+|---|---|
+| **Major** | Complex redesign and development, custom application, major systems integration, significant transformation |
+| **Standard** | Moderate website project, defined implementation, structured redesign, limited integration |
+| **Small** | Optimization, maintenance, defined development task, limited automation |
+
+**Provisional capacity policy** (an operating assumption, not a commitment):
+one major engagement active at a time, with additional smaller work accepted
+only where it does not threaten delivery quality or acquisition capacity.
+
+**Revenue urgency** is classified as Level 1 validation-led, Level 2 balanced,
+or Level 3 revenue-first. **Default until the founder specifies otherwise:
+balanced, with a revenue-first override where actual financial requirements
+make immediate revenue necessary.**
+
+**Minimum income requirement** is recorded split across personal income,
+business operating expenses, contractor and delivery costs, software, hosting
+and infrastructure, taxes, and cash reserve. Pricing and capacity cannot be
+evaluated independently of it.
+
+**Capacity governance rule.** The company must not promise delivery dates based
+on assumed capacity, accept concurrent work on optimism, build revenue targets
+without considering delivery hours, or commit to support obligations without
+staffing capacity. Capacity is reviewed after completed engagements against
+observed performance.
+
+**Resolves.** Q-014 *as to method.* The measured values are Q-019.
+
+---
+
+### D-033 — Commercial model structure, with prices configured from requirements
+**Date:** 2026-08-29 · **Status:** Confirmed · **Confidence:** High · **Owner:** Founder
+
+**Decision.** The commercial architecture is approved. Exact prices and targets
+are **configured from founder financial requirements and actual delivery
+capacity** — calculated, not selected.
+
+**Layer 1 — Discovery and strategic assessment.** Paid whenever meaningful
+analysis or strategy work is required. Price reflects time, complexity,
+strategic value, whether the output materially reduces client uncertainty, and
+whether discovery assets accelerate a subsequent implementation. Founder must
+configure minimum price, standard range, and maximum complexity tier.
+
+**Layer 2 — Core implementation.** Priced on scope, complexity, required
+expertise, delivery risk, client dependencies, timeline, business importance
+and third-party costs. **Default model: fixed or milestone-based pricing tied
+to clearly defined scope.** Time estimates remain internally important for
+margin management but do not define the client's value proposition.
+
+**Layer 3 — Ongoing support and optimization.** Monthly retainer, defined
+maintenance plan, capacity-based development retainer, optimization program, or
+managed hosting and support. **Avoid unlimited support for a fixed fee unless
+capacity and economics are proven.**
+
+**Minimum engagement value** is explicit and calculated as *required
+contribution margin + delivery cost + acquisition cost + opportunity cost*. Its
+purpose is to prevent accepting projects that consume disproportionate sales,
+communication, project management, technical setup, QA and administrative
+overhead. **A project is not accepted simply because revenue is available.**
+
+**Margin.** Every engagement is evaluated for projected gross margin, and
+actual economics reviewed after completion. Where actual delivery consistently
+exceeds the economics assumed at sale, price increases or scope is adjusted.
+
+**Revenue targets** are monthly, quarterly and annual, and must be
+**mathematically connected rather than independently selected.**
+
+**Pipeline coverage** = revenue target ÷ expected close rate. Until historical
+conversion data exists this is a planning assumption to be revised as evidence
+accumulates.
+
+**Proposal governance — binding now.** Until the values are finalized, **no
+proposal may state a standard company price or package price as established
+policy.** Individual opportunities may still be evaluated internally, but
+official pricing requires founder approval and must be consistent with
+documented capacity and financial requirements.
+
+**Resolves.** Q-015 *as to structure.* **The price points remain open as
+Q-020, and the proposal gate stays shut against them.**
+
+---
+
+### D-034 — Named stack defaults with a documented exception process
+**Date:** 2026-08-29 · **Status:** Confirmed · **Confidence:** High · **Owner:** Founder
+
+**Decision.** The company approves a named default for each stack category
+while retaining a documented exception process. **The purpose is not to force
+every client into identical technology** — it is to stop re-evaluating
+commodity decisions so that reusable assets, knowledge, deployment practices
+and documentation accumulate.
+
+**Categories requiring an approved default.** Marketing and business websites
+(framework, styling, component architecture, forms, analytics, SEO, image
+optimization, deployment); custom web applications (front-end, architecture,
+back-end, database, authentication, API, testing, deployment); CMS (by use
+case); hosting and deployment (provider, workflow, environments, DNS, backup,
+monitoring, access); integrations and automation (API patterns, credential
+storage, webhooks, workflows, error logging, monitoring, documentation).
+
+**Selection rule.** A technology becomes an approved default only where the
+company can support it across development, deployment, security, maintenance,
+documentation and client handoff. **Popularity alone is not justification.**
+Favour what the founder can confidently build with, debug, secure, maintain,
+hand off and support long term.
+
+**Exception policy.** Deviation is permitted for existing client
+infrastructure, a requirement the default cannot meet, a commercially necessary
+specialized platform, regulatory or security requirements, or long-term client
+maintainability. **Every exception is documented.**
+
+**Implementation requirement.** `TECH_STACK.md` carries an explicit table of
+category, approved default, approved alternatives, and whether an exception is
+required.
+
+**Resolves.** Q-016 *as to policy.* The named technologies are Q-021.
+
+---
+
+### D-035 — Brand system defined by values, not descriptions
+**Date:** 2026-08-29 · **Status:** Confirmed · **Confidence:** High · **Owner:** Founder
+
+**Decision.** The approved visual direction becomes a formal brand system
+defining **actual values rather than descriptive preferences.**
+
+**Logo assets.** Primary, horizontal and compact variants where applicable;
+light- and dark-background versions; minimum-size rules; clear-space
+requirements; prohibited modifications.
+
+**Colour system.** Primary and its variation, secondary, accent(s), neutral
+backgrounds, primary and secondary text, border and interface colours, status
+colours where applicable — each with HEX, RGB where required, and accessibility
+usage guidance. **Colours are not approved for appearance alone; the system
+must support accessible contrast and functional interface use.**
+
+**Typography.** Heading and body typefaces, optional technical or accent face,
+weights, heading and body scales, line-height and letter-spacing rules —
+supporting credibility, digital readability, accessibility, consistent
+implementation and reasonable web performance.
+
+**Spacing and layout.** A reusable scale rather than arbitrary values: base
+unit, small, standard, section and large spacing, container widths, grid
+conventions, border-radius conventions, component spacing.
+
+**Visual direction.** Strategic rather than decorative; technically competent
+rather than trend-driven; professional rather than generic; clear rather than
+noisy; modern without short-lived trends.
+
+**Governance.** Once approved, the documented logo, colours, typography,
+spacing and component conventions are the authoritative company visual system.
+**New assets extend the system rather than creating isolated styles.**
+
+**Resolves.** Q-017 *as to specification.* The asset values are Q-022.
+
+---
+
 ### D-019 — Controlled market testing, specialization on evidence
 **Date:** 2026-08-29 · **Status:** Confirmed · **Confidence:** High · **Owner:** Founder
 
@@ -540,6 +1033,11 @@ project management.
 significant, acquisition and profitable delivery temporarily outrank internal
 system development — but reusable delivery knowledge is still captured.
 
+**Amended by D-037 (2026-08-29).** The revenue-first override is now active:
+the operating classification is controlled commercial validation with revenue
+prioritized over speculative internal system building. The capacity model in
+D-037 supersedes the provisional assumption here.
+
 **Resolves.** Q-006.
 
 ---
@@ -609,6 +1107,13 @@ simultaneous optimization of every channel.
 conversion paths; business expansion; new locations; recent hiring; rebranding
 activity; growing teams; complex manual workflows; digital systems inconsistent
 with company maturity.
+
+**Amended by D-036 (2026-08-29).** The channel *set* stands; the **priority
+order does not**. No pre-existing founder access advantage is claimed without
+documented evidence, so acquisition is diversified rather than
+warm-network-first: targeted outbound, founder network where available,
+referrals as they develop, portfolio and content evidence, selective
+partnerships.
 
 **Resolves.** Q-008.
 

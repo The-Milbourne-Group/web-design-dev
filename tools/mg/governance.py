@@ -25,7 +25,9 @@ def repo_root(start: Path | None = None) -> Path:
 # --------------------------------------------------------------------------
 
 _Q_HEAD = re.compile(r"^###\s+(Q-\d+)\s+—\s+(.+?)\s+·\s+(\w+)\s*$", re.M)
-_Q_ROW = re.compile(r"^\|\s*(Q-\d+)\s*—\s*([^|]+?)\s*\|[^|]*\|\s*(D-\d+)\s*\|", re.M)
+_Q_ROW = re.compile(
+    r"^\|\s*(Q-\d+)\s*[—·-]\s*([^|]+?)\s*\|(?P<rest>(?:[^|\n]*\|){1,4})", re.M)
+_D_REF = re.compile(r"\bD-\d+\b")
 
 
 def open_questions(root: Path) -> dict[str, dict]:
@@ -37,10 +39,14 @@ def open_questions(root: Path) -> dict[str, dict]:
         out[qid] = {"id": qid, "title": title.strip(), "priority": prio, "resolved": False}
     for qid, title, prio in _Q_HEAD.findall(resolved_section):
         out[qid] = {"id": qid, "title": title.strip(), "priority": prio, "resolved": True}
-    # Resolved questions are recorded as table rows, not headings.
-    for qid, title, decision in _Q_ROW.findall(resolved_section):
+    # Resolved questions are recorded as table rows, not headings. The decision
+    # column has moved between rounds, so find the D-### anywhere in the row.
+    for mm in _Q_ROW.finditer(resolved_section):
+        qid, title = mm.group(1), mm.group(2)
+        found = _D_REF.search(mm.group("rest"))
         out.setdefault(qid, {"id": qid, "title": title.strip(), "priority": "Resolved",
-                             "resolved": True, "decision": decision.strip()})
+                             "resolved": True,
+                             "decision": found.group(0) if found else ""})
     return out
 
 
@@ -49,21 +55,51 @@ def is_open(root: Path, qid: str) -> bool:
     return bool(q) and not q["resolved"]
 
 
-# Commercial values the system forbids stating while their question is open.
-# D-025 approved the pricing architecture and explicitly deferred the price
-# points; D-029 defers package contents until pricing exists. Both residuals are
-# Q-015. Keying the guard on the resolved parents would have opened the gate the
-# moment Q-007 moved to Resolved — an approved model is not an approved number.
-COMMERCIAL_GUARDS = {
-    "Q-015": "price points, minimum engagement value, or any commercial figure",
-}
-PRICING_QUESTION = "Q-015"
+# Pricing is decided (D-038). The guard no longer refuses figures — it checks
+# them against the approved bands in `SERVICES.md` §2.4 and against the minimum
+# engagement value, which is the control that actually protects margin now.
+#
+# History, for why this is shaped as it is: Q-007 -> D-025 (model) -> Q-015 -> D-033 (structure)
+# -> Q-020 -> D-038 (values). While any link held no number the guard keyed on
+# the live residual, because an approved model is not an approved number.
 
-# Money, not numbers. An earlier version matched any 3+ digit run, which
-# flagged years, `Q-007` and `D-005` in every generated file; a proximity
-# heuristic then matched prose that legitimately *discusses* pricing being
-# open. A check that fires on everything is a check the operator learns to
-# ignore, so detection is now explicit about what money looks like.
+PRICING_QUESTION = None          # retained: callers test it for a live residual
+
+
+def pricing(root: Path) -> dict:
+    """The approved commercial configuration, read from `SERVICES.md` §2.4."""
+    text = (root / "SERVICES.md").read_text(encoding="utf-8")
+    mm = re.search(r"^## 2\.4 Commercial Configuration(.*?)(?=^### Minimum engagement)",
+                   text, re.M | re.S)
+    out: dict[str, dict] = {}
+    if not mm:
+        return out
+    for line in mm.group(1).splitlines():
+        line = line.strip()
+        if not line.startswith("|") or line.startswith("|---") or "| Price |" in line:
+            continue
+        cells = [c.strip() for c in line.strip("|").split("|")]
+        if len(cells) < 2:
+            continue
+        label = re.sub(r"\*\*", "", cells[0]).strip()
+        figures = [int(x.replace(",", "")) for x in re.findall(r"\$([\d,]+)", cells[1])]
+        if not figures:
+            continue
+        out[label] = {
+            "low": min(figures),
+            "high": max(figures) if len(figures) > 1 else None,
+            "recurring": "month" in cells[1].lower(),
+            "raw": re.sub(r"\*\*", "", cells[1]).strip(),
+        }
+    return out
+
+
+def minimum_engagement(root: Path) -> int | None:
+    for label, band in pricing(root).items():
+        if "minimum engagement" in label.lower():
+            return band["low"]
+    return None
+
 
 _MONEY_WORD = re.compile(
     r"\b(fee|fees|cost|costs|price|priced|pricing|invest|investment|budget"
@@ -82,44 +118,79 @@ def _is_year(tok: str) -> bool:
 
 
 def find_money(text: str) -> list[str]:
-    """Tokens in `text` that genuinely read as a commercial figure."""
-    hits: list[str] = []
-    for rx in (_CUR_SYMBOL, _CUR_CODE):
-        hits += [h.strip() for h in rx.findall(text)] if rx.groups == 0 else \
-                [mm.group(0).strip() for mm in rx.finditer(text)]
-    for mm in _THOUSANDS.finditer(text):
-        if not _is_year(mm.group(0)):
-            hits.append(mm.group(0))
+    """Tokens in `text` that genuinely read as a commercial figure.
+
+    Matches are deduplicated by span: `$3,000` is found by both the currency
+    pattern and the thousands pattern, and reporting one figure twice makes the
+    operator distrust the check.
+    """
+    spans: list[tuple[int, int, str]] = []
+    for rx in (_CUR_SYMBOL, _CUR_CODE, _THOUSANDS):
+        for mm in rx.finditer(text):
+            tok = mm.group(0).strip()
+            if rx is _THOUSANDS and _is_year(tok):
+                continue
+            spans.append((mm.start(), mm.end(), tok))
     # A bare four-digit-plus number counts only on a line that is talking money,
     # and never when it is a year.
-    for line in text.splitlines():
-        if not _MONEY_WORD.search(line):
+    offset = 0
+    for line in text.splitlines(keepends=True):
+        if _MONEY_WORD.search(line):
+            for mm in _BARE.finditer(line):
+                if not _is_year(mm.group(0)):
+                    spans.append((offset + mm.start(), offset + mm.end(), mm.group(0)))
+        offset += len(line)
+
+    spans.sort(key=lambda x: (x[0], -(x[1] - x[0])))
+    out: list[str] = []
+    covered_to = -1
+    for start, end, tok in spans:
+        if start < covered_to:          # inside a longer match already reported
             continue
-        for mm in _BARE.finditer(line):
-            if not _is_year(mm.group(0)):
-                hits.append(mm.group(0))
-    seen, out = set(), []
-    for h in hits:
-        if h not in seen:
-            seen.add(h); out.append(h)
+        out.append(tok)
+        covered_to = end
     return out
 
 
 def scan_for_open_values(root: Path, text: str) -> list[str]:
-    """Flag anything that looks like a price while Q-007 is open.
+    """Check commercial figures against the approved configuration.
 
-    This implements the rule CLAUDE.md §4.1 calls the highest-frequency and
-    most damaging failure mode in the system.
+    Before D-038 this refused every figure, because no price existed and
+    inventing one was the system's worst failure mode. Prices now exist, so the
+    useful check is different: a figure below the minimum engagement value is
+    the thing that quietly destroys margin.
     """
     problems: list[str] = []
-    if is_open(root, PRICING_QUESTION):
+    if PRICING_QUESTION and is_open(root, PRICING_QUESTION):
         hits = find_money(text)
         if hits:
             problems.append(
-                f"{PRICING_QUESTION} is open — price points are not decided (D-025 "
-                f"approved the model, not the numbers). Found figure(s) that read "
-                f"as commercial values: {', '.join(hits)}. "
+                f"{PRICING_QUESTION} is open — price points are not decided. Found "
+                f"figure(s) that read as commercial values: {', '.join(hits)}. "
                 f"Write 'to be determined' (SALES.md §6)."
+            )
+        return problems
+
+    minimum = minimum_engagement(root)
+    if minimum is None:
+        return problems
+    for hit in find_money(text):
+        digits = re.sub(r"[^\d.]", "", hit.split(".")[0])
+        if not digits:
+            continue
+        value = int(float(digits))
+        if "k" in hit.lower():
+            value *= 1000
+        # A recurring figure is measured against the retainer floor, not the
+        # project minimum, so only flag amounts stated as project value.
+        if value < minimum and not re.search(
+                rf"{re.escape(hit)}\s*(?:/|per\s+)\s*(?:mo|month)", text, re.I):
+            problems.append(
+                f"{hit} is below the ${minimum:,} minimum engagement value "
+                f"(SERVICES.md §2.4, D-038). An engagement below it is accepted only "
+                f"where the work is explicitly strategic or creates exceptional "
+                f"portfolio or relationship value, and the founder records the "
+                f"exception."
             )
     return problems
 
@@ -299,29 +370,17 @@ def require_founder(gate: str, approver: str | None) -> str:
 def proposal_gate(root: Path, opp: m.Opportunity) -> list[str]:
     """Blockers preventing a compliant proposal. Empty list == clear to issue.
 
-    SERVICES.md §4: an offer missing a pricing model or defined deliverables
-    "is not ready to sell". Q-007 and Q-011 leave both open.
+    Pricing no longer appears here: D-038 sets the price points, so
+    `SERVICES.md` §4 is satisfied by the approved configuration rather than by a
+    per-engagement declaration. What remains are the controls that were never
+    about pricing — an approved solution, sourced requirements, and scope the
+    company has actually said it delivers.
     """
     blockers: list[str] = []
-    if is_open(root, PRICING_QUESTION) and not opp.proposal.gate_terms_decided:
-        blockers.append(
-            f"{PRICING_QUESTION} open (price points) — D-025 approved value-oriented "
-            f"fixed-scope pricing but states exact price points require founder "
-            f"financial inputs before becoming policy, and SERVICES.md §4 requires a "
-            f"pricing model before an offer is presented. Record the founder's decision "
-            f"for THIS engagement with `mg gate <slug> --terms-decided --approved-by Founder`."
-        )
-    if is_open(root, PRICING_QUESTION) and not opp.proposal.gate_deliverables_defined:
-        blockers.append(
-            f"{PRICING_QUESTION} open — D-029 defers final package contents until pricing "
-            f"economics exist, and SERVICES.md §4 requires defined deliverables. Confirm "
-            f"the deliverables for THIS engagement with "
-            f"`mg gate <slug> --deliverables-defined --approved-by Founder`."
-        )
     if not opp.solution.approved_by:
         blockers.append(
             "Solution not approved. The scope must be founder-approved before it is "
-            "proposed (sops/sales/SOLUTION_DESIGN.md §3)."
+            "proposed (sops/sales/SOLUTION_DESIGN.md §3, D-010)."
         )
     unsourced = [r.ref for r in opp.in_scope() if not r.source]
     if unsourced:
@@ -330,6 +389,23 @@ def proposal_gate(root: Path, opp: m.Opportunity) -> list[str]:
             f"A requirement with no source is removed, not justified "
             f"(sops/sales/SOLUTION_DESIGN.md §5.2)."
         )
+    unmapped = unmapped_requirements(root, opp)
+    if unmapped:
+        blockers.append(
+            "Requirement(s) not delivered by an approved capability: "
+            + ", ".join(ref for ref, _ in unmapped)
+            + " (SERVICES.md §3)."
+        )
+    terms = (opp.proposal.commercial_terms or "").strip()
+    if not terms or terms.lower() in ("to be determined", "tbd"):
+        blockers.append(
+            "Commercial terms not set. Prices are approved (SERVICES.md §2.4) but the "
+            "figure for THIS engagement is a founder decision — the entry range is "
+            "$7,500–$25,000 and the price follows the solution design. Record it with "
+            "`mg gate <slug> --terms '...' --terms-decided --approved-by Founder`."
+        )
+    money = scan_for_open_values(root, terms)
+    blockers.extend(money)
     return blockers
 
 
@@ -342,7 +418,7 @@ def missing_for(stage: str, opp: m.Opportunity) -> list[str]:
     if stage == "qualification":
         miss = []
         if not q.source:
-            miss.append("lead source (evidence for Q-008)")
+            miss.append("lead source (channel evidence, D-026)")
         if not q.problem:
             miss.append("the problem in the prospect's own words")
         if not q.desired_outcome:

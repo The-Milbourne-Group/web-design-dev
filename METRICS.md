@@ -8,7 +8,7 @@
 **Parent Authority:** `MASTER.md` (Tier 1 — supreme), `BUSINESS.md`
 **Applies to:** All company measurement and reporting.
 **Owner:** Founder
-**Status:** Active — targets depend on Q-007.
+**Status:** Active — initial objective is three profitable projects (D-037, D-038).
 **Last reviewed:** 2026-08-29
 **Review trigger:** Metric definition change; new data source; quarterly review.
 **Related:** `MARKETING.md`, `SALES.md`, `DELIVERY.md`, `AUTOMATION.md`

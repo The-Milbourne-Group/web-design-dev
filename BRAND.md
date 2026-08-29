@@ -8,7 +8,7 @@
 **Parent Authority:** `MASTER.md` (Tier 1 — supreme), `STRATEGIC_CONFIGURATION.md` (Tier 2), `BUSINESS.md`
 **Applies to:** Website, proposals, sales material, social content, client communication, and all AI-generated assets.
 **Owner:** Founder
-**Status:** Active — visual identity open (Q-010).
+**Status:** Active — visual system specified (D-035) and values confirmed (D-040).
 **Last reviewed:** 2026-08-29
 **Review trigger:** Visual identity configuration; positioning change.
 **Related:** `MARKETING.md`, `SERVICES.md`, `agents/SEO_AGENT.md`, `agents/DESIGN_AGENT.md`
@@ -68,10 +68,54 @@ Case studies and proof must distinguish facts from estimates.
 5. Evidence
 6. Call to action
 
-## 8. Visual Direction
-Until a formal visual identity is configured, maintain a clean, modern, intentional system emphasizing hierarchy, readability, consistency, accessibility, and restraint.
+## 8. Visual System
 
-Do not invent official colors, typography, logos, or brand rules.
+**Confirmed (D-035 specification, D-040 values).**
+
+### 8.1 Values
+
+**Typography.** Primary **Inter**; fallback system sans-serif. Restrained
+hierarchy emphasizing clarity and readability.
+
+| Role | Value |
+|---|---|
+| Primary — near-black | `#111111` |
+| Secondary — off-white | `#F7F7F5` |
+| Neutral — slate/gray | `#6B7280` |
+| Light neutral | `#E5E7EB` |
+| Accent — deep blue | `#1D4ED8` |
+
+**The accent is used selectively.** Do not create an overly colourful
+interface.
+
+**Spacing.** 4px increments, with generous whitespace.
+**Border radius.** 4–8px. Avoid excessively rounded "consumer app" styling.
+
+**Wordmark.** THE MILBOURNE GROUP. A typography-based identity is acceptable
+for launch; **launch is not delayed waiting for an elaborate logo.** A fuller
+identity system may evolve once market evidence exists.
+
+Colour pairings must meet the `WEB_STANDARDS.md` §3.1 contrast baseline —
+`#6B7280` on `#F7F7F5` is not sufficient for body text.
+
+**Avoid** generic agency gradients, excessive AI imagery, neon "startup"
+aesthetics, clutter, visual novelty without purpose, and low-cost freelancer
+aesthetics.
+
+### 8.2 Direction
+
+Strategic rather than decorative · technically competent rather than
+trend-driven · professional rather than generic · clear rather than visually
+noisy · modern without relying on short-lived trends.
+
+This reinforces the confirmed market position: a strategic digital partner, not
+a commodity web designer (D-007, D-023).
+
+### 8.3 Governance
+
+Once approved, the documented logo, colours, typography, spacing and component
+conventions are **the authoritative company visual system**. New assets extend
+the system; they never create isolated styles.
 
 ## 9. Naming
 Use the full company name: **The Milbourne Group**.

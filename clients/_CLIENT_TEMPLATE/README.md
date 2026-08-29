@@ -8,7 +8,7 @@
 **Engagement:**
 **Stage:** Entry / Expansion / Recurring (`SERVICES.md` §2)
 **Status:** Prospect / Qualified / Discovery / Proposal / Onboarding / Active / Launched / Closed / Disqualified / Nurture / Lost
-**Source:** *How this opportunity arrived — evidence for Q-008*
+**Source:** *How this opportunity arrived — channel evidence (D-026)*
 **First contact:**
 **Owner:** Founder
 **Last updated:**
@@ -32,7 +32,7 @@ What stage this is in, what is in progress, and what is blocked.
 
 ## Buyer Evidence
 
-*Recorded per `ICP.md` §7 to resolve Q-003. Do not generalize into `ICP.md`
+*Recorded per `ICP.md` §7 to test the D-021 buyer roles. Do not generalize into `ICP.md`
 directly — propose it under `governance/CHANGE_MANAGEMENT.md` once a pattern
 is stable across engagements.*
 

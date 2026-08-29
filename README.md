@@ -35,7 +35,7 @@ services, no credentials.
 ./mg next                # every live opportunity and target: stage, next action, owner, gaps
 ./mg check               # governance check across every record
 ./mg metrics             # conversion, cycle time, channel performance
-tools/e2e.sh             # end-to-end test of the whole system (76 assertions)
+tools/e2e.sh             # end-to-end test of the whole system (78 assertions)
 ```
 
 Full command reference: `tools/README.md`.
@@ -83,17 +83,20 @@ Full model: `governance/AUTHORITY.md`.
 
 **Never invent a value the founder has not decided.**
 
-`OPEN_QUESTIONS.md` is the single register of what is unknown. An operator that
-supplies a price or a client profile from imagination has created a false
-company fact that propagates into client-facing material.
+Strategic configuration is now complete, so the rule bites differently than it
+used to: the values exist, and the job is to use them rather than improvise
+around them. An operator that quotes a price outside `SERVICES.md` §2.4, claims
+experience the founder has not documented, or extends the offer set has created
+a false company fact.
 
-This is enforced, not just stated. `./mg` reads the register at runtime and
-refuses to state a figure, tag an unapproved capability, or issue a proposal
-while the values it depends on are open.
+This is enforced, not just stated. `./mg` reads the approved configuration at
+runtime and refuses figures below the $5,000 minimum engagement, requirements
+with no source, scope outside the approved capabilities, and outreach whose
+personalisation rests on inference rather than observed fact.
 
-**An approved model is not an approved number.** Four Discovery Round 2 answers
-approved an architecture and explicitly deferred its values. Treating the
-parent question as fully answered is how an invented price reaches a client.
+**D-036 is worth reading before any outbound work.** The founder advantage is
+operating capability, not credentials — no undocumented experience,
+relationship, client, outcome or credential is ever claimed.
 
 ## Map
 
@@ -114,41 +117,51 @@ exports/                                      generated artifacts, no authority
 
 ## Current Status
 
-**Discovery Round 2 is complete.** Q-001 – Q-012 are resolved by D-019 – D-030:
-market approach, maturity target, size bands and buyer roles, primary trigger,
-founder-advantage policy, capacity model, pricing architecture, acquisition
-channels, stack policy, visual direction, package structure, and escalation
-authority.
+**Strategic configuration is complete.** `OPEN_QUESTIONS.md` holds no pending
+founder decision. Forty decisions are recorded (D-001 – D-040). The company is
+in **controlled commercial validation** (D-037).
 
-Thirty decisions are recorded. Four assumptions remain active; two were retired
-by Discovery Round 2.
+### The launch configuration
 
-### Open — five items
+| | |
+|---|---|
+| **Market** | Established small-to-mid-sized service and professional businesses whose digital presence or infrastructure has outgrown the business (D-036) |
+| **Advantage** | Operating capability — systems thinking, strategy-to-implementation continuity, founder-led delivery (D-036). No undocumented claims. |
+| **Acquisition** | Targeted outbound · founder network where documented · referrals as they develop · portfolio evidence · selective partnerships (D-036) |
+| **Capacity** | One major implementation in active build; at most two active engagements (D-037) |
+| **Pricing** | $5,000 minimum · entry $7,500–$25,000 · assessment $1,500–$5,000 · recurring from $750/mo · 50/25/25 (D-038, `SERVICES.md` §2.4) |
+| **Stack** | Next.js + TypeScript · Tailwind · PostgreSQL · Vercel or equivalent (D-039) |
+| **Brand** | Inter · `#111111` `#F7F7F5` `#6B7280` `#E5E7EB` accent `#1D4ED8` · 4px spacing · 4–8px radius (D-040) |
 
-| | Question | Priority |
-|---|---|---|
-| **Q-013** | Founder advantage inventory — actual experience, relationships, past projects | **Blocking** |
-| **Q-014** | Founder capacity and financial requirements | **Blocking** |
-| **Q-015** | Price points, minimum engagement, revenue targets | **Blocking** |
-| Q-016 | Named technology stack | High |
-| Q-017 | Brand asset values | Medium |
+### The objective
 
-### The bottleneck
+**Close and successfully deliver three profitable projects**, establish reliable
+project economics, then refine pricing from actual delivery margin (D-037,
+D-038). Revenue is prioritized over further speculative internal system
+building.
 
-**Q-013.** D-026 makes warm network and referrals the highest-priority
-acquisition channel, and D-023 makes market selection the intersection of
-*founder access + technical advantage + market pain + project economics*.
-Three of those four terms are now known. The fourth is not — so the
-highest-priority channel cannot be worked, and no market can be selected.
+### What is assumed, not known
 
-**Until Q-015 is answered, no proposal may state a figure.** The pricing
-*model* is approved (D-025); the numbers are not. `./mg` enforces this: the
-proposal gate stays shut, and clearing it for a single engagement is an
-explicit founder decision recorded against that engagement.
+Two operating assumptions carry the launch and are validated by the first
+projects, not by argument:
+
+- **A-007** — the price bands are viable in this market. No engagement has been
+  sold at them.
+- **A-008** — one major engagement at a time is sustainable. Not yet measured
+  against real delivery.
+
+Tax treatment and governing legal jurisdiction are unrecorded (**R-010**) and
+must be settled before the first agreement is executed.
+
+### Not yet built
+
+Delivery execution beyond project initialization. The lifecycle is specified in
+`DELIVERY.md` §2 and its procedures exist in `sops/delivery/`, but they are run
+by hand.
 
 ### Not yet proven
 
-No SOP in this system has been executed against a live engagement. Every
-procedure is constructed from the domain documents rather than transcribed from
-observed practice, and the pilots that exercise them use realistic simulations,
-not real clients. Treat the first real pass through each as a draft to correct.
+No SOP has been executed against a live engagement. Every procedure is
+constructed from the documents rather than transcribed from observed practice,
+and the pilots are realistic simulations. Treat the first real pass through each
+as a draft to correct.

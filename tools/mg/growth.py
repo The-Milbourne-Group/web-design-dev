@@ -57,7 +57,7 @@ TARGET_TRANSITIONS: dict[str, set[str]] = {
 
 # Fit bands. Deliberately not a numeric score: `ICP.md` carries no weights and
 # inventing them would be fake precision over an ICP that is still open
-# (Q-001 – Q-004).
+# (D-019 – D-022 set the profile; D-036 the founder advantage).
 FIT_BANDS = ["Strong", "Possible", "Weak", "Not a fit"]
 
 ACTIONS = ["Research further", "Initiate outreach", "Monitor",
@@ -96,7 +96,7 @@ class Signal:
 class Touch:
     """One outreach attempt, from draft to outcome."""
     seq: int = 0
-    channel: str = ""             # whatever the founder actually uses (Q-008 open)
+    channel: str = ""             # the channel actually used (D-026 priority order)
     purpose: str = ""             # the reason for contact, in one line
     draft: str = ""
     grounded_in: list[str] = field(default_factory=list)   # evidence refs
@@ -125,7 +125,7 @@ class Target:
     slug: str = ""
     company: m.Company = field(default_factory=m.Company)
     contacts: list[m.Contact] = field(default_factory=list)
-    identified_via: str = ""      # how this target was found — channel evidence for Q-008
+    identified_via: str = ""      # how this target was found — channel evidence (D-026)
     identified_on: str = ""
     campaign: str = ""            # free-text grouping, so outcomes trace to an activity
     status: str = IDENTIFIED

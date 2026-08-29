@@ -193,7 +193,7 @@ Prospect → Qualified → Discovery → Proposal → Agreement
 The directory is created at **qualification** so that qualification records,
 discovery notes, and solution traceability have a home before an agreement
 exists. It is retained after closure — including for disqualified
-opportunities, whose reasoning is the evidence base for Q-001 and Q-003.
+opportunities, whose reasoning is market-selection evidence under D-019 and D-036.
 
 The `Status` vocabulary itself is owned by `clients/README.md` — this diagram
 shows the flow, not the permitted values.

@@ -1,12 +1,12 @@
 # QUALIFICATION RECORD — <PROSPECT>
 
 > Completed under `sops/sales/QUALIFICATION.md`. Retained even when the
-> outcome is Disqualified — the reasoning is evidence for Q-001 and Q-003.
+> outcome is Disqualified — the reasoning is market-selection evidence (D-019, D-036).
 
 **Prospect:**
 **Date assessed:**
 **Assessed by:**
-**Source:** *How they arrived — evidence for Q-008*
+**Source:** *How they arrived — channel evidence (D-026)*
 
 ---
 
@@ -63,6 +63,6 @@ off-strategy.
 ## Quality Check
 
 - [ ] No invented assumption presented as fact
-- [ ] No price, timeline, or deliverable quoted (Q-007 open)
+- [ ] No price, timeline, or deliverable quoted (`SALES.md` §6 — qualification does not price)
 - [ ] Decision-maker identified or explicitly recorded as unknown
 - [ ] Disqualification reasoning recorded, not just the verdict

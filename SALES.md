@@ -8,7 +8,7 @@
 **Parent Authority:** `MASTER.md` (Tier 1 — supreme), `STRATEGIC_CONFIGURATION.md` (Tier 2), `BUSINESS.md`, `SERVICES.md`, `ICP.md`, `BRAND.md`
 **Applies to:** All opportunity handling from first contact to signed agreement.
 **Owner:** Founder
-**Status:** Active — pricing open (Q-007).
+**Status:** Active — commercial configuration confirmed (D-038).
 **Last reviewed:** 2026-08-29
 **Review trigger:** Pricing configuration; change to the offer set; recurring loss pattern.
 **Related:** `sops/sales/QUALIFICATION.md`, `sops/sales/DISCOVERY.md`, `templates/sales/PROPOSAL_OUTLINE.md`, `agents/SALES_AGENT.md`
@@ -62,11 +62,12 @@ Procedure: `sops/sales/SOLUTION_DESIGN.md`.
 Binding on every sales conversation and proposal:
 
 - **Never state a price.** Pricing, minimum engagement, and package economics
-  are open (`OPEN_QUESTIONS.md` Q-007). Use "to be determined" and escalate to
+  are set in `SERVICES.md` §2.4 (D-038). Quote within the approved range; the
+  figure for an engagement follows the solution design and is approved by
   the founder. An invented figure creates a commitment the company has not
   made.
 - **Never promise deliverables that are not defined.** Package contents are
-  open (Q-011).
+  defined in `SERVICES.md` §7 (D-029).
 - **Sell into the confirmed progression** (D-005): Strategic Website & Digital
   Foundation first, then expansion, then recurring. Do not lead with an
   expansion engagement before the foundation is sound.
@@ -94,8 +95,8 @@ recorded.
 
 **Issuance is currently gated.** `SERVICES.md` §4 requires a pricing model and
 defined deliverables before an offer is presented commercially; both are open
-(Q-007, Q-011). Until the founder decides them, every proposal is an
-escalation, not a procedure an agent completes.
+(`SERVICES.md` §2.4). The minimum engagement is $5,000; an engagement below it
+requires an explicitly recorded founder exception (D-038).
 
 ## 8. Sales Ethics
 Do not:

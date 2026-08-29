@@ -100,7 +100,7 @@ relationships (D-008). National capability does not license indiscriminate
 marketing.
 
 **Open:** industry focus, detailed size bands, and buyer roles — `OPEN_QUESTIONS.md`
-Q-001, Q-002, Q-003. Detailed audience definitions belong in `ICP.md`.
+D-019, D-020 and D-021. Detailed audience definitions belong in `ICP.md`.
 
 ## 9. Offer Architecture
 
@@ -129,7 +129,7 @@ client impact. A pricing model must protect margin, define scope, account for
 risk and revisions, and remain understandable.
 
 **Specific pricing must not be invented.** Pricing, minimum engagement, and
-package economics are registered as `Open` (Q-007). Until the founder
+package economics are set in `SERVICES.md` §2.4 (D-038). Until the founder
 configures them, every reference to price is "to be determined." This applies
 to proposals, the company website, and all agent output without exception.
 

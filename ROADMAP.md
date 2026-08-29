@@ -8,7 +8,7 @@
 **Parent Authority:** `MASTER.md` (Tier 1 — supreme), `STRATEGIC_CONFIGURATION.md` (Tier 2), `BUSINESS.md`
 **Applies to:** Prioritization of internal capability work.
 **Owner:** Founder
-**Status:** Active — sequencing depends on Q-006.
+**Status:** Active — sequencing follows D-037: controlled commercial validation.
 **Last reviewed:** 2026-08-29
 **Review trigger:** Phase completion; capacity change; Discovery Round 2.
 **Related:** `DECISIONS.md`, `OPEN_QUESTIONS.md`, `MASTER.md` §12
@@ -74,9 +74,10 @@ Do not mark work complete because a document or automation exists. Completion re
 ## 8. Sequencing Dependency
 
 Phase ordering assumes an answer to revenue urgency and founder capacity
-(`OPEN_QUESTIONS.md` Q-006). A revenue-urgent configuration would move Phase 2
+(D-037 activates the revenue-first override). A revenue-urgent configuration
+moves Phase 2
 acquisition work ahead of Phase 1 completion; a system-building configuration
-would not. Do not treat the current order as settled until Q-006 is resolved.
+would not. Capacity is reviewed against observed delivery performance (D-037).
 
 ## 9. Current Priority Selection
 At any time, identify:

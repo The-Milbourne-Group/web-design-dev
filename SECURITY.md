@@ -8,7 +8,7 @@
 **Parent Authority:** `MASTER.md` (Tier 1 — supreme), §7 in particular
 **Applies to:** Everyone and everything operating on behalf of the company.
 **Owner:** Founder
-**Status:** Active — escalation contact open (Q-012).
+**Status:** Active — escalation authority and response targets confirmed (D-030).
 **Last reviewed:** 2026-08-29
 **Review trigger:** Any incident; new tool or vendor handling client data; access change.
 **Related:** `MASTER.md` §7, `AUTOMATION.md`, `clients/_CLIENT_TEMPLATE/`
@@ -58,7 +58,7 @@ If a suspected security issue occurs:
 2. Preserve relevant evidence where appropriate.
 3. **Escalate to the founder immediately.** The founder is the responsible
    authority for all security escalation (`ASSUMPTIONS.md` A-004, pending
-   confirmation under Q-012).
+   confirmed by D-030).
 4. Never conceal, minimise, or delay reporting an issue.
 5. Document facts, impact, affected parties, and remediation in `RISKS.md`.
 6. Notify affected clients where obligation or integrity requires it — a

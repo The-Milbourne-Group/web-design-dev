@@ -8,7 +8,7 @@
 **Parent Authority:** `MASTER.md` (Tier 1 — supreme), `STRATEGIC_CONFIGURATION.md` (Tier 2), `BUSINESS.md`, `SERVICES.md`
 **Applies to:** Qualification, outreach targeting, marketing audience, proposal fit assessment.
 **Owner:** Founder
-**Status:** Active — profile confirmed (D-019 – D-022). Founder advantage inventory open (Q-013).
+**Status:** Active — profile and market confirmed (D-019 – D-022, D-036).
 **Last reviewed:** 2026-08-29
 **Review trigger:** Evidence that specialization is warranted (D-019); accumulation of real buyer evidence.
 **Related:** `SALES.md`, `sops/sales/QUALIFICATION.md`, `MARKETING.md`, `OPEN_QUESTIONS.md`
@@ -169,13 +169,22 @@ Qualification must establish:
 
 Full procedure: `sops/sales/QUALIFICATION.md`.
 
-## 9. Unresolved Configuration
+## 9. Initial Market
 
-The client profile is configured. What remains open is the **founder advantage
-inventory** (Q-013) — actual industry experience, existing relationships and
-referral opportunities, and past projects with case-study potential.
+Confirmed under D-036: **established small-to-mid-sized service and
+professional businesses with growth ambitions whose digital presence or
+infrastructure has become fragmented, outdated, underperforming, or
+disconnected from their operational needs.**
 
-This matters here because D-023 makes market selection the intersection of
-*founder access + technical advantage + market pain + project economics*. Three
-of those four terms are now known; the fourth is not, so no market may be
-selected as a permanent specialization yet (D-019).
+Prioritise the overlap of:
+
+- digital infrastructure problems;
+- a need for strategic website improvement;
+- potential expansion into systems or workflow improvement;
+- sufficient project economics ($5,000 minimum engagement, `SERVICES.md` §2.4);
+- comfort working remotely with a boutique specialist.
+
+The company begins **broad enough to test demand** rather than claiming an
+industry specialization before evidence exists (D-019). Specialization follows
+the evidence criteria in D-019, evaluated against the market-selection criteria
+in D-031.

@@ -8,7 +8,7 @@
 **Owner:** Founder
 **Status:** Active
 **Last reviewed:** 2026-08-29
-**Review trigger:** Stack configuration (Q-009); standards change.
+**Review trigger:** Stack revision (D-039); standards change.
 **Related:** `WEB_STANDARDS.md`, `TECH_STACK.md`, `SECURITY.md`, `sops/delivery/`
 
 ---
@@ -31,7 +31,7 @@ someone who did not write them.
 ## 3. Non-Responsibilities
 
 - Does **not** approve its own work for delivery — QA verifies, founder accepts
-- Does **not** select the company technology stack (Q-009 — founder decision,
+- Does **not** select the company technology stack (D-039 — founder decision,
   `TECH_STACK.md` §3)
 - Does **not** deploy to production without authorization
   (`MASTER.md` §7.4)

@@ -78,8 +78,8 @@ def render_target(t: gr.Target) -> str:
 
 ## 1. Contacts
 
-*Roles are recorded as published. Buyer roles are open (Q-003) and must not be
-inferred from a name or a title pattern.*
+*Roles are recorded as published. D-021 sets the expected buyer roles; a role
+is still never inferred from a name or a title pattern.*
 
 | Name | Role | Email |
 |---|---|---|
@@ -169,7 +169,7 @@ def cmd_add(root, a):
     _save(root, t)
     ok(f"Target {c(slug, C.ACC)} — {a.company}")
     if not a.via:
-        warn("  No --via recorded. How targets are found is the evidence Q-008 needs.")
+        warn("  No --via recorded. How targets are found is what tests the D-026 channel order.")
     print(f"\n{c('Next:', C.B)} {_next(t)}")
     return 0
 
@@ -328,7 +328,7 @@ def cmd_sent(root, a):
     touch.channel = a.channel or touch.channel
     if not touch.channel:
         err("Record the channel it was sent through — channel evidence is what "
-            "Q-008 needs to be answerable.")
+            "tests the D-026 channel priority order.")
         return 1
     if t.status in (gr.PRIORITIZED, gr.CONTACTED, gr.MONITORING, gr.NO_RESPONSE):
         t.set_status(gr.CONTACTED, a.actor, f"touch #{touch.seq} sent via {touch.channel}")
@@ -381,7 +381,7 @@ def cmd_monitor(root, a):
 def cmd_disqualify(root, a):
     t = store.load_target(root, a.slug)
     if not a.reason:
-        err("Disqualification reasoning is the evidence Q-001 and Q-003 need "
+        err("Disqualification reasoning is market-selection evidence under D-019 and D-036 "
             "(`ICP.md` §7). Record why.")
         return 1
     t.set_status(gr.DISQUALIFIED, a.actor, a.reason)

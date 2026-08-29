@@ -122,7 +122,7 @@ def growth_summary(targets: list, opps: list[m.Opportunity]) -> dict:
 
     Attribution is by the source string the conversion writes into the
     opportunity, so a downstream outcome traces back to the channel and
-    campaign that produced it — the evidence Q-008 needs.
+    campaign that produced it — the evidence that tests the D-026 priority order.
     """
     from . import growth as gr
 
@@ -175,7 +175,7 @@ def growth_summary(targets: list, opps: list[m.Opportunity]) -> dict:
 
 
 def _by_channel(targets) -> dict:
-    """Outcomes per channel actually used. Q-008 is open; this is the evidence."""
+    """Outcomes per channel actually used — the evidence behind the D-026 order."""
     out: dict[str, dict] = {}
     for t in targets:
         for touch in t.sent_touches():

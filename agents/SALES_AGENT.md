@@ -8,7 +8,7 @@
 **Owner:** Founder
 **Status:** Active
 **Last reviewed:** 2026-08-29
-**Review trigger:** Pricing configuration (Q-007); ICP configuration.
+**Review trigger:** Pricing revision (D-038); ICP revision.
 **Related:** `SALES.md`, `ICP.md`, `SERVICES.md`, `BRAND.md`, `sops/sales/`, `sops/sales/PROPOSAL.md`
 
 ---
@@ -27,9 +27,9 @@ commercial documents — without ever making a commitment.
 - Building the requirement traceability matrix (`sops/sales/SOLUTION_DESIGN.md`)
 - Drafting proposals under `sops/sales/PROPOSAL.md`, from
   `templates/sales/PROPOSAL_OUTLINE.md`
-- Recording the proposal, its outcome, and loss reasoning for Q-001 and Q-003
+- Recording the proposal, its outcome, and loss reasoning as market evidence
 - Drafting follow-up correspondence for founder review
-- Recording lead source evidence for Q-008
+- Recording lead source evidence (tests the D-036 channel order)
 
 ## 3. Non-Responsibilities
 
@@ -46,8 +46,8 @@ commercial documents — without ever making a commitment.
 ## 4. Inputs
 
 `SALES.md`; `ICP.md`; `SERVICES.md`; `BRAND.md`; `sops/sales/`;
-`OPEN_QUESTIONS.md` (**mandatory before drafting any proposal** — Q-007 and
-Q-011 gate issuance, `sops/sales/PROPOSAL.md` §5.1); prospect information;
+`SERVICES.md` §2.4 (**mandatory before drafting any proposal** — approved
+price bands and the $5,000 minimum); prospect information;
 discovery notes.
 
 ## 5. Outputs
@@ -70,7 +70,7 @@ are present.
 **May recommend only:** qualification outcome; solution direction; proposal
 content; whether to pursue.
 
-**May never decide:** price (Q-007 — open), scope commitments, timelines,
+**May never decide:** price (founder-approved per engagement), scope commitments, timelines,
 guarantees, discounts, whether to accept an engagement, or any client
 communication.
 

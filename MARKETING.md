@@ -45,17 +45,21 @@ These are binding on every marketing artifact (D-001 – D-004, D-007, D-009):
 
 ## 3. Core Channels
 
-Confirmed under D-026: a **concentrated** multi-channel strategy, in priority
-order. Concentrate resources on the first three; do not attempt simultaneous
-optimization of every channel.
+**Diversified early-stage approach (D-036, amending the D-026 priority order).**
+No pre-existing founder access advantage is claimed without documented
+evidence, so the company does not lead with a warm network it has not
+inventoried.
 
-| # | Channel | Why this order |
+| # | Channel | Note |
 |---|---|---|
-| 1 | **Warm network and referrals** — former clients, existing professional relationships, business contacts, personal network where professionally appropriate, referral partners | Trust already exists and acquisition cost is lower |
-| 2 | **Targeted outbound** — focused campaigns toward businesses showing clear digital maturity gaps | Personalized and problem-led, never generic |
-| 3 | **Strategic partnerships** — referral relationships with complementary providers | Partners already hold trusted client relationships |
-| 4 | Authority and portfolio content | Evidence of expertise, not content volume |
-| 5 | Inbound search | A longer-term asset, not the immediate revenue source |
+| 1 | **Targeted outbound** | Personalized and problem-led, never generic. The channel the company can run today without prior relationships. |
+| 2 | **Founder network where available** | Used where a real relationship exists; never assumed. |
+| 3 | **Referrals as they develop** | A product of delivered work, not a launch channel. |
+| 4 | **Portfolio and content evidence** | Establishes expertise; D-036 notes the operating system itself evidences systems-design capability, not past client work. |
+| 5 | **Selective partnerships** | Complementary providers who meet digital problems exceeding their own delivery capability. |
+
+Concentrate effort rather than dispersing it. Channel performance is measured
+per opportunity (`./mg metrics`) and the order is revised from evidence.
 
 ### 3.1 Outbound Target Signals
 
@@ -72,8 +76,8 @@ business consultants; managed IT providers; software consultants; commercial
 photographers; SEO specialists; professional service firms serving established
 businesses.
 
-**Channel 1 depends on Q-013.** The warm network cannot be worked until the
-founder's actual relationships and former clients are documented.
+**The founder network is used where a documented relationship exists** — it is
+not assumed, and no access advantage is claimed without evidence (D-036).
 
 ## 4. Content Strategy
 Create content around:
