@@ -54,6 +54,11 @@ Craft standards for phases 3–8 are in `WEB_STANDARDS.md`. Procedures:
 | Any phase — scope change | `sops/delivery/SCOPE_CHANGE.md` |
 
 ## 3. Onboarding
+
+The pre-agreement scope baseline is `clients/<client>/PROPOSAL.md` — the scope
+and exclusions as issued (`sops/sales/PROPOSAL.md`). Onboarding reconciles the
+project brief against it.
+
 Confirm:
 - Agreement
 - Scope

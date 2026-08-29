@@ -48,8 +48,10 @@ Founder.
    source of later scope disputes.
 
 3. **Confirm scope against the agreement.** Reconcile the brief with what was
-   sold, including anything promised verbally during sales. Any discrepancy is
-   resolved now, in writing, not during delivery.
+   sold — `clients/<client>/PROPOSAL.md` records the scope and exclusions as
+   issued (`sops/sales/PROPOSAL.md` §6) — including anything promised verbally
+   during sales. Any discrepancy is resolved now, in writing, not during
+   delivery.
 
 4. **Confirm stakeholders and approvals.** Record who approves each phase, who
    supplies content and access, and what happens when an approver is
@@ -75,6 +77,9 @@ Founder.
 10. **Hold a kickoff** confirming objective, scope, exclusions, timeline,
     responsibilities, and communication. Send a written summary.
 
+11. **Set `Status: Active`** in `clients/<client>/README.md`. Onboarding is
+    complete and delivery work may begin (`clients/README.md`).
+
 ## 6. Outputs
 
 - `clients/<client>/` workspace initialized
@@ -83,6 +88,7 @@ Founder.
 - Access recorded (names and locations only)
 - Confirmed timeline with client-side dependencies
 - Written kickoff summary
+- `Status: Active`
 
 ## 7. Quality Checks
 

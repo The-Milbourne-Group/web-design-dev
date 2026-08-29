@@ -102,7 +102,7 @@ Founder. Only the founder may accept, decline, or reprice a scope change.
 |---|---|
 | Change implemented before approval | Stop; document; escalate; the company now carries unagreed work |
 | Many Minor changes have eroded margin | Review cumulatively; a pattern of small changes is one Material change |
-| Client asserts the change was always in scope | Return to the agreement and brief; resolve in writing, not from memory |
+| Client asserts the change was always in scope | Return to the agreement, the brief, and the scope and exclusions as issued in `clients/<client>/PROPOSAL.md`; resolve in writing, not from memory |
 | Change invalidates completed work | State this explicitly in the impact assessment before the client decides |
 | Founder accepted a change to preserve goodwill | Record it as a commercial decision with its cost, so the pattern is visible |
 

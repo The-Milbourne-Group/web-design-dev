@@ -88,6 +88,15 @@ A proposal should clearly state:
 - Acceptance/change process
 - Next step
 
+Procedure: `sops/sales/PROPOSAL.md`, which covers the issuance gate, the
+founder approval routing, where the proposal is filed, and how its outcome is
+recorded.
+
+**Issuance is currently gated.** `SERVICES.md` §4 requires a pricing model and
+defined deliverables before an offer is presented commercially; both are open
+(Q-007, Q-011). Until the founder decides them, every proposal is an
+escalation, not a procedure an agent completes.
+
 ## 8. Sales Ethics
 Do not:
 - Fabricate urgency

@@ -164,6 +164,47 @@ rebuilt to the ten-element standard; all eight agents rebuilt to `MASTER.md`
 system records the founder's decisions, it does not validate them. Nine items
 remain open by design (`OPEN_QUESTIONS.md`).
 
+### 2026-08-29 — Second integration test (commercial chain)
+
+**Checked:** cold-start orientation against the ten orientation questions; the
+ten end-to-end scenarios re-run against the post-remediation system; all eight
+agents; adversarial cases; and two new mechanical checks — every `DOC.md §N`
+cross-reference resolved to a real section or numbered step, and every declared
+client `Status` traced to the procedure that assigns it.
+
+**Baseline confirmed clean:** file references resolve, metadata complete, no
+secret values, no AI-first positioning, 11/11 SOPs and 8/8 agents at standard.
+
+**Failures found and fixed:**
+
+| ID | Severity | Defect | Fix |
+|---|---|---|---|
+| P0-7 | System breaking | The proposal — the only binding client-facing commercial document — had no procedure and no artifact location. `SYSTEM_MAP.md` §3 named a *template* in its Procedure column; the sole control against a fabricated price was a blockquote in a Tier 6 template, which carries no authority. Onboarding and scope change both reconcile against "what was sold", which was never filed. `METRICS.md` §4 mandated two proposal metrics that nothing recorded. | D-018 |
+| P1-8 | High | `Active`, `Launched`, and `Lost` were declared statuses that no procedure assigned; `Clarification required` was a qualification outcome absent from the vocabulary | Status-assignment table in `clients/README.md`; steps added to `ONBOARDING.md`, `LAUNCH.md`, `PROPOSAL.md` |
+| P1-9 | High | Two differing client lifecycles — `SYSTEM_MAP.md` §6 included `Solution` and `Agreement`; `clients/README.md` included `Active`, `Launched`, `Closed`. Neither was registered as owner | `clients/README.md` registered as sole owner of the vocabulary; `SYSTEM_MAP.md` aligned and scoped to flow |
+| P2-10 | Friction | `CLOSURE.md` §5.11 cited `SOLUTION.md` §5 (Feasibility) for deferred items, which are §4 — expansion review pointed at the wrong section | Corrected |
+
+**Surfaced, not fixed — requires founder decision:** `SERVICES.md` §4 forbids
+presenting an offer without a pricing model and defined deliverables. Q-007 and
+Q-011 leave both open. **No proposal can currently be issued that satisfies
+`SERVICES.md` §4.** The commercial chain is executable up to solution design and
+then blocked by an undecided value, not by a documentation gap.
+`sops/sales/PROPOSAL.md` §9 makes this a standing escalation rather than
+something discovered mid-engagement.
+
+**Regression:** re-ran all checks after remediation. One defect introduced
+during remediation (a dangling `templates/README.md` §3 reference, that file
+having no numbered sections) was caught and corrected. Final state: every live
+cross-reference resolves to an existing section or step; the only three
+unresolved are explicitly marked "former" and are intentional history; 12/12
+SOPs at the ten-element standard; 11/11 statuses assigned by a named procedure.
+
+**Not verified:** the SOPs remain untested against a live engagement — this
+round tested the system against itself, not against reality. `PROPOSAL.md` in
+particular has never been executed, and its issuance gate has never been run
+against a real commercial decision. Treat the first real pass through it as a
+draft to correct.
+
 ### 2026-08-29 — Integration and execution test
 
 **Checked:** orientation from a cold start; ten end-to-end business scenarios
